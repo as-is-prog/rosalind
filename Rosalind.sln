@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosalind", "Rosalind\Rosalind.csproj", "{12D09BF9-11E4-4C4F-8484-DD56CB89689E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosalind.Test", "Rosalind.Test\Rosalind.Test.csproj", "{CBC8A945-E476-451B-B7EE-3543337D3581}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{12D09BF9-11E4-4C4F-8484-DD56CB89689E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12D09BF9-11E4-4C4F-8484-DD56CB89689E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12D09BF9-11E4-4C4F-8484-DD56CB89689E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBC8A945-E476-451B-B7EE-3543337D3581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBC8A945-E476-451B-B7EE-3543337D3581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBC8A945-E476-451B-B7EE-3543337D3581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBC8A945-E476-451B-B7EE-3543337D3581}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

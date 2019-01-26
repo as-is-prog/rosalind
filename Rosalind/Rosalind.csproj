@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{12D09BF9-11E4-4C4F-8484-DD56CB89689E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Rosalind</RootNamespace>
+    <RootNamespace>Shiorose</RootNamespace>
     <AssemblyName>Rosalind</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,8 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ghost.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rosalind.cs" />
+    <Compile Include="Shiolink\Load.cs" />
+    <Compile Include="Shiolink\Protocol.cs" />
+    <Compile Include="Shiolink\Request.cs" />
+    <Compile Include="Shiolink\Response.cs" />
+    <Compile Include="Shiolink\Sync.cs" />
+    <Compile Include="Shiolink\Unload.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
