@@ -31,9 +31,42 @@ namespace Shiorose
                 switch (req.Method)
                 {
                     case RequestMethod.GET:
-                        return CreateOKResponse("testdata");
+                        var retValue = "testdata";
+                        switch (req.ID)
+                        {
+                            case "version":
+                                retValue = "0.0.0";
+                                break;
+                            case "name":
+                                retValue = "Rosalind";
+                                break;
+                            case "craftman":
+                                retValue = "as-is-prog";
+                                break;
+                            case "craftmanw":
+                                retValue = "AS-IS";
+                                break;
+                            case "OnBoot":
+                            case "OnFirstBoot":
+                            case "OnGhostChanged":
+                                retValue = @"\u\s[-1]\h\s[0]こんちは";
+                                break;
+                            case "OnClose":
+                                retValue = @"\u\s[-1]\h\s[0]さいなら";
+                                break;
+                            case "homeurl":
+                            case "username":
+                            case "sakura.recommendsites":
+                            case "sakura.portalsites":
+                            case "kero.recommendsites":
+                            case "kero.portalsites":
+                                return CreateNoContentResponse();
+                            default:
+                                return CreateNoContentResponse();
+                        }
+                        return CreateOKResponse(retValue);
                     case RequestMethod.NOTIFY:
-                        return CreateNoContentResponse();
+                        return CreateOKResponse(null);
                 }
 
                 return CreateBadRequestResponse();

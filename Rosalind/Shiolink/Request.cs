@@ -50,6 +50,7 @@ namespace Shiorose.Shiolink
         private static readonly string SECURITYLEVEL_HEADSTR = "SecurityLevel: ";
         private static readonly string STATUS_HEADSTR = "Status: ";
         private static readonly string ID_HEADSTR = "ID: ";
+        private static readonly string BASE_ID_HEADSTR = "BaseID: ";
         private static readonly string REFERENCE_HEADSTR = "Reference";
 
 
@@ -60,6 +61,7 @@ namespace Shiorose.Shiolink
         public string SecurityLevel { get; private set; }
         public string Status { get; set; }
         public string ID { get; private set; }
+        public string BaseID { get; private set; }
         public string[] References { get; private set; }
 
         public static new Request Parse(System.IO.TextReader stdIn)
@@ -70,7 +72,8 @@ namespace Shiorose.Shiolink
 
             var s = stdIn.ReadLine();
 
-            try {
+            try
+            {
                 request.Method = RequestMethodUtil.StringToRequestMethod(s.Substring(0, s.IndexOf(' ')));
                 request.Version = s.Substring(s.LastIndexOf('/') + 1, 3);
             }
@@ -81,7 +84,7 @@ namespace Shiorose.Shiolink
 
             while((s = stdIn.ReadLine()) != "")
             {
-                
+            
                 if (s.StartsWith(SENDER_HEADSTR))
                 {
                     request.Sender = s.Substring(SENDER_HEADSTR.Length);
@@ -106,9 +109,13 @@ namespace Shiorose.Shiolink
                 {
                     tmp_reference.Add(s.Substring(s.IndexOf(": ") + 2));
                 }
+                else if (s.StartsWith(BASE_ID_HEADSTR))
+                {
+                    request.BaseID = s.Substring(BASE_ID_HEADSTR.Length);
+                }
                 else
                 {
-                    throw new FormatException("Parse error. str: " + s);
+                    throw new FormatException("SHIORI requestdata parse error. str: " + s);
                 }
             }
 

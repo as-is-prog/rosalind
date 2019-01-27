@@ -11,6 +11,7 @@ namespace Shiorose.Shiolink
         public static Protocol Parse(System.IO.TextReader stdIn)
         {
             var s = stdIn.ReadLine();
+
             if (s.StartsWith("*L:"))
             {
                 return new Load(s.Substring(s.IndexOf(':') + 1));
@@ -25,7 +26,7 @@ namespace Shiorose.Shiolink
             }
             else
             {
-                throw new FormatException("Parse error. str: " + s);
+                throw new FormatException("SHIOLINK command parse error. str: " + s);
             }
         }
     }

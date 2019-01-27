@@ -10,8 +10,9 @@ namespace Shiorose
     class Program
     {
         public static readonly string DEFAULT_CHARSET = "UTF-8";
+        public static readonly System.IO.TextWriter logFile = System.IO.File.AppendText("error_log.txt");
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
@@ -32,12 +33,13 @@ namespace Shiorose
                         Console.WriteLine(sync.SyncStr);
 
                         Shiolink.Request request = Shiolink.Request.Parse(Console.In);
-                        rosa.Request(request).ContinueWith(async response => Console.WriteLine(await response));
+                        await rosa.Request(request).ContinueWith(async response => Console.WriteLine(await response));
                         break;
                 }
 
             } while (pr.GetType() != typeof(Shiolink.Unload));
 
+            logFile.Close();
             return;
         }
     }
