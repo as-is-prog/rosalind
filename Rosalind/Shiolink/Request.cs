@@ -51,7 +51,7 @@ namespace Shiorose.Shiolink
         private static readonly string STATUS_HEADSTR = "Status: ";
         private static readonly string ID_HEADSTR = "ID: ";
         private static readonly string BASE_ID_HEADSTR = "BaseID: ";
-        private static readonly string REFERENCE_HEADSTR = "Reference";
+        private static readonly string REFERENCE_STR = "Reference";
 
 
         public RequestMethod Method { get; private set; }
@@ -105,7 +105,7 @@ namespace Shiorose.Shiolink
                 {
                     request.ID = s.Substring(ID_HEADSTR.Length);
                 }
-                else if (s.StartsWith(REFERENCE_HEADSTR))
+                else if (s.StartsWith(REFERENCE_STR))
                 {
                     tmp_reference.Add(s.Substring(s.IndexOf(": ") + 2));
                 }
@@ -134,7 +134,7 @@ namespace Shiorose.Shiolink
             if (null != SecurityLevel) retStr.AppendFormat("{0}{1}\r\n", SECURITYLEVEL_HEADSTR, SecurityLevel);
             if (null != ID) retStr.AppendFormat("{0}{1}\r\n", ID_HEADSTR, ID);
             var rIdx = 0;
-            References.ToList().ForEach(r => retStr.AppendFormat("{0}{1}: {2}\r\n", REFERENCE_HEADSTR, rIdx++, r));
+            References.ToList().ForEach(r => retStr.AppendFormat("{0}{1}: {2}\r\n", REFERENCE_STR, rIdx++, r));
             retStr.AppendLine();
             return retStr.ToString();
         }

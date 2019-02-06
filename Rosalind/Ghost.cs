@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 
 namespace Shiorose
 {
-    class Ghost
+    public class Ghost
     {
+        protected string username = "test";
+        public string Homeurl { get; private set; }
+
         public Ghost()
         {
-
+            Homeurl = "";
         }
 
-        public string OnBoot()
+        public virtual string OnBoot()
         {
-            return "";
+            return @"\u\s[-1]\h\s[0](Base)こんちは";
+        }
+
+        public virtual string OnClose()
+        {
+            return @"\u\s[-1]\h\s[0](Base)さいなら";
         }
     }
 }
