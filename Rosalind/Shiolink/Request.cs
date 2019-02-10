@@ -62,13 +62,11 @@ namespace Shiorose.Shiolink
         public string Status { get; set; }
         public string ID { get; private set; }
         public string BaseID { get; private set; }
-        public string[] References { get; private set; }
+        public IDictionary<int, string> References { get; private set; } = new Dictionary<int, string>();
 
         public static new Request Parse(System.IO.TextReader stdIn)
         {
             var request = new Request();
-
-            var tmp_reference = new List<string>();
 
             var s = stdIn.ReadLine();
 
@@ -107,7 +105,8 @@ namespace Shiorose.Shiolink
                 }
                 else if (s.StartsWith(REFERENCE_STR))
                 {
-                    tmp_reference.Add(s.Substring(s.IndexOf(": ") + 2));
+                    int idx = Int32.Parse(s.Substring(REFERENCE_STR.Length, s.IndexOf(":") - REFERENCE_STR.Length));
+                    request.References.Add(idx ,s.Substring(s.IndexOf(": ") + 2));
                 }
                 else if (s.StartsWith(BASE_ID_HEADSTR))
                 {
@@ -118,8 +117,6 @@ namespace Shiorose.Shiolink
                     throw new FormatException("SHIORI requestdata parse error. str: " + s);
                 }
             }
-
-            request.References = tmp_reference.ToArray();
 
             return request;
         }
@@ -133,8 +130,8 @@ namespace Shiorose.Shiolink
             if (null != Sender) retStr.AppendFormat("{0}{1}\r\n", SENDER_HEADSTR, Sender);
             if (null != SecurityLevel) retStr.AppendFormat("{0}{1}\r\n", SECURITYLEVEL_HEADSTR, SecurityLevel);
             if (null != ID) retStr.AppendFormat("{0}{1}\r\n", ID_HEADSTR, ID);
-            var rIdx = 0;
-            References.ToList().ForEach(r => retStr.AppendFormat("{0}{1}: {2}\r\n", REFERENCE_STR, rIdx++, r));
+
+            References.Keys.ToList().ForEach(idx => retStr.AppendFormat("{0}{1}: {2}\r\n", REFERENCE_STR, idx, References[idx]));
             retStr.AppendLine();
             return retStr.ToString();
         }
