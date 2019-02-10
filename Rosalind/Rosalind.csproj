@@ -54,8 +54,7 @@
     <LangVersion>7.1</LangVersion>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <DebugSymbols>false</DebugSymbols>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Release\Rosalind.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=3.3.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">

@@ -36,7 +36,6 @@ namespace Shiorose
 
             var imp = String.Join("\r\n", files.Select(f => string.Format("#load \"{0}\"", f))) + "\r\n";
 
-
             // Script Options
             var ssr = ScriptSourceResolver.Default.WithBaseDirectory(Environment.CurrentDirectory);
             var smr = ScriptMetadataResolver.Default.WithBaseDirectory(Environment.CurrentDirectory);
@@ -95,11 +94,19 @@ namespace Shiorose
                     retValue = ghost.Homeurl;
                     break;
                 case "username":
-                case "sakura.recommendsites":
-                case "sakura.portalsites":
-                case "kero.recommendsites":
-                case "kero.portalsites":
                     retValue = "";
+                    break;
+                case "sakura.recommendsites":
+                    retValue = ghost.SakuraRecommendSites.ToStringFromSites();
+                    break;
+                case "sakura.portalsites":
+                    retValue = ghost.SakuraPortalSites.ToStringFromSites();
+                    break;
+                case "kero.recommendsites":
+                    retValue = ghost.KeroRecommendSites.ToStringFromSites();
+                    break;
+                case "kero.portalsites":
+                    retValue = ghost.KeroPortalSites.ToStringFromSites();
                     break;
                 /* SHIORI event (supposes) */
                 case "OnFirstBoot":
@@ -249,9 +256,10 @@ namespace Shiorose
 
         public static Response CreateNoContentResponse()
         {
-            var res = new Response(StatusCode.NO_CONTENT);
-
-            res.Charset = "UTF-8";
+            var res = new Response(StatusCode.NO_CONTENT)
+            {
+                Charset = "UTF-8"
+            };
 
             return res;
         }

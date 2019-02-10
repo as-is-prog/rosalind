@@ -12,14 +12,37 @@ namespace Shiorose
     /// </summary>
     public class Ghost
     {
-        protected string username = "test";
-        public string Homeurl { get; protected set; }
+        /// <summary>
+        /// ユーザ名
+        /// </summary>
+        public string UserName { get; protected set; }
+        /// <summary>
+        /// 更新URL
+        /// </summary>
+        public string Homeurl { get; protected set; } = "";
+        /// <summary>
+        /// Sakura側おすすめサイト
+        /// </summary>
+        public List<Site> SakuraRecommendSites { get; protected set; } = new List<Site>();
+        /// <summary>
+        /// Sakura側ポータルサイト
+        /// </summary>
+        public List<Site> SakuraPortalSites { get; protected set; } = new List<Site>();
+        /// <summary>
+        /// Kero側おすすめサイト
+        /// </summary>
+        public List<Site> KeroRecommendSites { get; protected set; } = new List<Site>();
+        /// <summary>
+        /// Kero側ポータルサイト
+        /// </summary>
+        public List<Site> KeroPortalSites { get; protected set; } = new List<Site>();
 
-        public Ghost()
-        {
-            Homeurl = "";
-        }
         
+        protected Ghost()
+        {
+
+        }
+
         /// <summary>
         /// 初回起動イベント
         /// </summary>
