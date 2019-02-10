@@ -131,7 +131,7 @@ namespace Shiorose
                         retValue = ghost.OnCloseAll(req.References, r0);
                     }
                     break;
-                case "OnCloseChanged":
+                case "OnGhostChanged":
                     {
                         req.References.TryGetValue(0, out string r0);
                         req.References.TryGetValue(1, out string r1);
