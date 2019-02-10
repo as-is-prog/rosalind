@@ -13,7 +13,7 @@ namespace Shiorose
         public string ImgPath { get; set; }
         public string TalkScript { get; set; }
 
-        public Site(string name, string url = null, string imgPath = null)
+        public Site(string name, string url = "", string imgPath = "")
         {
             Name = name;
             Url = url;
