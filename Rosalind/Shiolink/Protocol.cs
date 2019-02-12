@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
-    public abstract class Protocol
+    internal abstract class Protocol
     {
         public static Protocol Parse(System.IO.TextReader stdIn)
         {

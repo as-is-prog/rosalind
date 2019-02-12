@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
-    public enum RequestMethod
+    internal enum RequestMethod
     {
         GET,
         NOTIFY,
         NONE
     };
 
-    public static class RequestMethodUtil
+    internal static class RequestMethodUtil
     {
         public static string ToStringFromEnum(this RequestMethod requestMethod)
         {
@@ -42,7 +42,7 @@ namespace Shiorose.Shiolink
         }
     }
 
-    public class Request : Protocol
+    internal class Request : Protocol
     {
 
         private static readonly string SENDER_HEADSTR = "Sender: ";

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Shiorose
 {
     /// <summary>
-    /// Rosalindを用いたゴースト開発者が継承すべきクラス．
+    /// Rosalindを用いたゴースト開発者が継承すべき、SHIORIイベントに対する挙動を実装するクラス．
     /// 各種イベントをハンドルするメソッドのコメントは 2019/02/10にukadocを参照し参考にしています．
     /// </summary>
     public class Ghost
@@ -37,12 +37,17 @@ namespace Shiorose
         /// </summary>
         public List<Site> KeroPortalSites { get; protected set; } = new List<Site>();
 
-        
+        public List<Func<string>> RandomTalks { get; protected set; } = new List<Func<string>>();
+
+        /// <summary>
+        ///
+        /// </summary>
         protected Ghost()
         {
 
         }
 
+        #region 起動・終了・切り替えイベント
         /// <summary>
         /// 初回起動イベント
         /// </summary>
@@ -206,6 +211,46 @@ namespace Shiorose
         {
             return @"\u\s[-1]\h\s[0](Base)OnOtherGhostClosed";
         }
+
+        // TODO: OnShellChanged
+
+        // TODO: OnShellChanging
+
+        // TODO: OnDressupChanged
+
+        // TODO: OnShellChanged
+
+        // TODO: OnBalloonChange
+
+        // TODO: OnWindowStateRestore
+
+        // TODO: OnWindowStateMinimize
+
+        // TODO: OnFullScreenAppMinimize
+
+        // TODO: OnFullScreenAppRestore
+
+        // TODO: OnVirtualDesktopChanged
+
+        // TODO: OnCacheSuspend
+
+        // TODO: OnCacheRestore
+
+        // TODO: OnInitialize [NOTIFY]
+
+        // TODO: OnDestroy [NOTIFY]
+
+        // TODO: OnSysResume
+
+        // TODO: OnSysSuspend
+
+        // TODO: OnBasewareUpdating
+
+        // TODO: OnBasewareUpdated
+
+        #endregion
+
+
 
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
-    public class Sync : Protocol
+    internal class Sync : Protocol
     {
         public string SyncStr { get; private set; }
 

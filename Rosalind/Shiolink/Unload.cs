@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
-    public class Unload : Protocol
+    internal class Unload : Protocol
     {
     }
 }

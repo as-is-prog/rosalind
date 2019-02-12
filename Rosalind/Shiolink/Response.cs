@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
-    public enum StatusCode {
+    internal enum StatusCode {
         INTERNAL_SERVER_ERROR,
         OK,
         NO_CONTENT,
         BAD_REQUEST
     }
 
-    public static class StatusCodeUtil
+    internal static class StatusCodeUtil
     {
         public static string ToStringFromEnum(this StatusCode statusCode)
         {
@@ -33,7 +33,7 @@ namespace Shiorose.Shiolink
         }
     }
 
-    public class Response
+    internal class Response
     {
         private static readonly string DEFAULT_RESPONSE_VERSION = "3.0";
         

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
-    public class Load : Protocol
+
+    internal class Load : Protocol
     {
         public string ShioriDir { get; private set; }
 

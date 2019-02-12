@@ -11,15 +11,21 @@ using System.Threading.Tasks;
 
 namespace Shiorose
 {
+    /// <summary>
+    /// SHIORIイベントを解釈する、Rosalindのメインクラス
+    /// </summary>
     public class Rosalind
     {
-        public static readonly string NAME = "Rosalind";
-        public static readonly string VERSION = "0.0.0";
+        private static readonly string NAME = "Rosalind";
+        private static readonly string VERSION = "0.0.0";
         private static readonly string CRAFTMAN = "as-is-prog";
         private static readonly string CRAFTMAN_W = "AS-IS";
 
         private static readonly string SHIORI_PROTOCOL_VERSION = "3.0";
 
+        /// <summary>
+        /// SHIORIの存在しているディレクトリ
+        /// </summary>
         public readonly string shioriDir;
         private Ghost ghost;
 
@@ -28,7 +34,7 @@ namespace Shiorose
             shioriDir = load.ShioriDir;
         }
 
-        public async static Task<Rosalind> Load(Load load)
+        internal async static Task<Rosalind> Load(Load load)
         {
             Rosalind rosa = new Rosalind(load);
 
@@ -48,7 +54,7 @@ namespace Shiorose
             return rosa;
         }
 
-        public async Task<Response> Request(Request req)
+        internal async Task<Response> Request(Request req)
         {
             return await Task.Run(() =>
             {
@@ -109,6 +115,7 @@ namespace Shiorose
                     retValue = ghost.KeroPortalSites.ToStringFromSites();
                     break;
                 /* SHIORI event (supposes) */
+                #region 起動・終了・切り替えイベント
                 case "OnFirstBoot":
                     {
                         req.References.TryGetValue(0, out string r0);
@@ -122,6 +129,7 @@ namespace Shiorose
                         req.References.TryGetValue(0, out string r0);
                         req.References.TryGetValue(6, out string r6);
                         req.References.TryGetValue(7, out string r7);
+
                         bool isHalt = r6 == "halt";
                         retValue = ghost.OnBoot(req.References, r0, isHalt, r7);
                     }
@@ -216,6 +224,43 @@ namespace Shiorose
                         retValue = ghost.OnOtherGhostClosed(req.References, r0, r1, r2, r7);
                     }
                     break;
+                // TODO: OnShellChanged
+
+                // TODO: OnShellChanging
+
+                // TODO: OnDressupChanged
+
+                // TODO: OnShellChanged
+
+                // TODO: OnBalloonChange
+
+                // TODO: OnWindowStateRestore
+
+                // TODO: OnWindowStateMinimize
+
+                // TODO: OnFullScreenAppMinimize
+
+                // TODO: OnFullScreenAppRestore
+
+                // TODO: OnVirtualDesktopChanged
+
+                // TODO: OnCacheSuspend
+
+                // TODO: OnCacheRestore
+
+                // TODO: OnInitialize [NOTIFY]
+
+                // TODO: OnDestroy [NOTIFY]
+
+                // TODO: OnSysResume
+
+                // TODO: OnSysSuspend
+
+                // TODO: OnBasewareUpdating
+
+                // TODO: OnBasewareUpdated
+                #endregion
+
                 /* SHIORI event (other) */
                 default:
                     try
@@ -237,12 +282,12 @@ namespace Shiorose
             }
         }
 
-        public void Unload(Shiolink.Unload unload)
+        internal void Unload(Shiolink.Unload unload)
         {
 
         }
 
-        public static Response CreateOKResponse(string value)
+        internal static Response CreateOKResponse(string value)
         {
             var res = new Response(StatusCode.OK, NAME)
             {
@@ -254,7 +299,7 @@ namespace Shiorose
             return res;
         }
 
-        public static Response CreateNoContentResponse()
+        internal static Response CreateNoContentResponse()
         {
             var res = new Response(StatusCode.NO_CONTENT)
             {
@@ -264,7 +309,7 @@ namespace Shiorose
             return res;
         }
 
-        public static Response CreateBadRequestResponse()
+        internal static Response CreateBadRequestResponse()
         {
             var res = new Response(StatusCode.BAD_REQUEST);
 
