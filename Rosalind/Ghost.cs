@@ -250,7 +250,45 @@ namespace Shiorose
 
         #endregion
 
+        #region 入力ボックスイベント
 
+        // TODO: OnTeachStart
+
+        // TODO: OnTeachInputCancel
+
+        // TODO: OnTeach
+
+        // TODO: OnCommunicate
+
+        // TODO: OnCommunicateInputCancel
+
+        // TODO: OnUserInput
+
+        // TODO: OnUserInputCancel
+
+        // TODO: inputbox.autocomplete
+
+        #endregion
+
+        #region ダイアログボックスイベント
+
+        // TODO: OnSystemDialog
+
+        // TODO: OnSystemDialogCancel
+
+        // TODO: OnConfigurationDialogHelp
+
+        #endregion
+
+        #region 時間イベント
+
+        // TODO: OnSecondChange
+
+        // TODO: OnMinuteChange
+
+        // TODO: OnHourTimeSignal
+
+        #endregion
 
     }
 }
