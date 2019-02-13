@@ -297,6 +297,19 @@ namespace Shiorose
                 // TODO: OnHourTimeSignal
 
                 #endregion
+                #region 消滅イベント
+
+                // TODO: OnVanishSelecting
+
+                // TODO: OnVanishSelected
+
+                // TODO: OnVanishCancel
+
+                // TODO: OnVanished
+
+                // TODO: OnOtherGhostVanish
+
+                #endregion
                 /* SHIORI event (other) */
                 default:
                     try
