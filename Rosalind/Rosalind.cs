@@ -224,69 +224,178 @@ namespace Shiorose
                         retValue = ghost.OnOtherGhostClosed(req.References, r0, r1, r2, r7);
                     }
                     break;
-                // TODO: OnShellChanged
+                case "OnShellChanged":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
 
-                // TODO: OnShellChanging
+                        retValue = ghost.OnShellChanged(req.References, r0, r1, r2);
+                    }
+                    break;
+                case "OnShellChanging":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
 
-                // TODO: OnDressupChanged
+                        retValue = ghost.OnShellChanging(req.References, r0, r1, r2);
+                    }
+                    break;
+                case "OnDressupChanged":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        bool isEnable = r2 == "1";
+                        req.References.TryGetValue(3, out string r3);
 
-                // TODO: OnShellChanged
+                        retValue = ghost.OnDressupChanged(req.References, r0, r1, isEnable, r3);
+                    }
+                    break;
+                case "OnBalloonChange":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnBalloonChange
+                        retValue = ghost.OnBalloonChange(req.References, r0, r1);
+                    }
+                    break;
+                case "OnWindowStateRestore":
+                    retValue = ghost.OnWindowStateRestore();
+                    break;
+                case "OnWindowStateMinimize":
+                    retValue = ghost.OnWindowStateMinimize();
+                    break;
+                case "OnFullScreenAppMinimize":
+                    retValue = ghost.OnFullScreenAppMinimize();
+                    break;
+                case "OnFullScreenAppRestore":
+                    retValue = ghost.OnFullScreenAppRestore();
+                    break;
+                case "OnVirtualDesktopChanged":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnWindowStateRestore
-
-                // TODO: OnWindowStateMinimize
-
-                // TODO: OnFullScreenAppMinimize
-
-                // TODO: OnFullScreenAppRestore
-
-                // TODO: OnVirtualDesktopChanged
-
-                // TODO: OnCacheSuspend
-
-                // TODO: OnCacheRestore
-
+                        retValue = ghost.OnVirtualDesktopChanged(req.References, r0, r1);
+                    }
+                    break;
+                case "OnCacheSuspend":
+                    retValue = ghost.OnCacheSuspend();
+                    break;
+                case "OnCacheRestore":
+                    retValue = ghost.OnCacheRestore();
+                    break;
                 // TODO: OnInitialize [NOTIFY]
-
                 // TODO: OnDestroy [NOTIFY]
+                case "OnSysResume":
+                    {
+                        req.References.TryGetValue(0, out string r0);
 
-                // TODO: OnSysResume
+                        retValue = ghost.OnSysResume(req.References, r0);
+                    }
+                    break;
+                // TODO: OnSysSuspend [NOTIFY]
+                case "OnBasewareUpdating":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnSysSuspend
+                        retValue = ghost.OnBasewareUpdating(req.References, r0, r1);
+                    }
+                    break;
+                case "OnBasewareUpdated":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnBasewareUpdating
-
-                // TODO: OnBasewareUpdated
+                        retValue = ghost.OnBasewareUpdated(req.References, r0, r1);
+                    }
+                    break;
                 #endregion
                 #region 入力ボックスイベント
+                case "OnTeachStart":
+                    retValue = ghost.OnTeachStart();
+                    break;
+                case "OnTeachInputCancel":
+                    {
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnTeachStart
+                        retValue = ghost.OnTeachInputCancel(req.References, r1);
+                    }
+                    break;
+                case "OnTeach":
+                    retValue = ghost.OnTeach(req.References, req.References.Select(p => p.Value));
+                    break;
+                case "OnCommunicate":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnTeachInputCancel
+                        retValue = ghost.OnCommunicate(req.References, r0, r1, req.References.Skip(2).Select(p => p.Value));
+                    }
+                    break;
+                case "OnCommunicateInputCancel":
+                    {
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnTeach
+                        retValue = ghost.OnCommunicateInputCancel(req.References, r1);
+                    }
+                    break;
+                case "OnUserInput":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnCommunicate
+                        retValue = ghost.OnUserInput(req.References, r0, r1);
+                    }
+                    break;
+                case "OnUserInputCancel":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnCommunicateInputCancel
+                        retValue = ghost.OnUserInputCancel(req.References, r0, r1);
+                    }
+                    break;
+                case "inputbox.autocomplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
 
-                // TODO: OnUserInput
-
-                // TODO: OnUserInputCancel
-
-                // TODO: inputbox.autocomplete
-
+                        retValue = ghost.InputboxAutocomplete(req.References, r0, r1);
+                    }
+                    break;
                 #endregion
                 #region ダイアログボックスイベント
+                case "OnSystemDialog":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
 
-                // TODO: OnSystemDialog
+                        retValue = ghost.OnSystemDialog(req.References, r0, r1, r2);
+                    }
+                    break;
+                case "OnSystemDialogCancel":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        
+                        retValue = ghost.OnSystemDialogCancel(req.References, r0, r1);
+                    }
+                    break;
+                case "OnConfigurationDialogHelp":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
 
-                // TODO: OnSystemDialogCancel
-
-                // TODO: OnConfigurationDialogHelp
-
+                        retValue = ghost.OnConfigurationDialogHelp(req.References, r0, r1, r2, r3);
+                    }
+                    break;
                 #endregion
                 #region 時間イベント
 
@@ -308,6 +417,23 @@ namespace Shiorose
                 // TODO: OnVanished
 
                 // TODO: OnOtherGhostVanish
+
+                #endregion
+                #region 選択肢イベント
+
+                // TODO: OnChoiceSelect
+
+                // TODO: OnChoiceSelectEx
+
+                // TODO: OnChoiceEnter
+
+                // TODO: OnChoiceTimeout
+
+                // TODO: OnChoiceHover
+
+                // TODO: OnAnchorSelect
+
+                // TODO: OnAnchorSelectEx
 
                 #endregion
                 /* SHIORI event (other) */
