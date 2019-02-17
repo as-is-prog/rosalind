@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using Shiorose.Resource;
 using Shiorose.Shiolink;
 using System;
 using System.Collections.Generic;
@@ -26,31 +27,30 @@ namespace Shiorose
         /// <summary>
         /// SHIORIの存在しているディレクトリ
         /// </summary>
-        public readonly string shioriDir;
+        public static string ShioriDir { get; private set; }
         private Ghost ghost;
 
         private Rosalind(Load load)
         {
-            shioriDir = load.ShioriDir;
+            ShioriDir = load.ShioriDir;
         }
 
         internal async static Task<Rosalind> Load(Load load)
         {
             Rosalind rosa = new Rosalind(load);
 
-            var files = Directory.GetFiles(rosa.shioriDir, "*.csx", SearchOption.AllDirectories).Where(f => !(f.EndsWith("Ghost.csx")));
+            var files = Directory.GetFiles(ShioriDir, "*.csx", SearchOption.AllDirectories).Where(f => !(f.EndsWith("Ghost.csx") || f.EndsWith("SaveData.csx")));
 
             var imp = String.Join("\r\n", files.Select(f => string.Format("#load \"{0}\"", f))) + "\r\n";
 
             // Script Options
-            var ssr = ScriptSourceResolver.Default.WithBaseDirectory(Environment.CurrentDirectory);
-            var smr = ScriptMetadataResolver.Default.WithBaseDirectory(Environment.CurrentDirectory);
+            var ssr = ScriptSourceResolver.Default.WithBaseDirectory(ShioriDir);
+            var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
             var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
 
-            var script = CSharpScript.Create<Ghost>(imp + File.ReadAllText(rosa.shioriDir + "Ghost.csx"), so);
-            
-            rosa.ghost = (await script.RunAsync()).ReturnValue;
+            var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(ShioriDir + "Ghost.csx"), so);
 
+            rosa.ghost = (await ghostScript.RunAsync()).ReturnValue;
             return rosa;
         }
 
@@ -399,25 +399,81 @@ namespace Shiorose
                 #endregion
                 #region 時間イベント
 
-                // TODO: OnSecondChange
+                case "OnSecondChange":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
 
-                // TODO: OnMinuteChange
+                        retValue = ghost.OnSecondChange(req.References, r0, r1 != "0", r2 != "0", r3 != "0", r4);
+                    }
+                    break;
+                case "OnMinuteChange":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
 
-                // TODO: OnHourTimeSignal
+                        retValue = ghost.OnMinuteChange(req.References, r0, r1 != "0", r2 != "0", r3 != "0", r4);
+                    }
+                    break;
+                case "OnHourTimeSignal":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+
+                        retValue = ghost.OnHourTimeSignal(req.References, r0, r1 != "0", r2 != "0", r3 != "0", r4);
+                    }
+                    break;
 
                 #endregion
                 #region 消滅イベント
 
-                // TODO: OnVanishSelecting
+                case "OnVanishSelecting":
+                    retValue = ghost.OnVanishSelecting();
+                    break;
+                case "OnVanishSelected":
+                    retValue = ghost.OnVanishSelected();
+                    break;
+                case "OnVanishCancel":
+                    retValue = ghost.OnVanishCancel();
+                    break;
+                case "OnVanishButtonHold":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
 
-                // TODO: OnVanishSelected
+                        retValue = ghost.OnVanishButtonHold(req.References, r0, r1, r2);
+                    }
+                    break;
+                case "OnVanished":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(7, out string r7);
 
-                // TODO: OnVanishCancel
+                        retValue = ghost.OnVanished(req.References, r0, r1, r2, r7);
+                    }
+                    break;
+                case "OnOtherGhostVanish":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(7, out string r7);
 
-                // TODO: OnVanished
-
-                // TODO: OnOtherGhostVanish
-
+                        retValue = ghost.OnOtherGhostVanish(req.References, r0, r1, r2, r7);
+                    }
+                    break;
                 #endregion
                 #region 選択肢イベント
 
@@ -459,7 +515,7 @@ namespace Shiorose
 
         internal void Unload(Shiolink.Unload unload)
         {
-
+            ghost.SaveData.Save();
         }
 
         internal static Response CreateOKResponse(string value)

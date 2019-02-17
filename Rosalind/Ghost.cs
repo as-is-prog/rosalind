@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shiorose.Resource;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Shiorose
     /// </summary>
     public abstract class Ghost
     {
+ 
         /// <summary>
         /// ユーザ名
         /// </summary>
@@ -37,7 +39,33 @@ namespace Shiorose
         /// </summary>
         public List<Site> KeroPortalSites { get; protected set; } = new List<Site>();
 
-        public List<Func<string>> RandomTalks { get; protected set; } = new List<Func<string>>();
+        /// <summary>
+        /// ランダムトークのリスト
+        /// </summary>
+        public List<Talk> RandomTalks { get; protected set; } = new List<Talk>();
+
+
+        private Random rand = new Random();
+
+        protected int TALK_INTERVAL = 30;
+
+        protected int talkTimingCount;
+
+        private BaseSaveData __saveData; 
+        protected BaseSaveData _saveData {
+            get => __saveData;
+            set
+            {
+                __saveData = value;
+                talkTimingCount = __saveData.TalkInterval;
+            }
+        }
+        public virtual BaseSaveData SaveData { get => _saveData; }
+
+        public Ghost()
+        {
+            talkTimingCount = TALK_INTERVAL;
+        }
 
         #region 起動・終了・切り替えイベント
         /// <summary>
@@ -217,7 +245,6 @@ namespace Shiorose
             return @"\u\s[-1]\h\s[0](Base)OnShellChanged";
         }
 
-        // TODO: OnShellChanging
         /// <summary>
         /// 他のシェルへ切り替えた際に発生。
         /// </summary>
@@ -231,7 +258,6 @@ namespace Shiorose
             return @"\u\s[-1]\h\s[0](Base)OnShellChanging";
         }
 
-        // TODO: OnDressupChanged
         /// <summary>
         /// 着せ替えが切替えられた際に発生する。
         /// このイベントの後に発生するOnNotifyDressupInfoも参照すること。
@@ -247,7 +273,6 @@ namespace Shiorose
             return @"\u\s[-1]\h\s[0](Base)OnDressupChanged";
         }
 
-        // TODO: OnBalloonChange
         /// <summary>
         /// 他のバルーンから切り替わった際に発生。
         /// </summary>
@@ -260,7 +285,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnWindowStateRestore
         /// <summary>
         /// 最小化が解除された際に発生。
         /// </summary>
@@ -270,7 +294,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnWindowStateMinimize
         /// <summary>
         /// 最小化が指示された際に発生。
         /// </summary>
@@ -280,7 +303,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnFullScreenAppMinimize
         /// <summary>
         /// 全画面表示のアプリ起動に対するSSP最小化の際に発生。
         /// 通常の最小化時に発生するOnWindowStateMinimizeに上書きされる。
@@ -290,7 +312,7 @@ namespace Shiorose
         {
             return "";
         }
-        // TODO: OnFullScreenAppRestore
+
         /// <summary>
         /// 全画面表示のアプリ終了に対するSSP最小化復帰の際に発生。
         /// </summary>
@@ -300,7 +322,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnVirtualDesktopChanged
         /// <summary>
         /// 仮想デスクトップが切り替わった際に発生。
         /// 現状Windows 10上でのみ有効。
@@ -317,7 +338,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnCacheSuspend
         /// <summary>
         /// ゴーストキャッシュに入った際に発生。
         /// </summary>
@@ -327,7 +347,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnCacheRestore
         /// <summary>
         /// ゴーストキャッシュから出た際に発生。
         /// </summary>
@@ -341,7 +360,6 @@ namespace Shiorose
 
         // TODO: OnDestroy [NOTIFY]
 
-        // TODO: OnSysResume
         /// <summary>
         /// サスペンド（スリープ・休止状態（ハイバネーション）両方）解除の際に発生。
         /// </summary>
@@ -356,7 +374,6 @@ namespace Shiorose
 
         // TODO: OnSysSuspend [NOTIFY]        
 
-        // TODO: OnBasewareUpdating
         /// <summary>
         /// 本体更新時、ダウンロードが終わりファイル更新を開始する前に発生。このイベントに反応がない場合はOnCloseAll、OnCloseの順に発生する。
         /// </summary>
@@ -369,7 +386,6 @@ namespace Shiorose
             return "";
         }
 
-        // TODO: OnBasewareUpdated
         /// <summary>
         /// 本体更新終了後、ゴーストが起動する時に発生。このイベントに反応がない場合はOnBootが発生する。
         /// </summary>
@@ -542,25 +558,133 @@ namespace Shiorose
 
         #region 時間イベント
 
-        // TODO: OnSecondChange
+        /// <summary>
+        /// 1秒ごとに発生する時間イベント。
+        /// トーク再生不能な時は、Reference3が0になった上でNOTIFYでイベント通知される。返されたスクリプトは無視される。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="uptime">Reference0 OSの連続起動時間（hour）</param>
+        /// <param name="isOffScreen">Reference1 見切れ時に1、それ以外は0。</param>
+        /// <param name="isOverlap">Reference2 重なり時に1、それ以外は0。</param>
+        /// <param name="canTalk">Reference3 トーク再生可能なときに1、それ以外は0。</param>
+        /// <param name="leftSecond">Reference4 ※SSPのみ　(OSレベルで)何も操作せず放置されている時間。秒単位。</param>
+        /// <returns></returns>
+        public virtual string OnSecondChange(IDictionary<int, string> reference, string uptime, bool isOffScreen, bool isOverlap, bool canTalk, string leftSecond)
+        {
+            // 間隔0なら自発的に発言しない
+            if (SaveData.TalkInterval == 0) return "";
 
-        // TODO: OnMinuteChange
+            if (--talkTimingCount <= 0 && canTalk)
+            {
+                talkTimingCount = SaveData.TalkInterval;
+                return OnRandomTalk();
+            }
+            return "";
+        }
 
-        // TODO: OnHourTimeSignal
+        /// <summary>
+        /// 1分ごとに発生する時間イベント。
+        /// トーク再生不能な時は、Reference3が0になった上でNOTIFYでイベント通知される。返されたスクリプトは無視される。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="uptime">Reference0 OSの連続起動時間（hour）</param>
+        /// <param name="isOffScreen">Reference1 見切れ時に1、それ以外は0。</param>
+        /// <param name="isOverlap">Reference2 重なり時に1、それ以外は0。</param>
+        /// <param name="canTalk">Reference3 トーク再生可能なときに1、それ以外は0。</param>
+        /// <param name="leftSecond">Reference4 ※SSPのみ　(OSレベルで)何も操作せず放置されている時間。秒単位。</param>
+        /// <returns></returns>
+        public virtual string OnMinuteChange(IDictionary<int, string> reference, string uptime, bool isOffScreen, bool isOverlap, bool canTalk, string leftSecond)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 時報イベント。毎正時(?時0分0秒近く)に発生。
+        /// トーク再生不能な時はトークできるようになるまで待つ。そのため少しずれた時間に通知されることがある。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="uptime">Reference0 OSの連続起動時間（hour）</param>
+        /// <param name="isOffScreen">Reference1 見切れ時に1、それ以外は0。</param>
+        /// <param name="isOverlap">Reference2 重なり時に1、それ以外は0。</param>
+        /// <param name="canTalk">Reference3 常に1。(トーク再生可能になるまで待つため)</param>
+        /// <param name="leftSecond">Reference4 ※SSPのみ　(OSレベルで)何も操作せず放置されている時間。秒単位。</param>
+        /// <returns></returns>
+        public virtual string OnHourTimeSignal(IDictionary<int, string> reference, string uptime, bool isOffScreen, bool isOverlap, bool canTalk, string leftSecond)
+        {
+            return "";
+        }
 
         #endregion
 
         #region 消滅イベント
 
-        // TODO: OnVanishSelecting
+        /// <summary>
+        /// 消滅が指示された際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnVanishSelecting()
+        {
+            return "";
+        }
 
-        // TODO: OnVanishSelected
+        /// <summary>
+        /// 確認ダイアログでYESが選択された際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnVanishSelected()
+        {
+            return "";
+        }
 
-        // TODO: OnVanishCancel
+        /// <summary>
+        /// 確認ダイアログでNOが選択された際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnVanishCancel()
+        {
+            return "";
+        }
 
-        // TODO: OnVanished
+        /// <summary>
+        /// 消滅イベント中ダブルクリックでキャンセルされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="pauseScript">Reference0 中断の操作が起きたスクリプト。</param>
+        /// <param name="pauseScopeNum">Reference1 中断の操作が起きたバルーンのスコープ番号。本体側0、相方側1、それ以降も。</param>
+        /// <param name="pauseCharIndex">Reference2 中断位置。スクリプト先頭からの文字数で表現。文字数はさくらスクリプトのタグも含めたもの。</param>
+        /// <returns></returns>
+        public virtual string OnVanishButtonHold(IDictionary<int, string> reference, string pauseScript, string pauseScopeNum, string pauseCharIndex)
+        {
+            return "";
+        }
 
-        // TODO: OnOtherGhostVanish
+        /// <summary>
+        /// 直前のゴーストの消滅により自分に切り替わった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="vanishSakuraName">Reference0 消滅したゴーストの本体側の名前。</param>
+        /// <param name="vanishScript">Reference1 ※SSPのみ　消滅したゴーストのOnVanishSelectedイベントのスクリプト。</param>
+        /// <param name="vanishGhostName">Reference2 ※SSPのみ　消滅したゴースト名。</param>
+        /// <param name="nowGhostShellName">Reference7 ※SSPのみ　切り替わったゴーストのシェル名。</param>
+        /// <returns></returns>
+        public virtual string OnVanished(IDictionary<int, string> reference, string vanishSakuraName, string vanishScript, string vanishGhostName, string nowGhostShellName)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 複数起動中、他のゴーストが消滅した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="vanishSakuraName">Reference0 消滅したゴーストの本体側の名前。</param>
+        /// <param name="vanishScript">Reference1 消滅したゴーストのOnVanishSelectedイベントのスクリプト。</param>
+        /// <param name="vanishGhostName">Reference2 消滅したゴースト名。</param>
+        /// <param name="vanishGhostShellName">Reference7 切り替わったゴーストのシェル名。</param>
+        /// <returns></returns>
+        public virtual string OnOtherGhostVanish(IDictionary<int, string> reference, string vanishSakuraName, string vanishScript, string vanishGhostName, string vanishGhostShellName)
+        {
+            return "";
+        }
 
         #endregion
 
@@ -579,6 +703,22 @@ namespace Shiorose
         // TODO: OnAnchorSelect
 
         // TODO: OnAnchorSelectEx
+
+        #endregion
+
+        #region イベント処理補助
+
+        private Talk GetRandomTalk()
+        {
+            var filtedTalks = RandomTalks.Where(t => t.Filter()).ToArray();
+
+            return filtedTalks[rand.Next(0, filtedTalks.Length)];
+        }
+
+        protected virtual string OnRandomTalk()
+        {
+            return GetRandomTalk().TalkScript();
+        }
 
         #endregion
 
