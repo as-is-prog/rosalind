@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shiorose
+namespace Shiorose.Resource
 {
     /// <summary>
     /// おすすめサイト・ポータルサイトを表すクラス
