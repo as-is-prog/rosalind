@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Shiorose.Resource
 {
+    /// <summary>
+    /// トークに関わるクラス
+    /// </summary>
     public class Talk
     {
         /// <summary>

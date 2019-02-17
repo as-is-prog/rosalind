@@ -47,11 +47,16 @@ namespace Shiorose
 
         private Random rand = new Random();
 
-        protected int TALK_INTERVAL = 30;
-
+        /// <summary>
+        /// 次のランダムトークまでの秒数
+        /// </summary>
         protected int talkTimingCount;
 
         private BaseSaveData __saveData; 
+        /// <summary>
+        /// （常用非推奨）セーブデータを保持するプロパティ。
+        /// セーブデータのロード時のみ使ってください。
+        /// </summary>
         protected BaseSaveData _saveData {
             get => __saveData;
             set
@@ -60,11 +65,18 @@ namespace Shiorose
                 talkTimingCount = __saveData.TalkInterval;
             }
         }
+
+        /// <summary>
+        /// セーブデータ。基本的にこのプロパティをオーバーライドしてBaseSaveDataを継承した独自クラスを返すようにすれば便利？
+        /// </summary>
         public virtual BaseSaveData SaveData { get => _saveData; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Ghost()
         {
-            talkTimingCount = TALK_INTERVAL;
+
         }
 
         #region 起動・終了・切り替えイベント
@@ -561,6 +573,7 @@ namespace Shiorose
         /// <summary>
         /// 1秒ごとに発生する時間イベント。
         /// トーク再生不能な時は、Reference3が0になった上でNOTIFYでイベント通知される。返されたスクリプトは無視される。
+        /// <para>ランダムトークの処理をここで行っているので、オーバーライドした上でランダムトークをしたい場合はbaseのメソッドも呼び出してください。</para>
         /// </summary>
         /// <param name="reference">Reference</param>
         /// <param name="uptime">Reference0 OSの連続起動時間（hour）</param>
@@ -715,6 +728,11 @@ namespace Shiorose
             return filtedTalks[rand.Next(0, filtedTalks.Length)];
         }
 
+        /// <summary>
+        /// ランダムトークが発生するタイミングで呼び出される。
+        /// <para>ただしOnMinuteChangeをオーバーライドした場合は自分で呼び出すように実装してください。</para>
+        /// </summary>
+        /// <returns></returns>
         protected virtual string OnRandomTalk()
         {
             return GetRandomTalk().TalkScript();
