@@ -476,21 +476,56 @@ namespace Shiorose
                     break;
                 #endregion
                 #region 選択肢イベント
+                case "OnChoiceSelect":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var otherId = req.References.Skip(1).Select(r => r.Value);
 
-                // TODO: OnChoiceSelect
+                        retValue = ghost.OnChoiceSelect(req.References, r0, otherId);
+                    }
+                    break;
+                case "OnChoiceSelectEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        var extInfo = req.References.Skip(2).Select(r => r.Value);
 
-                // TODO: OnChoiceSelectEx
+                        retValue = ghost.OnChoiceSelectEx(req.References, r0, r1, extInfo);
+                    }
+                    break;
+                // TODO: OnChoiceEnter [NOTIFY]
+                case "OnChoiceTimeout":
+                    {
+                        req.References.TryGetValue(0, out string r0);
 
-                // TODO: OnChoiceEnter
+                        retValue = ghost.OnChoiceTimeout(req.References, r0);
+                    }
+                    break;
+                case "OnChoiceHover":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        var extInfo = req.References.Skip(2).Select(r => r.Value);
 
-                // TODO: OnChoiceTimeout
+                        retValue = ghost.OnChoiceHover(req.References, r0, r1, extInfo);
+                    }
+                    break;
+                case "OnAnchorSelect":
+                    {
+                        req.References.TryGetValue(0, out string r0);
 
-                // TODO: OnChoiceHover
+                        retValue = ghost.OnAnchorSelect(req.References, r0);
+                    }
+                    break;
+                case "OnAnchorSelectEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        var extInfo = req.References.Skip(2).Select(r => r.Value);
 
-                // TODO: OnAnchorSelect
-
-                // TODO: OnAnchorSelectEx
-
+                        retValue = ghost.OnAnchorSelectEx(req.References, r0, r1, extInfo);
+                    }
+                    break;
                 #endregion
                 /* SHIORI event (other) */
                 default:

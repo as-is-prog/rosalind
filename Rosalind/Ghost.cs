@@ -703,19 +703,82 @@ namespace Shiorose
 
         #region 選択肢イベント
 
-        // TODO: OnChoiceSelect
 
-        // TODO: OnChoiceSelectEx
+        /// <summary>
+        /// 選択肢が選択された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="selectedId">Reference0 選択された選択肢のID。</param>
+        /// <param name="otherIds">Reference* ※CROWのみ　選択肢の２番目以降のID</param>
+        /// <returns></returns>
+        public virtual string OnChoiceSelect(IDictionary<int, string> reference, string selectedId, IEnumerable<string> otherIds)
+        {
+            return @"\u\s[-1]\h\s[0]selected:" + selectedId;
+        }
 
-        // TODO: OnChoiceEnter
+        /// <summary>
+        /// 選択肢が選択された際に発生。
+        /// OnChoiceSelectよりも先に開始する。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="selectedText">Reference0 選択肢のテキスト（ラベル）。</param>
+        /// <param name="selectedId">Reference1 選択肢のID。</param>
+        /// <param name="extInfo">Reference* 拡張情報(\qタグ内の3番目以降の引数)。</param>
+        /// <returns></returns>
+        public virtual string OnChoiceSelectEx(IDictionary<int, string> reference, string selectedText, string selectedId, IEnumerable<string> extInfo)
+        {
+            return @"\u\s[-1]\h\s[0]selectedText:" + selectedText + " selectedId:" + selectedId;
+        }
 
-        // TODO: OnChoiceTimeout
+        // TODO: OnChoiceEnter [NOTIFY]
 
-        // TODO: OnChoiceHover
+        /// <summary>
+        /// 選択肢待ち時間がタイムアウトした際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="script">Reference0 タイムアウトしたスクリプト。</param>
+        /// <returns></returns>
+        public virtual string OnChoiceTimeout(IDictionary<int, string> reference, string script)
+        {
+            return @"\u\s[-1]\h\s[0](Base)OnChoiceTimeout";
+        }
 
-        // TODO: OnAnchorSelect
+        /// <summary>
+        /// 選択肢上で静止された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="hoverdText">Reference0 選択肢のテキスト（ラベル）。</param>
+        /// <param name="hoverdId">Reference1 選択肢のID。</param>
+        /// <param name="extInfo">Reference* 拡張情報(\qタグ内の3番目以降の引数)。</param>
+        /// <returns></returns>
+        public virtual string OnChoiceHover(IDictionary<int, string> reference, string hoverdText, string hoverdId, IEnumerable<string> extInfo)
+        {
+            return "";
+        }
 
-        // TODO: OnAnchorSelectEx
+        /// <summary>
+        /// \_aジャンパがクリックされた瞬間に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="anchorId">Reference0 選択されたジャンパのID。</param>
+        /// <returns></returns>
+        public virtual string OnAnchorSelect(IDictionary<int, string> reference, string anchorId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// \_aジャンパがクリックされた瞬間に発生。このイベントにSHIORIが何も返さなかった場合にのみ、続けてOnAnchorSelectが発生する。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="anchorText">Reference0 選択されたジャンパのテキスト。</param>
+        /// <param name="anchorId">Reference1 選択されたジャンパのID。</param>
+        /// <param name="extInfo">Reference* 拡張情報(\_aタグ内の2番目以降の引数)。</param>
+        /// <returns></returns>
+        public virtual string OnAnchorSelectEx(IDictionary<int, string> reference, string anchorText, string anchorId, IEnumerable<string> extInfo)
+        {
+            return "";
+        }
 
         #endregion
 
