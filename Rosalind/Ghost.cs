@@ -713,7 +713,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelect(IDictionary<int, string> reference, string selectedId, IEnumerable<string> otherIds)
         {
-            return @"\u\s[-1]\h\s[0]selected:" + selectedId;
+            return Choice.Select(selectedId)();
         }
 
         /// <summary>
@@ -727,7 +727,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelectEx(IDictionary<int, string> reference, string selectedText, string selectedId, IEnumerable<string> extInfo)
         {
-            return @"\u\s[-1]\h\s[0]selectedText:" + selectedText + " selectedId:" + selectedId;
+            return Choice.Select(selectedId)();
         }
 
         // TODO: OnChoiceEnter [NOTIFY]
@@ -740,7 +740,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceTimeout(IDictionary<int, string> reference, string script)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnChoiceTimeout";
+            return Choice.Select("timeout")();
         }
 
         /// <summary>
@@ -783,6 +783,9 @@ namespace Shiorose
         #endregion
 
         #region イベント処理補助
+
+
+        /* ランダムトーク */
 
         private Talk GetRandomTalk()
         {
