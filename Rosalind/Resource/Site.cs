@@ -47,8 +47,6 @@ namespace Shiorose.Resource
     /// </summary>
     public static class SitesUtil
     {
-        private static readonly string BYTE_1_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 1 });
-        private static readonly string BYTE_2_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 2 });
 
         /// <summary>
         /// SiteのコレクションをSHIORIメソッドで定義された形式の文字列に変換する
@@ -59,10 +57,10 @@ namespace Shiorose.Resource
         {
             var siteStrs = sites.Select(site => {
                 var siteUrlPart = site.TalkScript == "" ? site.Url : string.Format(@"script:\![open,browser,{0}]{1}", site.Url, site.TalkScript);
-                return string.Format("{1}{0}{2}{0}{3}{0}", BYTE_1_STR, site.Name, siteUrlPart, site.ImgPath);
+                return string.Format("{1}{0}{2}{0}{3}{0}", Rosalind.BYTE_1_STR, site.Name, siteUrlPart, site.ImgPath);
             });
             
-            return String.Join(BYTE_2_STR, siteStrs);
+            return String.Join(Rosalind.BYTE_2_STR, siteStrs);
         }
     }
 }

@@ -17,6 +17,15 @@ namespace Shiorose
     /// </summary>
     public class Rosalind
     {
+        /// <summary>
+        /// バイト値1の文字列
+        /// </summary>
+        public static readonly string BYTE_1_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 1 });
+        /// <summary>
+        /// バイト値2の文字列
+        /// </summary>
+        public static readonly string BYTE_2_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 2 });
+
         private static readonly string NAME = "Rosalind";
         private static readonly string VERSION = "0.0.0";
         private static readonly string CRAFTMAN = "as-is-prog";
@@ -547,6 +556,252 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
 
                         retValue = ghost.OnOtherSurfaceChange(req.References, r0, r1, r2, r3, r4, r5);
+                    }
+                    break;
+                #endregion
+                #region マウスイベント
+                case "OnMouseClick":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseClick(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseClickEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseClickEx(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseDoubleClick":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseDoubleClick(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseDoubleClickEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseDoubleClickEx(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseMultipleClick":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+                        req.References.TryGetValue(7, out string r7);
+
+                        int.TryParse(r7, out int comboCount);
+                        retValue = ghost.OnMouseMultipleClick(req.References, r0, r1, r3, r4, r5, r6, comboCount);
+                    }
+                    break;
+                case "OnMouseMultipleClickEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+                        req.References.TryGetValue(7, out string r7);
+
+                        int.TryParse(r7, out int comboCount);
+                        retValue = ghost.OnMouseMultipleClickEx(req.References, r0, r1, r3, r4, r5, r6, comboCount);
+                    }
+                    break;
+                case "OnMouseUp":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseUp(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseUpEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseUpEx(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseDown":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseDown(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseDownEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseDownEx(req.References, r0, r1, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseMove":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseMove(req.References, r0, r1, r2, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseWheel":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseWheel(req.References, r0, r1, r2, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseEnterAll":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseEnterAll(req.References, r0, r1, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseLeaveAll":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseLeaveAll(req.References, r0, r1, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseEnter":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseEnter(req.References, r0, r1, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseLeave":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseLeave(req.References, r0, r1, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseDragStart":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseDragStart(req.References, r0, r1, r2, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseDragEnd":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseDragEnd(req.References, r0, r1, r2, r3, r4, r5, r6);
+                    }
+                    break;
+                case "OnMouseHover":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseHover(req.References, r0, r1, r3, r4, r6);
+                    }
+                    break;
+                case "OnMouseGesture":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        var mousePos = r1.Split(BYTE_1_STR.ToCharArray());
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var newMousePos = r3.Split(BYTE_1_STR.ToCharArray());
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+
+                        retValue = ghost.OnMouseGesture(req.References, r0, mousePos[0], mousePos[1], r2, newMousePos[0], newMousePos[1], r4, r5, r6);
                     }
                     break;
                 #endregion

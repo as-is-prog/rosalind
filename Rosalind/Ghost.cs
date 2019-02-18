@@ -819,6 +819,333 @@ namespace Shiorose
 
         #endregion
 
+        #region マウスイベント
+        /* 
+         * [MEMO]
+         * マウスイベントの実装において、数値を渡すcomboCountとcharIdはそれぞれ以下の理由で型を決めた。
+         * comboCount => 「N回以上連続クリックされた」など数値として扱うためintに。
+         * charId => 「0のキャラ、1のキャラがクリックされた」などあくまで識別子として扱うためstringのままに。
+         * 
+         * TODO: mouseX, mouseYは保留中。
+         */
+        /// <summary>
+        /// 左・右ボタン（＋中ボタン）でマウスクリックされた時(マウスボタンを1回押して放された瞬間)に、OnMouseUpに反応しない場合に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
+        /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右ボタン以外でマウスクリックされた時(マウスボタンを1回押して放された瞬間)に、OnMouseUpExに反応しない場合に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右ボタンでダブルクリックされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
+        /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseDoubleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右ボタン以外でダブルクリックされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseDoubleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 3回以上連続でクリックされた際に発生。
+        /// 同イベントに応答が無い場合、通常通りOnMouseClickとOnMouseDoubleClickの流れに戻る。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。それ以降2～</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <param name="comboCount">Reference7 連続クリック回数</param>
+        /// <returns></returns>
+        public virtual string OnMouseMultipleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType, int comboCount)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 左・右ボタン以外で3回以上連続でクリックされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。それ以降2～</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <param name="comboCount">Reference7 連続クリック回数</param>
+        /// <returns></returns>
+        public virtual string OnMouseMultipleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType, int comboCount)
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右のマウスボタンが放された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseUp(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右以外のマウスボタンが放された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="Reference3">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseUpEx(IDictionary<int, string> reference, string mouseX, string mouseY, string Reference3, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右のマウスボタンが押された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseDown(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// 左・右以外のマウスボタンが押された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsType">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseDownEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsType, string buttonName, string deviceType = "mouse")
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// マウスが移動した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="wheelRotation">Reference2 マウスホイールの回転量および回転方向。</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseMove(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスホイールが回転した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="wheelRotation">Reference2 マウスホイールの回転量および回転方向。</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseWheel(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string deviceType = "mouse")
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスがキャラクターウインドウに入った際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseEnterAll(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスがキャラクターウインドウから出た際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseLeaveAll(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスが当たり判定に入った際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseEnter(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスが当たり判定から出た際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseLeave(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスをドラッグし始めた際に発生。ただしパッシブモードでは抑制される。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="wheelRotation">Reference2 マウスホイールの回転量および回転方向。</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseDragStart(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string buttonName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスをドラッグし終えた際に発生。ただしパッシブモードでは抑制される。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="wheelRotation">Reference2 マウスホイールの回転量および回転方向。</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseDragEnd(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string buttonName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスが静止している際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="mouseX">Reference0 マウスカーソルの x 座標（ローカル座標）</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標（ローカル座標）</param>
+        /// <param name="charId">Reference3 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="partsName">Reference4 当たり判定の識別子。</param>
+        /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
+        /// <returns></returns>
+        public virtual string OnMouseHover(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        {
+            return "";
+        }
+        /// <summary>
+        /// マウスを右ドラッグまたはホイールをドラッグした際に発生。
+        /// なおSSP2.3.53以降、タッチパネル環境でOnMouseGestureのReference5がupまたはdownであるようなものに対してSHIORIが何も返さなかった（204 No Contentが返された）場合、代替イベントとしてOnMouseWheelが発生する。詳細はOnMouseWheelの節を参照。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="charId">Reference0 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="mouseX">Reference1 マウスカーソルの x 座標</param>
+        /// <param name="mouseY">Reference1 マウスカーソルの y 座標</param>
+        /// <param name="partsName">Reference2 当たり判定の識別子。</param>
+        /// <param name="startMouseX">Reference3 右ドラッグを開始したマウスカーソルの x 座標</param>
+        /// <param name="startMouseY">Reference3 右ドラッグを開始したマウスカーソルの y 座標</param>
+        /// <param name="startPartsName">Reference4 右ドラッグを開始した当たり判定の識別子。</param>
+        /// <param name="gestureDirection">
+        /// Reference5 ジェスチャー方向。
+        /// left_up(左上) up(上) right_up(右上)
+        /// left(左) right(右)
+        /// left_down(左下) down(下) right_down(右下)
+        /// circle.cw(時計回り) circle.ccw(反時計回り)
+        /// end(右ボタンをはなした)
+        /// </param>
+        /// <param name="gestureRotation">Reference6 ジェスチャー移動角度。右0度から反時計回りに360度。</param>
+        /// <returns></returns>
+        public virtual string OnMouseGesture(IDictionary<int, string> reference, string charId, string mouseX, string mouseY, string partsName, string startMouseX, string startMouseY, string startPartsName, string gestureDirection, string gestureRotation)
+        {
+            return "";
+        }
+
+
+        #endregion
+
         #region イベント処理補助
 
 
@@ -841,6 +1168,23 @@ namespace Shiorose
             return GetRandomTalk().TalkScript();
         }
 
+        /* マウス関連 */
+
+        /// <summary>
+        /// マウスイベントにおけるデバイスタイプ。
+        /// </summary>
+        public enum DeviceType
+        {
+            /// <summary>
+            /// マウス
+            /// </summary>
+            MOUSE,
+            /// <summary>
+            /// タッチパネル
+            /// </summary>
+            TOUCH
+        }
+        
         #endregion
 
     }
