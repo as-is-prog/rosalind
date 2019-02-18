@@ -782,6 +782,43 @@ namespace Shiorose
 
         #endregion
 
+        #region surfaceイベント
+
+        // TODO: OnSurfaceChange [NOTIFY]        
+
+        /// <summary>
+        /// トーク後一定時間経過後に一度発生。
+        /// SSPの場合は本体設定の喋りタイムアウトで設定された秒数+１５秒後に発生（つまりバルーンが閉じてから１５秒後）。
+        /// ※喋りタイムアウト設定が０のときだけOnSurfaceRestoreが発生するまでバルーンが表示され続ける。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="sakuraSurface">Reference0 本体側の現在サーフェス。</param>
+        /// <param name="keroSurface">Reference1 相方側の現在サーフェス。</param>
+        /// <returns></returns>
+        public virtual string OnSurfaceRestore(IDictionary<int, string> reference, string sakuraSurface, string keroSurface)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// （自分以外の）他のゴーストのサーフェス（表情）が変わった際に通知されます。
+        /// 負荷対策のため、標準では無効のイベントです。このイベントを使用するためには、事前に \![set,othersurfacechange,true] で有効化する必要があります。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="ghostName">Reference0 ゴースト名</param>
+        /// <param name="sakuraName">Reference1 ゴーストSakura名</param>
+        /// <param name="windowId">Reference2 サーフェスが切り替わったウインドウID(Sakura=0)</param>
+        /// <param name="newSurfaceId">Reference3 新サーフェスID</param>
+        /// <param name="oldSurfaceId">Reference4 旧サーフェスID</param>
+        /// <param name="newSurfaceSize">Reference5 新しいサーフェスの大きさ(座標：左,上,右,下)</param>
+        /// <returns></returns>
+        public virtual string OnOtherSurfaceChange(IDictionary<int, string> reference, string ghostName, string sakuraName, string windowId, string newSurfaceId, string oldSurfaceId, string newSurfaceSize)
+        {
+            return "";
+        }
+
+        #endregion
+
         #region イベント処理補助
 
 

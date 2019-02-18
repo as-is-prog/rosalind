@@ -527,6 +527,29 @@ namespace Shiorose
                     }
                     break;
                 #endregion
+                #region サーフェスイベント
+                // TODO: OnSurfaceChange [NOTIFY]
+                case "OnSurfaceRestore":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+
+                        retValue = ghost.OnSurfaceRestore(req.References, r0, r1);
+                    }
+                    break;
+                case "OnOtherSurfaceChange":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+
+                        retValue = ghost.OnOtherSurfaceChange(req.References, r0, r1, r2, r3, r4, r5);
+                    }
+                    break;
+                #endregion
                 /* SHIORI event (other) */
                 default:
                     try
