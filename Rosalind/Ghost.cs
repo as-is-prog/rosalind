@@ -1063,6 +1063,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnMouseEnter(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, DeviceType deviceType)
         {
+            mouseMoveCount = 0;
             return "";
         }
         /// <summary>
