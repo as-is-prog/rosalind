@@ -569,7 +569,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseClick(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseClick(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseClickEx":
@@ -581,7 +581,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseClickEx(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseClickEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseDoubleClick":
@@ -593,7 +593,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDoubleClick(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseDoubleClick(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseDoubleClickEx":
@@ -605,7 +605,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDoubleClickEx(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseDoubleClickEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseMultipleClick":
@@ -619,7 +619,7 @@ namespace Shiorose
                         req.References.TryGetValue(7, out string r7);
 
                         int.TryParse(r7, out int comboCount);
-                        retValue = ghost.OnMouseMultipleClick(req.References, r0, r1, r3, r4, r5, r6, comboCount);
+                        retValue = ghost.OnMouseMultipleClick(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6), comboCount);
                     }
                     break;
                 case "OnMouseMultipleClickEx":
@@ -633,7 +633,7 @@ namespace Shiorose
                         req.References.TryGetValue(7, out string r7);
 
                         int.TryParse(r7, out int comboCount);
-                        retValue = ghost.OnMouseMultipleClickEx(req.References, r0, r1, r3, r4, r5, r6, comboCount);
+                        retValue = ghost.OnMouseMultipleClickEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6), comboCount);
                     }
                     break;
                 case "OnMouseUp":
@@ -645,7 +645,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseUp(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseUp(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseUpEx":
@@ -657,7 +657,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseUpEx(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseUpEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseDown":
@@ -669,7 +669,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDown(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseDown(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseDownEx":
@@ -681,7 +681,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDownEx(req.References, r0, r1, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseDownEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseMove":
@@ -693,7 +693,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseMove(req.References, r0, r1, r2, r3, r4, r6);
+                        retValue = ghost.OnMouseMove(req.References, r0, r1, r2, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseWheel":
@@ -705,7 +705,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseWheel(req.References, r0, r1, r2, r3, r4, r6);
+                        retValue = ghost.OnMouseWheel(req.References, r0, r1, r2, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseEnterAll":
@@ -716,7 +716,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseEnterAll(req.References, r0, r1, r3, r4, r6);
+                        retValue = ghost.OnMouseEnterAll(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseLeaveAll":
@@ -727,7 +727,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseLeaveAll(req.References, r0, r1, r3, r4, r6);
+                        retValue = ghost.OnMouseLeaveAll(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseEnter":
@@ -738,7 +738,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseEnter(req.References, r0, r1, r3, r4, r6);
+                        retValue = ghost.OnMouseEnter(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseLeave":
@@ -749,7 +749,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseLeave(req.References, r0, r1, r3, r4, r6);
+                        retValue = ghost.OnMouseLeave(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseDragStart":
@@ -762,7 +762,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDragStart(req.References, r0, r1, r2, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseDragStart(req.References, r0, r1, r2, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseDragEnd":
@@ -775,7 +775,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDragEnd(req.References, r0, r1, r2, r3, r4, r5, r6);
+                        retValue = ghost.OnMouseDragEnd(req.References, r0, r1, r2, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseHover":
@@ -786,7 +786,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseHover(req.References, r0, r1, r3, r4, r6);
+                        retValue = ghost.OnMouseHover(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
                     }
                     break;
                 case "OnMouseGesture":

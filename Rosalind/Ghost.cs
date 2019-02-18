@@ -52,6 +52,11 @@ namespace Shiorose
         /// </summary>
         protected int talkTimingCount;
 
+        /// <summary>
+        /// OnMouseMoveが呼ばれた回数のカウンタ
+        /// </summary>
+        protected int mouseMoveCount = 0;
+
         private BaseSaveData __saveData; 
         /// <summary>
         /// （常用非推奨）セーブデータを保持するプロパティ。
@@ -839,7 +844,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -854,7 +859,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -869,7 +874,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDoubleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseDoubleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -884,7 +889,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDoubleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseDoubleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -902,7 +907,7 @@ namespace Shiorose
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <param name="comboCount">Reference7 連続クリック回数</param>
         /// <returns></returns>
-        public virtual string OnMouseMultipleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType, int comboCount)
+        public virtual string OnMouseMultipleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType, int comboCount)
         {
             return "";
         }
@@ -919,7 +924,7 @@ namespace Shiorose
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <param name="comboCount">Reference7 連続クリック回数</param>
         /// <returns></returns>
-        public virtual string OnMouseMultipleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType, int comboCount)
+        public virtual string OnMouseMultipleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType, int comboCount)
         {
             return "";
         }
@@ -934,7 +939,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseUp(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseUp(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -949,7 +954,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseUpEx(IDictionary<int, string> reference, string mouseX, string mouseY, string Reference3, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseUpEx(IDictionary<int, string> reference, string mouseX, string mouseY, string Reference3, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -964,7 +969,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDown(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseDown(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -979,7 +984,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDownEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsType, string buttonName, string deviceType = "mouse")
+        public virtual string OnMouseDownEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsType, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -995,8 +1000,12 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseMove(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string deviceType = "mouse")
+        public virtual string OnMouseMove(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, DeviceType deviceType = DeviceType.MOUSE)
         {
+            if (++mouseMoveCount > 1 && mouseMoveCount % GetCallOnMouseStrokeTiming(partsName, deviceType) == 0)
+            {
+                return OnMouseStroke(partsName, deviceType);
+            }
             return "";
         }
         /// <summary>
@@ -1010,7 +1019,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseWheel(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string deviceType = "mouse")
+        public virtual string OnMouseWheel(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, DeviceType deviceType = DeviceType.MOUSE)
         {
             return "";
         }
@@ -1024,7 +1033,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseEnterAll(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        public virtual string OnMouseEnterAll(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, DeviceType deviceType)
         {
             return "";
         }
@@ -1038,7 +1047,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseLeaveAll(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        public virtual string OnMouseLeaveAll(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, DeviceType deviceType)
         {
             return "";
         }
@@ -1052,7 +1061,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseEnter(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        public virtual string OnMouseEnter(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, DeviceType deviceType)
         {
             return "";
         }
@@ -1066,7 +1075,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseLeave(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        public virtual string OnMouseLeave(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, DeviceType deviceType)
         {
             return "";
         }
@@ -1082,7 +1091,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDragStart(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string buttonName, string deviceType)
+        public virtual string OnMouseDragStart(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -1098,7 +1107,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDragEnd(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string buttonName, string deviceType)
+        public virtual string OnMouseDragEnd(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -1112,7 +1121,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseHover(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string deviceType)
+        public virtual string OnMouseHover(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, DeviceType deviceType)
         {
             return "";
         }
@@ -1171,21 +1180,65 @@ namespace Shiorose
         /* マウス関連 */
 
         /// <summary>
-        /// マウスイベントにおけるデバイスタイプ。
+        /// RosalindがOnMouseMoveを何回カウントしたらOnMouseStrokeを呼び出すかを返すメソッド。
+        /// オーバーライドでOnMouseStrokeの呼び出しタイミングを制御できます。
+        /// <para>引数で当たり判定の識別子が渡されるので、当たり判定が小さい部位は値を小さめにして調整するといいかも。</para>
+        /// <para>初期実装は100を固定で返すようになっています。</para>
         /// </summary>
-        public enum DeviceType
+        /// <param name="partsName">当たり判定の識別子</param>
+        /// <param name="deviceType">タッチパネルならtouch、それ以外ならmouse。</param>
+        /// <returns></returns>
+        protected virtual int GetCallOnMouseStrokeTiming(string partsName, DeviceType deviceType)
         {
-            /// <summary>
-            /// マウス
-            /// </summary>
-            MOUSE,
-            /// <summary>
-            /// タッチパネル
-            /// </summary>
-            TOUCH
+            return 100;
         }
-        
+
+        /// <summary>
+        /// いわゆる当たり判定へのなでなで判定がされた際に呼び出されるメソッド。
+        /// なでなで判定の設定方法は<see cref="GetCallOnMouseStrokeTiming"/>を参照。
+        /// </summary>
+        /// <param name="partsName">当たり判定の識別子</param>
+        /// <param name="deviceType">タッチパネルならtouch、それ以外ならmouse。</param>
+        /// <returns></returns>
+        protected virtual string OnMouseStroke(string partsName, DeviceType deviceType)
+        {
+            return "";
+        }
+
         #endregion
 
     }
+
+    /// <summary>
+    /// マウスイベントにおけるデバイスタイプ。
+    /// </summary>
+    public enum DeviceType
+    {
+        /// <summary>
+        /// マウス
+        /// </summary>
+        MOUSE,
+        /// <summary>
+        /// タッチパネル
+        /// </summary>
+        TOUCH
+    }
+
+    /// <summary>
+    /// DeviceTypeを拡張するクラス。
+    /// </summary>
+    internal static class DeviceTypeUtil
+    {
+        public static DeviceType ValueOf(string str)
+        {
+            switch (str)
+            {
+                case "touch":
+                    return DeviceType.TOUCH;
+                default:
+                    return DeviceType.MOUSE;
+            }
+        }
+    }
+
 }
