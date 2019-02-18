@@ -782,7 +782,7 @@ namespace Shiorose
 
         #endregion
 
-        #region surfaceイベント
+        #region サーフェスイベント
 
         // TODO: OnSurfaceChange [NOTIFY]        
 
