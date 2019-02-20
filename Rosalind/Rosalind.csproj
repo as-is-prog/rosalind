@@ -195,6 +195,7 @@
     <Compile Include="Shiolink\Unload.cs" />
     <Compile Include="Resource\Site.cs" />
     <Compile Include="Resource\Talk.cs" />
+    <Compile Include="Support\TalkBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
