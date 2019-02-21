@@ -9,7 +9,7 @@ namespace Shiorose.Resource
     /// <summary>
     /// 選択肢に関するクラス
     /// </summary>
-    public class Choice
+    public class Choice : DeferredEvent
     {
         /// <summary>
         /// 現在登録されてる選択肢の数
@@ -22,16 +22,15 @@ namespace Shiorose.Resource
         /// 選択がタイムアップしたときに返すスクリプト
         /// </summary>
         public static Func<string> TimeoutScript { get; set; }
-        
-        private string Title { get; set; }
-        private string Id { get; set; }
-        private Func<string> TalkScript { get; set; }
 
-        private Choice(string title, Func<string> talkScript, string id)
+        /// <summary>
+        /// 選択肢の表示名
+        /// </summary>
+        private string Title { get; set; }
+
+        private Choice(string title, Func<string> talkScript, string id) : base(id, talkScript)
         {
             Title = title;
-            TalkScript = talkScript;
-            Id = id;
         }
 
         /// <summary>

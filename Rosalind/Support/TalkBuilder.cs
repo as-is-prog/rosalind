@@ -21,8 +21,8 @@ namespace Shiorose.Support
         /// </summary>
         public static int defaultSurface = 0;
 
-        private readonly StringBuilder stringBuilder;
-        private readonly List<object> objects;
+        internal readonly StringBuilder stringBuilder;
+        internal readonly List<object> objects;
 
         /// <summary>
         /// トークビルダーを作成します。
@@ -54,6 +54,17 @@ namespace Shiorose.Support
             stringBuilder.Append("\\![*]");
 
             return this;
+        }
+
+        /// <summary>
+        /// 選択肢を追加します。
+        /// </summary>
+        /// <returns>
+        /// 
+        /// </returns>
+        public DeferredEventTalkBuilder AppendChoice(string title, string id = null)
+        {
+            return             
         }
 
         /// <summary>
@@ -160,5 +171,20 @@ namespace Shiorose.Support
 
             return embededStr;
         }
+    }
+
+    /// <summary>
+    /// 何かしらの遅延イベントを含むトーク作成補助クラス
+    /// </summary>
+    public class DeferredEventTalkBuilder : TalkBuilder
+    {
+
+        public DeferredEventTalkBuilder(TalkBuilder tb)
+        {
+            objects = tb.objects;
+
+        }
+
+
     }
 }
