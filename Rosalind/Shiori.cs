@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Shiorose
 {
-    class Shiori
+    internal class Shiori
     {
         public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
 #if LOGGING
         public static readonly System.IO.TextWriter logFile = System.IO.File.AppendText("error_log.txt");
 #endif
-        static async Task Main(string[] args)
+        internal static async Task Main(string[] args, Func<Shiolink.Load, Task<Rosalind>> loadFunc)
         {
             // TODO: 設定ファイル(ini)読み込み？
 
@@ -24,7 +24,7 @@ namespace Shiorose
 
             Shiolink.Load firstLoad = Shiolink.Protocol.Parse(Console.In) as Shiolink.Load;
 
-            Rosalind rosa = await Rosalind.Load(firstLoad);
+            Rosalind rosa = await loadFunc(firstLoad);
 
             Shiolink.Protocol pr;
             do

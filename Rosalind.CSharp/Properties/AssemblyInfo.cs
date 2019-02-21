@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("Rosalind")]
+[assembly: AssemblyTitle("Rosalind.CSharp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Rosalind")]
+[assembly: AssemblyProduct("Rosalind.CSharp")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
-[assembly: Guid("12d09bf9-11e4-4c4f-8484-dd56cb89689e")]
+[assembly: Guid("34ad3c82-0572-48d5-9420-b3866fa7ddb7")]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //
@@ -34,10 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-// TestクラスからInternalの参照可にする
-[assembly: InternalsVisibleTo("Rosalind.Test")]
-
-// 各言語対応プロジェクトからInternalの参照可にする
-[assembly: InternalsVisibleTo("Rosalind.CSharp")]
-[assembly: InternalsVisibleTo("Rosalind.VisualBasic")]

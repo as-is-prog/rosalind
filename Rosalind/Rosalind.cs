@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-using Shiorose.Resource;
+﻿using Shiorose.Resource;
 using Shiorose.Shiolink;
 using System;
 using System.Collections.Generic;
@@ -37,30 +35,12 @@ namespace Shiorose
         /// SHIORIの存在しているディレクトリ
         /// </summary>
         public static string ShioriDir { get; private set; }
-        private Ghost ghost;
 
-        private Rosalind(Load load)
+        internal Ghost ghost;
+
+        internal Rosalind(Load load)
         {
             ShioriDir = load.ShioriDir;
-        }
-
-        internal async static Task<Rosalind> Load(Load load)
-        {
-            Rosalind rosa = new Rosalind(load);
-
-            var files = Directory.GetFiles(ShioriDir, "*.csx", SearchOption.AllDirectories).Where(f => !(f.EndsWith("Ghost.csx") || f.EndsWith("SaveData.csx")));
-
-            var imp = String.Join("\r\n", files.Select(f => string.Format("#load \"{0}\"", f))) + "\r\n";
-
-            // Script Options
-            var ssr = ScriptSourceResolver.Default.WithBaseDirectory(ShioriDir);
-            var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
-            var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
-
-            var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(ShioriDir + "Ghost.csx"), so);
-
-            rosa.ghost = (await ghostScript.RunAsync()).ReturnValue;
-            return rosa;
         }
 
         internal async Task<Response> Request(Request req)
