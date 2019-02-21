@@ -65,13 +65,18 @@ namespace Shiorose.Resource
             return choiceScript;
         }
 
+        internal static string CreateScript(string title, string id = null)
+        {
+            return string.Format(@"\q[{0},{1}]", title, id ?? title);
+        }
+
         /// <summary>
         /// この選択肢インスタンスをSakuraScriptで挿入する際の文字列表現に変換します。
         /// </summary>
         /// <returns>この選択肢のSakuraScript文字列</returns>
         public override string ToString()
         {
-            return string.Format(@"\q[{0},{1}]", Title, Id);
+            return CreateScript(Title, Id);
         }
     }
 }
