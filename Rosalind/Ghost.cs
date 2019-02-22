@@ -1842,6 +1842,32 @@ namespace Shiorose
         #endregion
 
         #region 単体イベント
+        /// <summary>
+        /// 本体がアクティブな状態でキーが入力された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="keyName">Reference0 入力されたキー。(キートップに書かれた文字)</param>
+        /// <param name="keyCode">Reference1 入力されたキー。(Win32仮想キーコード)</param>
+        /// <param name="pressCount">Reference2 ※SSPのみ　キーの押しっぱなしカウント。</param>
+        /// <param name="charId">Reference3 ※SSPのみ　キーイベントが来たキャラクターウインドウID。</param>
+        /// <param name="extraKeys">Reference4 ※SSPのみ　修飾キーがカンマ区切りで列挙される。例："ctrl,alt"</param>
+        /// <returns></returns>
+        public virtual string OnKeyPress(IDictionary<int, string> reference, string keyName, string keyCode, int pressCount, string charId, string extraKeys)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// テキストデータがDnDされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="content">Reference0 テキスト内容。</param>
+        /// <param name="charId">Reference1 DnDされたキャラクターのID。</param>
+        /// <returns></returns>
+        public virtual string OnTextDrop(IDictionary<int, string> reference, string content, string charId)
+        {
+            return "";
+        }
 
         #endregion
 

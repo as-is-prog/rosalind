@@ -10,7 +10,7 @@ using Shiorose.Shiolink;
 
 namespace Shiorose.CSharp
 {
-    internal class RosaCSharp : Rosalind
+    public class RosaCSharp : Rosalind
     {
         internal RosaCSharp(Load load) : base(load)
         {
@@ -41,6 +41,51 @@ namespace Shiorose.CSharp
             }
             return rosa;
 
+        }
+
+        public class RunScriptResult
+        {
+            /// <summary>
+            /// 成功したか
+            /// </summary>
+            public bool isSuccess = false;
+            /// <summary>
+            /// 成功時は戻り値、
+            /// 失敗時はエラーメッセージ
+            /// </summary>
+            public string value;
+
+            public RunScriptResult(bool isSuccess, string value)
+            {
+                this.isSuccess = isSuccess;
+                this.value = value;
+            }
+        }
+
+        public async static Task<RunScriptResult> RunCSharpScript(string str, string currentDir = null)
+        {
+            return await Task.Run(async () => {
+                try
+                {
+                    Script<string> script;
+                    if (currentDir != null) {
+                        var ssr = ScriptSourceResolver.Default.WithBaseDirectory(currentDir);
+                        var smr = ScriptMetadataResolver.Default.WithBaseDirectory(currentDir);
+                        var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
+                        script = CSharpScript.Create<string>(str, so);
+                    }
+                    else
+                    {
+                        script = CSharpScript.Create<string>(str);
+                    }
+
+                    return new RunScriptResult(true, (await script.RunAsync()).ReturnValue);
+                }
+                catch (Exception e)
+                {
+                    return new RunScriptResult(false, e.Message);
+                }
+            });
         }
     }
 }

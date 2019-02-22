@@ -1291,6 +1291,28 @@ namespace Shiorose
                     }
                     break;
                 #endregion
+
+                #region 単体イベント
+                case "OnKeyPress":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        int.TryParse(r2, out int pressCount);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        retValue = ghost.OnKeyPress(req.References, r0, r1, pressCount, r3, r4);
+                    }
+                    break;
+                case "OnTextDrop":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        retValue = ghost.OnTextDrop(req.References, string.Join("\n", r0.Split(BYTE_1_CHAR)), r1);
+                    }
+                    break;
+                
+                #endregion
                 /* SHIORI event (other) */
                 default:
                     try
