@@ -1,4 +1,5 @@
 ﻿using Shiorose.Resource;
+using Shiorose.Resource.ShioriEvent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1172,6 +1173,202 @@ namespace Shiorose
 
         #endregion
 
+        #region インストールイベント
+
+        /// <summary>
+        /// アーカイブのインストール開始の際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnInstallBegin()
+        {
+            return @"\u\s[-1]\h\s[0](インストール開始)";
+        }
+
+        /// <summary>
+        /// インストールが正常終了した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="installType">Reference0 インストールした物の識別子。</param>
+        /// <param name="installName">Reference1 インストールした物の名前（install.txtのname指定）。</param>
+        /// <param name="installName2">Reference2 インストールした物の名前2（ghost with balloonなどの場合のballoon側の名前）。</param>
+        /// <returns></returns>
+        public virtual string OnInstallComplete(IDictionary<int, string> reference, InstallType installType, string installName, string installName2)
+        {
+            return string.Format(@"\u\s[-1]\h\s[0]({0}, {1}をインストールしました。)", installType.ToString(), installName);
+        }
+
+        /// <summary>
+        /// インストールが正常終了した際に発生。
+        /// このイベントが無かった場合OnInstallCompleteが発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="installTypes">Reference0 インストールした物の識別子。</param>
+        /// <param name="installNames">Reference1 インストールした物の名前。</param>
+        /// <param name="installPaths">Reference2 インストールした場所。</param>
+        /// <returns></returns>
+        public virtual string OnInstallCompleteEx(IDictionary<int, string> reference, InstallType[] installTypes, string[] installNames, string[] installPaths)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// インストールに失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 ※失敗理由。</param>
+        /// <returns></returns>
+        public virtual string OnInstallFailure(IDictionary<int, string> reference, InstallFailureReason failureReason)
+        {
+            return @"\u\s[-1]\h\s[0](インストール失敗。\n理由:"+ failureReason.ToString() +")";
+        }
+
+        /// <summary>
+        /// インストールするファイルが他のゴーストを指名していた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="sakuraName">Reference0 指定されたゴーストの本体側名（install.txtのaccept指定、つまり本来渡すべき相手）。</param>
+        /// <returns></returns>
+        public virtual string OnInstallRefuse(IDictionary<int, string> reference, string sakuraName)
+        {
+            return @"\u\s[-1]\h\s[0](インストール失敗。これは"+ sakuraName +"専用です。)";
+        }
+
+        /// <summary>
+        /// インストールするファイルが他のゴーストを指名していた際、かつ、指名対象ゴーストが一緒に起動していた時に発生。以降のインストールイベントは指名対象ゴースト側に発生する。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="sakuraName">Reference0 指定されたゴーストの本体側名（install.txtのaccept指定、つまり本来渡すべき相手）。</param>
+        /// <returns></returns>
+        public virtual string OnInstallReroute(IDictionary<int, string> reference, string sakuraName)
+        {
+            return @"\u\s[-1]\h\s[0](これは" + sakuraName + "専用です。" + sakuraName + "にインストールします。)";
+        }
+
+        #endregion
+
+        #region ファイルドロップイベント
+        /// <summary>
+        /// ファイルをドラッグしたままのカーソルがゴースト上に乗った際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ドラッグしているファイルパス。</param>
+        /// <param name="charId">Reference1 ドロップされたキャラクターのスコープ番号。本体側0、相方1、3人目以降は2以降。</param>
+        /// <returns></returns>
+        public virtual string OnFileDropping(IDictionary<int, string> reference, string filePath, string charId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ディレクトリがDnD された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="dirPath">Reference0 ドロップされたディレクトリのパス。</param>
+        /// <param name="charId">Reference1 ドロップされたキャラクターのスコープ番号。本体側0、相方1、3人目以降は2以降。</param>
+        /// <returns></returns>
+        public virtual string OnDirectoryDrop(IDictionary<int, string> reference, string dirPath, string charId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 画像ファイルのDnDによって壁紙が変更された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ドロップされたファイルパス。</param>
+        /// <returns></returns>
+        public virtual string OnWallpaperChange(IDictionary<int, string> reference, string filePath)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ファイルがDnDされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePaths">Reference0 ドロップされたファイルパスを（複数あればbyte値1で区切って）返す。</param>
+        /// <param name="charId">Reference1 ドロップされたキャラクターのスコープ番号。本体側0、相方1、3人目以降は2以降。</param>
+        /// <returns></returns>
+        public virtual string OnFileDropEx(IDictionary<int, string> reference, string[] filePaths, string charId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴーストフォルダがDnDされた際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnUpdatedataCreating()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// updates2.dauが作成された際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnUpdatedataCreated()
+        {
+            return @"\u\s[-1]\h\s[0](updates2.dau作成完了)";
+        }
+
+        /// <summary>
+        /// install.txtの入ったゴーストフォルダがDnDされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="objectName">Reference0 narにするオブジェクト名。</param>
+        /// <param name="fileName">Reference1 narに出力されたファイル名。</param>
+        /// <param name="installType">Reference2 ※識別子。インストールの識別子参照。</param>
+        /// <returns></returns>
+        public virtual string OnNarCreating(IDictionary<int, string> reference, string objectName, string fileName, InstallType installType)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// narファイルが作成された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="objectName">Reference0 narにするオブジェクト名。</param>
+        /// <param name="fileName">Reference1 narに出力されたファイル名。</param>
+        /// <param name="installType">Reference2 ※識別子。インストールの識別子参照。</param>
+        /// <returns></returns>
+        public virtual string OnNarCreated(IDictionary<int, string> reference, string objectName, string fileName, InstallType installType)
+        {
+            return @"\u\s[-1]\h\s[0](\_?"+fileName+@"\_?としてnarファイル作成完了)";
+        }
+
+
+        #endregion
+
+        #region URLドロップイベント
+
+        #endregion
+
+        #region ネットワーク更新イベント
+
+        #endregion
+
+        #region 時計合わせイベント
+
+        #endregion
+
+        #region メールチェックイベント
+
+        #endregion
+
+        #region ヘッドライン/RSSセンスイベント
+
+        #endregion
+
+        #region カレンダーイベント
+
+        #endregion
+
+        #region 単体イベント
+
+        #endregion
+
         #region イベント処理補助
 
 
@@ -1224,38 +1421,6 @@ namespace Shiorose
 
         #endregion
 
-    }
-
-    /// <summary>
-    /// マウスイベントにおけるデバイスタイプ。
-    /// </summary>
-    public enum DeviceType
-    {
-        /// <summary>
-        /// マウス
-        /// </summary>
-        MOUSE,
-        /// <summary>
-        /// タッチパネル
-        /// </summary>
-        TOUCH
-    }
-
-    /// <summary>
-    /// DeviceTypeを拡張するクラス。
-    /// </summary>
-    internal static class DeviceTypeUtil
-    {
-        public static DeviceType ValueOf(string str)
-        {
-            switch (str)
-            {
-                case "touch":
-                    return DeviceType.TOUCH;
-                default:
-                    return DeviceType.MOUSE;
-            }
-        }
     }
 
 }

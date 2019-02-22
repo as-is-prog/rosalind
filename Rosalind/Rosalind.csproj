@@ -75,6 +75,7 @@
     <Compile Include="Ghost.cs" />
     <Compile Include="Resource\Choice.cs" />
     <Compile Include="Resource\DeferredEvent.cs" />
+    <Compile Include="Resource\ShioriEvent\ShioriParams.cs" />
     <Compile Include="Resource\SHIORIResource.cs" />
     <Compile Include="Resource\SaveDataBase.cs" />
     <Compile Include="Shiori.cs" />
