@@ -71,10 +71,25 @@ namespace Shiorose.Resource
         /// <summary>
         /// セーブデータをファイルに書き込む
         /// </summary>
-        public void Save()
+        public virtual void Save()
         {
             SaveDataManager.Save(this);
         }
     }
+
+    internal class MockSaveData : BaseSaveData
+    {
+        public MockSaveData()
+        {
+            TalkInterval = 0;
+            UserName = "";
+        }
+
+        public override void Save()
+        {
+
+        }
+    }
+
 
 }

@@ -13,8 +13,17 @@ namespace Shiorose
 
         public CompileErrorGhost(string errorMessage)
         {
-            this.errorMessage = new TalkBuilder().Append("エラーが発生しました。").LineFeed().HalfLine().Append(errorMessage).Build();
+            Homeurl = "";
+
+            _saveData = new MockSaveData();
+
+            this.errorMessage = new TalkBuilder().Append("エラーが発生しました。").LineFeed().HalfLine().Append("\\_?" + errorMessage + "\\_?").Build();
             RandomTalks.Add(Talk.Create(this.errorMessage));
+        }
+
+        public override string OnBoot(IDictionary<int, string> reference, string shellName = "", bool isHalt = false, string haltGhostName = "")
+        {
+            return this.errorMessage;
         }
 
         public override string OnMouseDoubleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
