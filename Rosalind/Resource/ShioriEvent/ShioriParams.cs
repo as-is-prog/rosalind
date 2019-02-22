@@ -256,7 +256,7 @@ namespace Shiorose.Resource.ShioriEvent
                     return UpdateReason.AUTO;
                 case "manual":
                     return UpdateReason.MANUAL;
-                case "script"]
+                case "script":
                     return UpdateReason.SCRIPT;
                 default:
                     return UpdateReason.UNKNOWN;

@@ -950,7 +950,7 @@ namespace Shiorose
                         req.References.TryGetValue(0, out string r0);
                         req.References.TryGetValue(1, out string r1);
                         req.References.TryGetValue(2, out string r2);
-                        retValue = ghost.OnURLQuery(req.References);
+                        retValue = ghost.OnURLQuery(req.References, r0, r1, r2);
                     }
                     break;
                 #endregion
@@ -1173,6 +1173,7 @@ namespace Shiorose
                         var isupdate = r0 == "changed";
                         req.References.TryGetValue(1, out string r1);
                         var updateFileNames = r1.Split(',');
+                        req.References.TryGetValue(3, out string r3);
                         var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
                         req.References.TryGetValue(4, out string r4);
                         var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
@@ -1193,7 +1194,8 @@ namespace Shiorose
                 case "OnUpdateResultExplorer":
                     retValue = ghost.OnUpdateResultExplorer(req.References, req.References);
                     break;
-                #region
+                #endregion
+                
                 /* SHIORI event (other) */
                 default:
                     try
