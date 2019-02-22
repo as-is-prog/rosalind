@@ -76,7 +76,6 @@
     <Compile Include="Resource\Choice.cs" />
     <Compile Include="Resource\DeferredEvent.cs" />
     <Compile Include="Resource\SHIORIResource.cs" />
-    <Compile Include="Resource\InputBoxEvent.cs" />
     <Compile Include="Resource\SaveDataBase.cs" />
     <Compile Include="Shiori.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
