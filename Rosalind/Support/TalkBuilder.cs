@@ -315,6 +315,30 @@ namespace Shiorose.Support
         }
 
         /// <summary>
+        /// トークにスコープ変更文字列を追加します。
+        /// </summary>
+        /// <param name="scopeNumber">変更後のスコープ番号</param>
+        /// <returns></returns>
+        public DeferredEventTalkBuilder ChangeScope(int scopeNumber)
+        {
+            tb.ChangeScope(scopeNumber);
+
+            return this;
+        }
+
+        /// <summary>
+        /// トークにサーフェス変更文字列を追加します。
+        /// </summary>
+        /// <param name="surfaceNumber">変更後のサーフェス番号</param>
+        /// <returns></returns>
+        public DeferredEventTalkBuilder ChangeSurface(int surfaceNumber)
+        {
+            tb.ChangeSurface(surfaceNumber);
+
+            return this;
+        }
+
+        /// <summary>
         /// 遅延イベント付きトークオブジェクトを生成します。
         /// <para>
         /// 通常はこの後ContinuteWithメソッドで遅延イベント発生時の処理を追加します。
