@@ -22,5 +22,13 @@ namespace Shiorose.Support
         {
             return strs[random.Next(strs.Length)];
         }
+
+        /// <summary>
+        /// 引数で渡されたメソッドからランダムに一つ選択して"実行し、その値を返し"ます。
+        /// </summary>
+        public static string RandomChoice(params Func<string>[] funcs)
+        {
+            return funcs[random.Next(funcs.Length)]();
+        }
     }
 }
