@@ -12,6 +12,16 @@ namespace Shiorose.Resource
     public abstract class DeferredEvent
     {
         /// <summary>
+        /// 遅延して実行されるスクリプト
+        /// </summary>
+        private static Func<string, string> deferredScript = (s) => "";
+
+        /// <summary>
+        /// イベントキャンセル時に実行されるスクリプト
+        /// </summary>
+        private static Func<string> cancelScript = () => "";
+
+        /// <summary>
         /// イベントの識別子
         /// </summary>
         protected string Id { get; set; }
@@ -29,6 +39,35 @@ namespace Shiorose.Resource
         {
             Id = id;
             TalkScript = talkScript;
+        }
+
+        internal static void Set(Func<string, string> deferredScript)
+        {
+            DeferredEvent.deferredScript = deferredScript;
+        }
+
+        internal static void SetCancelScript(Func<string> cancelScript)
+        {
+            DeferredEvent.cancelScript = cancelScript;
+        }
+
+        internal static string Exec(string content)
+        {
+            var script = deferredScript;
+            deferredScript = (s) => "";
+            cancelScript = () => "";
+
+            return script(content);
+        }
+
+        internal static string Cancel()
+        {
+            var script = cancelScript;
+            deferredScript = (s) => "";
+            cancelScript = () => "";
+
+            return script();
+
         }
 
     }

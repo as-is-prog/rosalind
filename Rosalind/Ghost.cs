@@ -93,7 +93,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnFirstBoot(IDictionary<int, string> reference, int vanishCount = 0)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnFirstBoot";
+            return "";
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnBoot(IDictionary<int, string> reference, string shellName = "", bool isHalt = false, string haltGhostName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnBoot";
+            return "";
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnClose(IDictionary<int, string> reference, string reason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnClose";
+            return "";
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCloseAll(IDictionary<int, string> reference, string reason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnCloseAll";
+            return "";
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostChanged(IDictionary<int, string> reference, string prevSakuraName = "", string prevScript = "", string prevGhostName = "", string prevGhostPath = "", string nowGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostchanged";
+            return "";
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostChanging(IDictionary<int, string> reference, string nextSakuraName = "", string changeReason = "", string nextGhostName = "", string nextGhostPath = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostChanging";
+            return "";
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostCalled(IDictionary<int, string> reference, string calledSakuraName = "", string calledScript = "", string calledGhostName = "", string calledGhostPath = "", string nowGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostCalled";
+            return "";
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostCalling(IDictionary<int, string> reference, string callingSakuraName = "", string callingReason = "", string callingGhostName = "", string callingGhostPath = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostCalling";
+            return "";
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostCallComplete(IDictionary<int, string> reference, string calledSakuraName = "", string calledScript = "", string calledGhostName = "", string calledGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostCallComplete";
+            return "";
         }
 
         /// <summary>
@@ -214,7 +214,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnOtherGhostBooted(IDictionary<int, string> reference, string bootedSakuraName = "", string bootedScript = "", string bootedGhostName = "", string bootedGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnOtherGhostBooted";
+            return "";
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnOtherGhostChanged(IDictionary<int, string> reference, string prevSakuraName = "", string nextSakuraName = "", string prevScript = "", string nextScript = "", string prevGhostName = "", string nextGhostName = "", string prevGhostShellName = "", string nextGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnOtherGhostChanged";
+            return "";
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnOtherGhostClosed(IDictionary<int, string> reference, string closedSakuraName = "", string closedScript = "", string closedGhostName = "", string closedGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnOtherGhostClosed";
+            return "";
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnShellChanged(IDictionary<int, string> reference, string nowShellName, string nowGhostName, string nowShellPath)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnShellChanged";
+            return "";
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnShellChanging(IDictionary<int, string> reference, string nextShellName, string nowShellName, string nextShellPath)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnShellChanging";
+            return "";
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnDressupChanged(IDictionary<int, string> reference, string charId, string partsName, bool isEnable, string category)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnDressupChanged";
+            return "";
         }
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnTeachStart()
         {
-            return @"\u\s[-1]\h\s[0](Base)OnTeachStart";
+            return "";
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnTeachInputCancel(IDictionary<int,string> reference, string cancelReason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnTeachInputCancel";
+            return DeferredEvent.Cancel();
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnTeach(IDictionary<int,string> reference, IEnumerable<string> teachRecents)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnTeach";
+            return DeferredEvent.Exec(teachRecents.LastOrDefault());
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCommunicate(IDictionary<int, string> reference, string senderName = "", string script = "", IEnumerable<string> extInfo = null)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnCommunicate";
+            return "";
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCommunicateInputCancel(IDictionary<int, string> reference, string cancelReason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnCommunicateInputCancel";
+            return "";
         }
 
         /// <summary>
@@ -485,7 +485,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUserInput(IDictionary<int, string> reference, string inputBoxId = "", string content = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnUserInput";
+            return DeferredEvent.Exec(content);
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUserInputCancel(IDictionary<int, string> reference, string eventId = "", string cancelReason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnUserInputCancel";
+            return DeferredEvent.Cancel();
         }
 
 
@@ -718,7 +718,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelect(IDictionary<int, string> reference, string selectedId, IEnumerable<string> otherIds)
         {
-            return Choice.Select(selectedId)();
+            if (Choice.Count == 0)
+                return DeferredEvent.Exec(selectedId);
+            else
+                return Choice.Select(selectedId)();
         }
 
         /// <summary>
@@ -732,7 +735,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelectEx(IDictionary<int, string> reference, string selectedText, string selectedId, IEnumerable<string> extInfo)
         {
-            return Choice.Select(selectedId)();
+            if (Choice.Count == 0)
+                return DeferredEvent.Exec(selectedId);
+            else
+                return Choice.Select(selectedId)();
         }
 
         // TODO: OnChoiceEnter [NOTIFY]
@@ -745,7 +751,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceTimeout(IDictionary<int, string> reference, string script)
         {
-            return Choice.Select("timeout")();
+            if (Choice.Count == 0)
+                return DeferredEvent.Exec("timeout");
+            else
+                return Choice.Select("timeout")();
         }
 
         /// <summary>
