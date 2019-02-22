@@ -76,9 +76,9 @@ namespace Shiorose.CSharp
                     }
                     else
                     {
-                        var ssr = ScriptSourceResolver.Default.WithBaseDirectory(ShioriDir);
-                        var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
-                        var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
+                        var so = ScriptOptions.Default
+                                              .AddReferences("System.Core")
+                                              .AddImports("System.Linq");
                         script = CSharpScript.Create<string>(str, so);
                     }
 
