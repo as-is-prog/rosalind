@@ -1,4 +1,5 @@
 ﻿using Shiorose.Resource;
+using Shiorose.Resource.ShioriEvent;
 using Shiorose.Support;
 using System;
 using System.Collections.Generic;
