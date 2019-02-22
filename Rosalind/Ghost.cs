@@ -76,6 +76,13 @@ namespace Shiorose
         /// </summary>
         public virtual BaseSaveData SaveData { get => _saveData; }
 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual SHIORIResource Resource { get; set; } = new SHIORIResource();
+        
+
         /// <summary>
         /// 
         /// </summary>

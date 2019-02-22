@@ -84,12 +84,12 @@ namespace Shiorose
                 case "craftmanw":
                     retValue = CRAFTMAN_W;
                     break;
-                /* Ghost property */
+                /* SHIORI Resource (has Ghost class)*/
                 case "homeurl":
                     retValue = ghost.Homeurl;
                     break;
                 case "username":
-                    retValue = "";
+                    retValue = ghost.SaveData != null ? ghost.SaveData.UserName : "";
                     break;
                 case "sakura.recommendsites":
                     retValue = ghost.SakuraRecommendSites.ToStringFromSites();
@@ -102,6 +102,37 @@ namespace Shiorose
                     break;
                 case "kero.portalsites":
                     retValue = ghost.KeroPortalSites.ToStringFromSites();
+                    break;
+                ///* SHIORI Resouce (has SHIORIResource class)*/
+                case "sakura.recommendbuttoncaption":
+                    retValue = ghost.Resource.SakuraRecommendButtonCaption();
+                    break;
+                case "kero.recommendbuttoncaption":
+                    retValue = ghost.Resource.KeroRecommendButtonCaption();
+                    break;
+                case "sakura.portalbuttoncaption":
+                    retValue = ghost.Resource.SakuraPortalButtonCaption();
+                    break;
+                case "kero.portalbuttoncaption":
+                    retValue = ghost.Resource.KeroPortalButtonCaption();
+                    break;
+                case "updatebuttoncaption":
+                    retValue = ghost.Resource.UpdateButtonCaption();
+                    break;
+                case "vanishbuttoncaption":
+                    retValue = ghost.Resource.VanishButtonCaption();
+                    break;
+                case "readmebuttoncaption":
+                    retValue = ghost.Resource.ReadmeButtonCaption();
+                    break;
+                case "vanishbuttonvisible":
+                    retValue = ghost.Resource.VanishButtonVisible().ToString();
+                    break;
+                case "sakura.popupmenu.visible":
+                    retValue = ghost.Resource.SakuraPopupMenuVisible().ToString();
+                    break;
+                case "kero.popupmenu.visible":
+                    retValue = ghost.Resource.KeroPopupMenuVisible().ToString();
                     break;
                 /* SHIORI event (supposes) */
                 #region 起動・終了・切り替えイベント

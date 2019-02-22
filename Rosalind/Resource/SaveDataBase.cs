@@ -63,6 +63,12 @@ namespace Shiorose.Resource
         public int TalkInterval { get; set; }
 
         /// <summary>
+        /// ユーザ名
+        /// </summary>
+        [DataMember]
+        public string UserName { get; set; }
+
+        /// <summary>
         /// セーブデータをファイルに書き込む
         /// </summary>
         public void Save()
