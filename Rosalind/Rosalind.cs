@@ -108,7 +108,7 @@ namespace Shiorose
                 case "kero.portalsites":
                     retValue = ghost.KeroPortalSites.ToStringFromSites();
                     break;
-                ///* SHIORI Resouce (has SHIORIResource class)*/
+                //* SHIORI Resouce (has SHIORIResource class)*/
                 case "sakura.recommendbuttoncaption":
                     retValue = ghost.Resource.SakuraRecommendButtonCaption();
                     break;
@@ -144,8 +144,7 @@ namespace Shiorose
                 case "OnFirstBoot":
                     {
                         req.References.TryGetValue(0, out string r0);
-                        int vanishCount;
-                        Int32.TryParse(r0, out vanishCount);
+                        int.TryParse(r0, out int vanishCount);
                         retValue = ghost.OnFirstBoot(req.References, vanishCount);
                     }
                     break;
@@ -970,8 +969,7 @@ namespace Shiorose
                 case "OnUpdateReady":
                     {
                         req.References.TryGetValue(0, out string r0);
-                        int updateCount;
-                        if (int.TryParse(r0, out updateCount)) updateCount += 1;
+                        if (int.TryParse(r0, out int updateCount)) updateCount += 1;
                         req.References.TryGetValue(1, out string r1);
                         var updateFileNames = r1.Split(',').ToArray();
                         req.References.TryGetValue(3, out string r3);
@@ -1012,11 +1010,9 @@ namespace Shiorose
                     {
                         req.References.TryGetValue(0, out string r0);
                         req.References.TryGetValue(1, out string r1);
-                        int downloadProgressCount;
-                        if (int.TryParse(r1, out downloadProgressCount)) downloadProgressCount += 1;
+                        if (int.TryParse(r1, out int downloadProgressCount)) downloadProgressCount += 1;
                         req.References.TryGetValue(2, out string r2);
-                        int downloadTotalCount;
-                        if (int.TryParse(r2, out downloadTotalCount)) downloadTotalCount += 1;
+                        if (int.TryParse(r2, out int downloadTotalCount)) downloadTotalCount += 1;
                         req.References.TryGetValue(3, out string r3);
                         var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
                         req.References.TryGetValue(4, out string r4);
@@ -1076,8 +1072,7 @@ namespace Shiorose
                 case "OnUpdateOtherReady":
                     {
                         req.References.TryGetValue(0, out string r0);
-                        int updateCount;
-                        if (int.TryParse(r0, out updateCount)) updateCount += 1;
+                        if (int.TryParse(r0, out int updateCount)) updateCount += 1;
                         req.References.TryGetValue(1, out string r1);
                         var updateFileNames = r1.Split(',').ToArray();
                         req.References.TryGetValue(3, out string r3);
@@ -1118,11 +1113,9 @@ namespace Shiorose
                     {
                         req.References.TryGetValue(0, out string r0);
                         req.References.TryGetValue(1, out string r1);
-                        int downloadProgressCount;
-                        if (int.TryParse(r1, out downloadProgressCount)) downloadProgressCount += 1;
+                        if (int.TryParse(r1, out int downloadProgressCount)) downloadProgressCount += 1;
                         req.References.TryGetValue(2, out string r2);
-                        int downloadTotalCount;
-                        if (int.TryParse(r2, out downloadTotalCount)) downloadTotalCount += 1;
+                        if (int.TryParse(r2, out int downloadTotalCount)) downloadTotalCount += 1;
                         req.References.TryGetValue(3, out string r3);
                         var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
                         req.References.TryGetValue(4, out string r4);
@@ -1195,7 +1188,109 @@ namespace Shiorose
                     retValue = ghost.OnUpdateResultExplorer(req.References, req.References);
                     break;
                 #endregion
-                
+                #region 時計合わせイベント
+                case "OnSNTPBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnSNTPBegin(req.References, r0);
+                    }
+                    break;
+                case "OnSNTPCompare":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        DateTime? serverTime = null;
+                        try
+                        {
+                            var st = r1.Split(',').Select(n => int.Parse(n)).ToArray();
+                            serverTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(2, out string r2);
+                        DateTime? localTime = null;
+                        try
+                        {
+                            var st = r2.Split(',').Select(n => int.Parse(n)).ToArray();
+                            localTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(3, out string r3);
+                        int.TryParse(r3, out int diffSecond);
+                        req.References.TryGetValue(4, out string r4);
+                        int.TryParse(r4, out int diffMSecond);
+                        retValue = ghost.OnSNTPCompare(req.References, r0, serverTime, localTime, diffSecond, diffMSecond);
+                    }
+                    break;
+                case "OnSNTPCorrect":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        DateTime? serverTime = null;
+                        try
+                        {
+                            var st = r1.Split(',').Select(n => int.Parse(n)).ToArray();
+                            serverTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(2, out string r2);
+                        DateTime? localTime = null;
+                        try
+                        {
+                            var st = r2.Split(',').Select(n => int.Parse(n)).ToArray();
+                            localTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(3, out string r3);
+                        int.TryParse(r3, out int diffSecond);
+                        retValue = ghost.OnSNTPCorrect(req.References, r0, serverTime, localTime, diffSecond);
+                    }
+                    break;
+                case "OnSNTPFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnSNTPFailure(req.References, r0);
+                    }
+                    break;
+                #endregion
+                #region メールチェックイベント
+                case "OnBIFFBegin":
+                    {
+                        req.References.TryGetValue(2, out string r2);
+                        retValue = ghost.OnBIFFBegin(req.References, r2);
+                    }
+                    break;
+                case "OnBIFFComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        int.TryParse(r0, out int spoolMailCount);
+                        req.References.TryGetValue(1, out string r1);
+                        int.TryParse(r1, out int spoolMailByte);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+                        req.References.TryGetValue(7, out string r7);
+                        var senderAndTitle = r7.Split(BYTE_1_CHAR);
+                        string sender = null;
+                        string title = null;
+                        try
+                        {
+                            sender = senderAndTitle[0];
+                            title = senderAndTitle[1];
+                        }
+                        catch { }
+                        retValue = ghost.OnBIFFComplete(req.References,spoolMailCount, spoolMailByte, r2, r3, r4, r5, r6, sender, title);
+                    }
+                    break;
+                case "OnBIFFFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(2, out string r2);
+                        retValue = ghost.OnBIFFFailure(req.References, r0, r2);
+                    }
+                    break;
+                #endregion
                 /* SHIORI event (other) */
                 default:
                     try

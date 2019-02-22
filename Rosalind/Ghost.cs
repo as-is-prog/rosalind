@@ -1,5 +1,6 @@
 ﻿using Shiorose.Resource;
 using Shiorose.Resource.ShioriEvent;
+using Shiorose.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -799,7 +800,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnAnchorSelectEx(IDictionary<int, string> reference, string anchorText, string anchorId, IEnumerable<string> extInfo)
         {
-            return "";
+            if (anchorId.StartsWith("http://") || anchorId.StartsWith("https://"))
+                return "\\![open,browser," + anchorId + "]";
+            else
+                return "";
         }
 
         #endregion
@@ -1718,10 +1722,114 @@ namespace Shiorose
         #endregion
 
         #region 時計合わせイベント
+        /// <summary>
+        /// 時計合わせが開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <returns></returns>
+        public virtual string OnSNTPBegin(IDictionary<int, string> reference, string serverName)
+        {
+            return "(時計合わせ開始)";
+        }
+        /// <summary>
+        /// サーバに接続が確立された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <param name="serverTime">Reference1 カンマでセパレートされたサーバ側の現時刻。</param>
+        /// <param name="localTime">Reference2 カンマでセパレートされたローカル側の現時刻</param>
+        /// <param name="diffSecond">Reference3 サーバとローカルの時刻のずれ。（秒単位）</param>
+        /// <param name="diffMSecond">Reference4 ※SSPのみ　サーバとローカルの時刻のずれ。（ミリ秒単位）</param>
+        /// <returns></returns>
+        public virtual string OnSNTPCompare(IDictionary<int, string> reference, string serverName, DateTime? serverTime, DateTime? localTime, int diffSecond, int diffMSecond)
+        {
+            const string SET = "合わせる";
+            const string NO_SET = "そのままにする";
+            return new TalkBuilder().Append("("+diffSecond).AppendLine("秒のずれています)")
+                                    .AppendLine("時計を合わせますか？")
+                                    .HalfLine()
+                                    .Marker().AppendChoice(SET).LineFeed()
+                                    .Marker().AppendChoice(NO_SET).LineFeed()
+                                    .Build()
+                                    .ContinueWith((id) =>
+                                    {
+                                        if (id == SET)
+                                            return "\\6";
+                                        else
+                                            return "キャンセルしました。";
+                                    });
+        }
+        /// <summary>
+        /// ローカル時刻をサーバ時刻に修正した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <param name="serverTime">Reference1 カンマでセパレートされたサーバ側の現時刻。</param>
+        /// <param name="localTime">Reference2 カンマでセパレートされたローカル側の現時刻</param>
+        /// <param name="diffSecond">Reference3 サーバとローカルの時刻のずれ。（秒単位）</param>
+        /// <returns></returns>
+        public virtual string OnSNTPCorrect(IDictionary<int, string> reference, string serverName, DateTime? serverTime, DateTime? localTime, int diffSecond)
+        {
+            return "(時刻を修正しました)";
+        }
+
+        /// <summary>
+        /// 時計合わせに失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <returns></returns>
+        public virtual string OnSNTPFailure(IDictionary<int, string> reference, string serverName)
+        {
+            return "(時計合わせに失敗しました)";
+        }
 
         #endregion
 
         #region メールチェックイベント
+        /// <summary>
+        /// メールチェック開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="accountName">Reference2 チェックするメールサーバ名、SSP、CROWはアカウント名。</param>
+        /// <returns></returns>
+        public virtual string OnBIFFBegin(IDictionary<int, string> reference, string accountName)
+        {
+            return "("+accountName+"のメールチェック開始)";
+        }
+
+        /// <summary>
+        /// メールチェックが成功した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="spoolMailCount">Reference0 スプールされているメールの通数、１オリジン表記。</param>
+        /// <param name="spoolMailByte">Reference1 スプールされているメールのバイト数。</param>
+        /// <param name="mailServerName">Reference2 チェックするメールサーバ名。</param>
+        /// <param name="newMailDiff">Reference3 メールの新着差分。</param>
+        /// <param name="topResults">Reference4 全メールのTopResult。POP通信全ヘッダリスト。メールごとバイト値2区切りの、ヘッダごとバイト値1区切り（通常はReference7の情報を利用すればよい）。</param>
+        /// <param name="listResult">Reference5 ListResult。メールサーバ上のID。POPコマンドの「LIST」の結果に相当する内容。</param>
+        /// <param name="uidlResult">Reference6 UidlResult。メールを区別するためのID。POPコマンドの「UIDL」の結果に相当する内容。</param>
+        /// <param name="mailSender">Reference7 メールの送信者。</param>
+        /// <param name="mailTitle">Reference7 メールのタイトル。</param>
+        /// <returns></returns>
+        public virtual string OnBIFFComplete(IDictionary<int, string> reference, int spoolMailCount, int spoolMailByte, string mailServerName, string newMailDiff, string topResults, string listResult, string uidlResult, string mailSender, string mailTitle)
+        {
+            return string.Format("(送信者:{0} タイトル: {1} のメールがあります)", mailSender, mailTitle);
+        }
+
+        /// <summary>
+        /// メールチェックに成功した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 ※失敗理由</param>
+        /// <param name="accountName">Reference2 チェックするメールサーバ名、SSP、CROWはアカウント名。</param>
+        /// <returns></returns>
+        public virtual string OnBIFFFailure(IDictionary<int, string> reference, string failureReason, string accountName)
+        {
+            return "("+accountName+"のメールチェックに失敗: "+failureReason+")";
+        }
+
 
         #endregion
 
