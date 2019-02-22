@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompileErrorGhost.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="Resource\Choice.cs" />
     <Compile Include="Resource\DeferredEvent.cs" />

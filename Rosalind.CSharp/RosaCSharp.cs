@@ -20,19 +20,25 @@ namespace Shiorose.CSharp
         internal async static Task<Rosalind> Load(Load load)
         {
             RosaCSharp rosa = new RosaCSharp(load);
+            try
+            {
+                var files = Directory.GetFiles(ShioriDir, "*.csx", SearchOption.AllDirectories).Where(f => !(f.EndsWith("Ghost.csx") || f.EndsWith("SaveData.csx")));
 
-            var files = Directory.GetFiles(ShioriDir, "*.csx", SearchOption.AllDirectories).Where(f => !(f.EndsWith("Ghost.csx") || f.EndsWith("SaveData.csx")));
+                var imp = string.Join("\r\n", files.Select(f => string.Format("#load \"{0}\"", f))) + "\r\n";
 
-            var imp = string.Join("\r\n", files.Select(f => string.Format("#load \"{0}\"", f))) + "\r\n";
+                // Script Options
+                var ssr = ScriptSourceResolver.Default.WithBaseDirectory(ShioriDir);
+                var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
+                var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
 
-            // Script Options
-            var ssr = ScriptSourceResolver.Default.WithBaseDirectory(ShioriDir);
-            var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
-            var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
+                var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(ShioriDir + "Ghost.csx"), so);
 
-            var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(ShioriDir + "Ghost.csx"), so);
-
-            rosa.ghost = (await ghostScript.RunAsync()).ReturnValue;
+                rosa.ghost = (await ghostScript.RunAsync()).ReturnValue;
+            }
+            catch (Exception e)
+            {
+                rosa.ghost = new CompileErrorGhost(e.Message);
+            }
             return rosa;
 
         }
