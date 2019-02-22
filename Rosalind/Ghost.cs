@@ -10,7 +10,7 @@ namespace Shiorose
 {
     /// <summary>
     /// Rosalindを用いたゴースト開発者が継承すべき、SHIORIイベントに対する挙動を実装するクラス．
-    /// 各種イベントをハンドルするメソッドのコメントは 2019/02/10にukadocを参照し参考にしています．
+    /// <remarks>各種イベントをハンドルするメソッドのコメントはukadocの引用 + 一部改変して書いています。</remarks>
     /// </summary>
     public abstract class Ghost
     {
