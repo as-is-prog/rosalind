@@ -1181,7 +1181,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallBegin()
         {
-            return @"\u\s[-1]\h\s[0](インストール開始)";
+            return @"(インストール開始)";
         }
 
         /// <summary>
@@ -1194,7 +1194,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallComplete(IDictionary<int, string> reference, InstallType installType, string installName, string installName2)
         {
-            return string.Format(@"\u\s[-1]\h\s[0]({0}, {1}をインストールしました。)", installType.ToString(), installName);
+            return string.Format(@"({0}, {1}をインストールしました。)", installType.ToString(), installName);
         }
 
         /// <summary>
@@ -1219,7 +1219,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallFailure(IDictionary<int, string> reference, InstallFailureReason failureReason)
         {
-            return @"\u\s[-1]\h\s[0](インストール失敗。\n理由:"+ failureReason.ToString() +")";
+            return @"(インストール失敗。\n理由:"+ failureReason.ToString() +")";
         }
 
         /// <summary>
@@ -1230,7 +1230,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallRefuse(IDictionary<int, string> reference, string sakuraName)
         {
-            return @"\u\s[-1]\h\s[0](インストール失敗。これは"+ sakuraName +"専用です。)";
+            return @"(インストール失敗。これは"+ sakuraName +"専用です。)";
         }
 
         /// <summary>
@@ -1241,7 +1241,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallReroute(IDictionary<int, string> reference, string sakuraName)
         {
-            return @"\u\s[-1]\h\s[0](これは" + sakuraName + "専用です。" + sakuraName + "にインストールします。)";
+            return @"(これは" + sakuraName + "専用です。" + sakuraName + "にインストールします。)";
         }
 
         #endregion
@@ -1309,7 +1309,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUpdatedataCreated()
         {
-            return @"\u\s[-1]\h\s[0](updates2.dau作成完了)";
+            return @"(updates2.dau作成完了)";
         }
 
         /// <summary>
@@ -1335,17 +1335,385 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnNarCreated(IDictionary<int, string> reference, string objectName, string fileName, InstallType installType)
         {
-            return @"\u\s[-1]\h\s[0](\_?"+fileName+@"\_?としてnarファイル作成完了)";
+            return @"(\_?"+fileName+@"\_?としてnarファイル作成完了)";
         }
 
 
         #endregion
 
         #region URLドロップイベント
+        /// <summary>
+        /// URLがドロップされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="urlPath">Reference0 URLパス。</param>
+        /// <returns></returns>
+        public virtual string OnURLDropping(IDictionary<int, string> reference, string urlPath)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ドロップされたURLを受領し終わった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ダウンロードし終わったファイルのローカルパス。</param>
+        /// <returns></returns>
+        public virtual string OnURLDropped(IDictionary<int, string> reference, string filePath)
+        {
+            return @"("+filePath+"をダウンロード完了)";
+        }
+        /// <summary>
+        /// ドロップされたURLの受領に失敗したかキャンセルされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ダウンロードし終わった分のファイルのローカルパス。</param>
+        /// <param name="failureReason">Reference1 ユーザーのダブルクリックによって中断した場合、artificial</param>
+        /// <returns></returns>
+        public virtual string OnURLDropFailure(IDictionary<int, string> reference, string filePath, string failureReason)
+        {
+            return @"(ダウンロード失敗 理由:"+failureReason+")";
+        }
+
+        /// <summary>
+        /// URLがキャラクターウィンドウにドラッグ＆ドロップされた際に通知されます。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="urlPath">Reference0 URLパス。</param>
+        /// <param name="charId">Reference1 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="mimeType">Reference2 ドロップされたURLのMIMEタイプ</param>
+        /// <returns></returns>
+        public virtual string OnURLQuery(IDictionary<int, string> reference, string urlPath, string charId, string mimeType)
+        {
+            return "";
+        }
 
         #endregion
 
         #region ネットワーク更新イベント
+        /// <summary>
+        /// ネットワーク更新開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="ghostName">Reference0 ゴースト名。</param>
+        /// <param name="fullPath">Reference1 フルパス。</param>
+        /// <param name="updateType">Reference3 更新対象の識別子</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateBegin(IDictionary<int, string> reference, string ghostName, string fullPath, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "(ネットワーク更新開始)";
+        }
+
+        /// <summary>
+        /// 更新ファイルが確認された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateCount">Reference0 更新を行うファイルの総数。</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 更新対象種別。(shell ghost balloon headline plugin)</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateReady(IDictionary<int, string> reference, int updateCount, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "("+(updateCount)+"個の更新を確認)";
+        }
+
+        /// <summary>
+        /// ネットワーク更新が成功し完了した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="isUpdated">Reference0 更新があればtrue, なければfalse</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateComplete(IDictionary<int, string> reference, bool isUpdated, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return isUpdated ? "(ネットワーク更新完了)" : "(更新ファイルなし)";
+        }
+
+        /// <summary>
+        /// ネットワーク更新に失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 失敗理由
+        /// <para> timeout -> タイムアウト</para>
+        /// <para> too slow -> 回線が非常に重い</para>
+        /// <para> md5 miss -> MD5不一致</para>
+        /// <para> artificial -> ユーザによる中断</para>
+        /// <para> 404等 -> 各ステータスコードによる失敗</para>
+        /// <para> fileio -> ストレージの容量不足</para>
+        /// <para> readonly -> 更新対象が読み取り専用だった</para>
+        /// </param>
+        /// <param name="failureFileName">Reference1 カンマでセパレートされた更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateFailure(IDictionary<int, string> reference, string failureReason, string failureFileName, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "(ネットワーク更新失敗 理由:"+failureReason+")";
+        }
+        /// <summary>
+        /// ファイルダウンロード開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="downloadFileName">Reference0 ダウンロードするファイル名。</param>
+        /// <param name="downloadProgressCount">Reference1 ダウンロード中の更新ファイルが何番目か。</param>
+        /// <param name="downloadTotalCount">Reference2 更新を行うファイルの総数。</param>
+        /// <param name="updateType">Reference3 （SSPのみ）※更新対象種別。</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnDownloadBegin(IDictionary<int, string> reference, string downloadFileName, int downloadProgressCount, int downloadTotalCount, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "("+downloadFileName+"をダウンロード開始 "+downloadProgressCount+"/"+downloadTotalCount+")";
+        }
+
+        /// <summary>
+        /// MD5の照合開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnMD5CompareBegin(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// MD5が一致した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnMD5CompareComplete(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// MD5が一致しなかった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnMD5CompareFailure(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のネットワーク更新開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="ghostName">Reference0 ゴースト名。</param>
+        /// <param name="fullPath">Reference1 フルパス。</param>
+        /// <param name="updateType">Reference3 更新対象の識別子</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherBegin(IDictionary<int, string> reference, string ghostName, string fullPath, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外の更新ファイルが確認された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateCount">Reference0 更新を行うファイルの総数。</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 更新対象種別。(shell ghost balloon headline plugin)</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherReady(IDictionary<int, string> reference, int updateCount, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のネットワーク更新が成功し完了した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="isUpdated">Reference0 更新があればtrue, なければfalse</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherComplete(IDictionary<int, string> reference, bool isUpdated, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のネットワーク更新に失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 失敗理由
+        /// <para> timeout -> タイムアウト</para>
+        /// <para> too slow -> 回線が非常に重い</para>
+        /// <para> md5 miss -> MD5不一致</para>
+        /// <para> artificial -> ユーザによる中断</para>
+        /// <para> 404等 -> 各ステータスコードによる失敗</para>
+        /// <para> fileio -> ストレージの容量不足</para>
+        /// <para> readonly -> 更新対象が読み取り専用だった</para>
+        /// </param>
+        /// <param name="failureFileName">Reference1 カンマでセパレートされた更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherFailure(IDictionary<int, string> reference, string failureReason, string failureFileName, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のファイルダウンロード開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="downloadFileName">Reference0 ダウンロードするファイル名。</param>
+        /// <param name="downloadProgressCount">Reference1 ダウンロード中の更新ファイルが何番目か。</param>
+        /// <param name="downloadTotalCount">Reference2 更新を行うファイルの総数。</param>
+        /// <param name="updateType">Reference3 （SSPのみ）※更新対象種別。</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnDownloadBegin(IDictionary<int, string> reference, string downloadFileName, int downloadProgressCount, int downloadTotalCount, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のMD5の照合開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnMD5CompareBegin(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のMD5が一致した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnMD5CompareComplete(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のMD5が一致しなかった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnMD5CompareFailure(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ネットワーク更新のチェックに成功した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="isUpdate">Reference0 更新があればtrue、なければfalse。</param>
+        /// <param name="updateFileNames">Reference1 カンマでセパレートされた更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 ※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。scriptのみ。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateCheckComplete(IDictionary<int, string> reference, bool isUpdate, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "(ネットワーク更新"+(isUpdate ? "あり" : "なし")+")";
+        }
+
+        /// <summary>
+        /// ネットワーク更新のチェックに失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 失敗理由
+        /// <para> timeout -> タイムアウト</para>
+        /// <para> too slow -> 回線が非常に重い</para>
+        /// <para> md5 miss -> MD5不一致</para>
+        /// <para> artificial -> ユーザによる中断</para>
+        /// <para> 404等 -> 各ステータスコードによる失敗</para>
+        /// <para> fileio -> ストレージの容量不足</para>
+        /// <para> readonly -> 更新対象が読み取り専用だった</para>
+        /// </param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。scriptのみ。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateCheckFailure(IDictionary<int, string> reference, string failureReason, UpdateReason updateReason)
+        {
+            return @"(ネットワーク更新のチェック失敗 理由: "+failureReason+")";
+        }
+
+        /// <summary>
+        /// ネットワーク更新を実行した際に発生し、バルーン・シェル一括更新機能も含めてすべての更新結果を一括で通知する。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateResults">Reference* 更新を実行した順に、更新結果が以下のフォーマットで入っている
+        /// <para>（\1はバイト値1）</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)[\1] (※4)</para> 
+        /// <para>または</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)</para>
+        ///
+        /// <para>※1……ネットワーク更新対象の種別</para>
+        /// <para>※2……成功時「OK」　失敗時「NG」</para>
+        /// <para>※3……成功した場合は更新ファイル数(更新ファイルなし= noneの場合0)、失敗した場合は失敗理由。</para>
+        /// <para>※4……失敗して、かつ失敗原因のファイルがわかる場合、そのファイル名。</para>
+        /// </param>
+        /// <returns></returns>
+        public virtual string OnUpdateResult(IDictionary<int, string> reference, IDictionary<int, string> updateResults)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴーストエクスプローラからネットワーク更新を実行した際に発生。OnUpdateResultのエクスプローラ版。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateResults">Reference* 更新を実行した順に、更新結果が以下のフォーマットで入っている
+        /// <para>（\1はバイト値1）</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)[\1] (※4)</para> 
+        /// <para>または</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)</para>
+        ///
+        /// <para>※1……ネットワーク更新対象の種別</para>
+        /// <para>※2……成功時「OK」　失敗時「NG」</para>
+        /// <para>※3……成功した場合は更新ファイル数(更新ファイルなし= noneの場合0)、失敗した場合は失敗理由。</para>
+        /// <para>※4……失敗して、かつ失敗原因のファイルがわかる場合、そのファイル名。</para>
+        /// </param>
+        /// <returns></returns>
+        public virtual string OnUpdateResultExplorer(IDictionary<int, string> reference, IDictionary<int, string> updateResults)
+        {
+            return "";
+        }
+
 
         #endregion
 

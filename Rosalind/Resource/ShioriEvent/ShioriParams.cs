@@ -104,6 +104,66 @@ namespace Shiorose.Resource.ShioriEvent
     }
 
     /// <summary>
+    /// ネットワーク更新イベントにおける更新対象の識別子
+    /// </summary>
+    public enum UpdateType
+    {
+        /// <summary>
+        /// ゴースト
+        /// </summary>
+        GHOST,
+        /// <summary>
+        /// シェル
+        /// </summary>
+        SHELL,
+        /// <summary>
+        /// バルーン
+        /// </summary>
+        BALLOON,
+        /// <summary>
+        /// プラグイン
+        /// </summary>
+        PLUGIN,
+        /// <summary>
+        /// ヘッドライン
+        /// </summary>
+        HEADLINE,
+        /// <summary>
+        /// ベースウェア(CROWのみ)
+        /// </summary>
+        BASEWARE,
+        /// <summary>
+        /// (Rosalind独自)Rosalindが未知の識別子
+        /// </summary>
+        UNKNOWN
+    }
+
+    /// <summary>
+    /// ネットワーク更新イベントにおける更新理由の識別子
+    /// </summary>
+    public enum UpdateReason
+    {
+        /// <summary>
+        /// SSPの設定などによる自動更新
+        /// </summary>
+        AUTO,
+        /// <summary>
+        /// オーナードローメニューからの選択などによる手動実行。
+        /// </summary>
+        MANUAL,
+        /// <summary>
+        /// さくらスクリプトタグによる更新。
+        /// </summary>
+        SCRIPT,
+        /// <summary>
+        /// (Rosalind独自)Rosalindが未知の識別子
+        /// </summary>
+        UNKNOWN
+    }
+
+
+
+    /// <summary>
     /// SHIORIイベントで渡される各種識別子のenumを拡張するクラス。
     /// </summary>
     internal static class ShioriParamTypeUtil
@@ -167,6 +227,40 @@ namespace Shiorose.Resource.ShioriEvent
             }
         }
 
+        public static UpdateType StringToUpdateType(string str)
+        {
+            switch (str)
+            {
+                case "shell":
+                    return UpdateType.SHELL;
+                case "ghost":
+                    return UpdateType.GHOST;
+                case "balloon":
+                    return UpdateType.BALLOON;
+                case "plugin":
+                    return UpdateType.PLUGIN;
+                case "headline":
+                    return UpdateType.HEADLINE;
+                case "baseware":
+                    return UpdateType.BASEWARE;
+                default:
+                    return UpdateType.UNKNOWN;
+            }
+        }
 
+        public static UpdateReason StringToUpdateReason(string str)
+        {
+            switch (str)
+            {
+                case "auto":
+                    return UpdateReason.AUTO;
+                case "manual":
+                    return UpdateReason.MANUAL;
+                case "script"]
+                    return UpdateReason.SCRIPT;
+                default:
+                    return UpdateReason.UNKNOWN;
+            }
+        }
     }
 }

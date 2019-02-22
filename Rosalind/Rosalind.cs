@@ -925,6 +925,275 @@ namespace Shiorose
                     }
                     break;
                 #endregion
+                #region URLドロップイベント
+                case "OnURLDropping":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnURLDropping(req.References, r0);
+                    }
+                    break;
+                case "OnURLDropped":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnURLDropped(req.References, r0);
+                    }
+                    break;
+                case "OnURLDropFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        retValue = ghost.OnURLDropFailure(req.References, r0, r1);
+                    }
+                    break;
+                case "OnURLQuery":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        retValue = ghost.OnURLQuery(req.References);
+                    }
+                    break;
+                #endregion
+                #region ネットワーク更新イベント
+                case "OnUpdateBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateBegin(req.References,r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateReady":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        int updateCount;
+                        if (int.TryParse(r0, out updateCount)) updateCount += 1;
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateReady(req.References, updateCount, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var isUpdated = r0 == "changed";
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateComplete(req.References,isUpdated, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateFailure(req.References, r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnDownloadBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        int downloadProgressCount;
+                        if (int.TryParse(r1, out downloadProgressCount)) downloadProgressCount += 1;
+                        req.References.TryGetValue(2, out string r2);
+                        int downloadTotalCount;
+                        if (int.TryParse(r2, out downloadTotalCount)) downloadTotalCount += 1;
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOnDownloadBegin(req.References, r0, downloadProgressCount, downloadTotalCount, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnMD5CompareBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOnMD5CompareBegin(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnMD5CompareComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOnMD5CompareComplete(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnMD5CompareFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOnMD5CompareFailure(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherBegin(req.References, r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherReady":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        int updateCount;
+                        if (int.TryParse(r0, out updateCount)) updateCount += 1;
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherReady(req.References, updateCount, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var isUpdated = r0 == "changed";
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherComplete(req.References, isUpdated, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherFailure(req.References, r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnDownloadBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        int downloadProgressCount;
+                        if (int.TryParse(r1, out downloadProgressCount)) downloadProgressCount += 1;
+                        req.References.TryGetValue(2, out string r2);
+                        int downloadTotalCount;
+                        if (int.TryParse(r2, out downloadTotalCount)) downloadTotalCount += 1;
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherOnDownloadBegin(req.References, r0, downloadProgressCount, downloadTotalCount, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnMD5CompareBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOtherOnMD5CompareBegin(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnMD5CompareComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOtherOnMD5CompareComplete(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnMD5CompareFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOtherOnMD5CompareFailure(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateCheckComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var isupdate = r0 == "changed";
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',');
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateCheckComplete(req.References, isupdate, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateCheckFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateCheckFailure(req.References, r0, updateReason);
+                    }
+                    break;
+                case "OnUpdateResult":
+                    retValue = ghost.OnUpdateResult(req.References, req.References);
+                    break;
+                case "OnUpdateResultExplorer":
+                    retValue = ghost.OnUpdateResultExplorer(req.References, req.References);
+                    break;
+                #region
                 /* SHIORI event (other) */
                 default:
                     try
