@@ -1,4 +1,5 @@
 ﻿using Shiorose.Resource;
+using Shiorose.Resource.ShioriEvent;
 using Shiorose.Shiolink;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,10 @@ namespace Shiorose
         /// バイト値1の文字列
         /// </summary>
         public static readonly string BYTE_1_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 1 });
+        /// <summary>
+        /// バイト値1の文字
+        /// </summary>
+        public static readonly char BYTE_1_CHAR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 1 }).First();
         /// <summary>
         /// バイト値2の文字列
         /// </summary>
@@ -84,12 +89,12 @@ namespace Shiorose
                 case "craftmanw":
                     retValue = CRAFTMAN_W;
                     break;
-                /* Ghost property */
+                /* SHIORI Resource (has Ghost class)*/
                 case "homeurl":
                     retValue = ghost.Homeurl;
                     break;
                 case "username":
-                    retValue = "";
+                    retValue = ghost.SaveData != null ? ghost.SaveData.UserName : "";
                     break;
                 case "sakura.recommendsites":
                     retValue = ghost.SakuraRecommendSites.ToStringFromSites();
@@ -103,13 +108,43 @@ namespace Shiorose
                 case "kero.portalsites":
                     retValue = ghost.KeroPortalSites.ToStringFromSites();
                     break;
+                //* SHIORI Resouce (has SHIORIResource class)*/
+                case "sakura.recommendbuttoncaption":
+                    retValue = ghost.Resource.SakuraRecommendButtonCaption();
+                    break;
+                case "kero.recommendbuttoncaption":
+                    retValue = ghost.Resource.KeroRecommendButtonCaption();
+                    break;
+                case "sakura.portalbuttoncaption":
+                    retValue = ghost.Resource.SakuraPortalButtonCaption();
+                    break;
+                case "kero.portalbuttoncaption":
+                    retValue = ghost.Resource.KeroPortalButtonCaption();
+                    break;
+                case "updatebuttoncaption":
+                    retValue = ghost.Resource.UpdateButtonCaption();
+                    break;
+                case "vanishbuttoncaption":
+                    retValue = ghost.Resource.VanishButtonCaption();
+                    break;
+                case "readmebuttoncaption":
+                    retValue = ghost.Resource.ReadmeButtonCaption();
+                    break;
+                case "vanishbuttonvisible":
+                    retValue = ghost.Resource.VanishButtonVisible().ToString();
+                    break;
+                case "sakura.popupmenu.visible":
+                    retValue = ghost.Resource.SakuraPopupMenuVisible().ToString();
+                    break;
+                case "kero.popupmenu.visible":
+                    retValue = ghost.Resource.KeroPopupMenuVisible().ToString();
+                    break;
                 /* SHIORI event (supposes) */
                 #region 起動・終了・切り替えイベント
                 case "OnFirstBoot":
                     {
                         req.References.TryGetValue(0, out string r0);
-                        int vanishCount;
-                        Int32.TryParse(r0, out vanishCount);
+                        int.TryParse(r0, out int vanishCount);
                         retValue = ghost.OnFirstBoot(req.References, vanishCount);
                     }
                     break;
@@ -549,7 +584,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseClick(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseClick(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseClickEx":
@@ -561,7 +596,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseClickEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseClickEx(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseDoubleClick":
@@ -573,7 +608,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDoubleClick(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseDoubleClick(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseDoubleClickEx":
@@ -585,7 +620,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDoubleClickEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseDoubleClickEx(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseMultipleClick":
@@ -599,7 +634,7 @@ namespace Shiorose
                         req.References.TryGetValue(7, out string r7);
 
                         int.TryParse(r7, out int comboCount);
-                        retValue = ghost.OnMouseMultipleClick(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6), comboCount);
+                        retValue = ghost.OnMouseMultipleClick(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6), comboCount);
                     }
                     break;
                 case "OnMouseMultipleClickEx":
@@ -613,7 +648,7 @@ namespace Shiorose
                         req.References.TryGetValue(7, out string r7);
 
                         int.TryParse(r7, out int comboCount);
-                        retValue = ghost.OnMouseMultipleClickEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6), comboCount);
+                        retValue = ghost.OnMouseMultipleClickEx(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6), comboCount);
                     }
                     break;
                 case "OnMouseUp":
@@ -625,7 +660,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseUp(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseUp(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseUpEx":
@@ -637,7 +672,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseUpEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseUpEx(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseDown":
@@ -649,7 +684,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDown(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseDown(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseDownEx":
@@ -661,7 +696,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDownEx(req.References, r0, r1, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseDownEx(req.References, r0, r1, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseMove":
@@ -673,7 +708,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseMove(req.References, r0, r1, r2, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseMove(req.References, r0, r1, r2, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseWheel":
@@ -685,7 +720,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseWheel(req.References, r0, r1, r2, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseWheel(req.References, r0, r1, r2, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseEnterAll":
@@ -696,7 +731,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseEnterAll(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseEnterAll(req.References, r0, r1, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseLeaveAll":
@@ -707,7 +742,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseLeaveAll(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseLeaveAll(req.References, r0, r1, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseEnter":
@@ -718,7 +753,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseEnter(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseEnter(req.References, r0, r1, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseLeave":
@@ -729,7 +764,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseLeave(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseLeave(req.References, r0, r1, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseDragStart":
@@ -742,7 +777,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDragStart(req.References, r0, r1, r2, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseDragStart(req.References, r0, r1, r2, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseDragEnd":
@@ -755,7 +790,7 @@ namespace Shiorose
                         req.References.TryGetValue(5, out string r5);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseDragEnd(req.References, r0, r1, r2, r3, r4, r5, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseDragEnd(req.References, r0, r1, r2, r3, r4, r5, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseHover":
@@ -766,7 +801,7 @@ namespace Shiorose
                         req.References.TryGetValue(4, out string r4);
                         req.References.TryGetValue(6, out string r6);
 
-                        retValue = ghost.OnMouseHover(req.References, r0, r1, r3, r4, DeviceTypeUtil.ValueOf(r6));
+                        retValue = ghost.OnMouseHover(req.References, r0, r1, r3, r4, ShioriParamTypeUtil.StringToDeviceType(r6));
                     }
                     break;
                 case "OnMouseGesture":
@@ -784,6 +819,499 @@ namespace Shiorose
                         retValue = ghost.OnMouseGesture(req.References, r0, mousePos[0], mousePos[1], r2, newMousePos[0], newMousePos[1], r4, r5, r6);
                     }
                     break;
+                #endregion
+                #region インストールイベント
+                case "OnInStallBegin":
+                    retValue = ghost.OnInstallBegin();
+                    break;
+                case "OnInstallComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var installType = ShioriParamTypeUtil.StringToInstallType(r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+
+                        retValue = ghost.OnInstallComplete(req.References, installType, r1, r2);
+                    }
+                    break;
+                case "OnInstallCompleteEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var installTypes = r0.Split(BYTE_1_CHAR).Select(it => ShioriParamTypeUtil.StringToInstallType(it)).ToArray();
+                        req.References.TryGetValue(1, out string r1);
+                        var installNames = r1.Split(BYTE_1_CHAR).ToArray();
+                        req.References.TryGetValue(2, out string r2);
+                        var installPaths = r2.Split(BYTE_1_CHAR).ToArray();
+
+                        retValue = ghost.OnInstallCompleteEx(req.References, installTypes, installNames, installPaths);
+                    }
+                    break;
+                case "OnInstallFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var failureReason = ShioriParamTypeUtil.StringToInstallFailureReason(r0);
+
+                        retValue = ghost.OnInstallFailure(req.References, failureReason);
+                    }
+                    break;
+                case "OnInstallRefuse":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+
+                        retValue = ghost.OnInstallRefuse(req.References, r0);
+                    }
+                    break;
+                case "OnInstallReroute":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+
+                        retValue = ghost.OnInstallReroute(req.References, r0);
+                    }
+                    break;
+                #endregion
+                #region ファイルドロップイベント
+                case "OnFileDropping":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+
+                        retValue = ghost.OnFileDropping(req.References, r0, r1);
+                    }
+                    break;
+                case "OnDirectoryDrop":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        retValue = ghost.OnDirectoryDrop(req.References, r0, r1);
+                    }
+                    break;
+                case "OnWallpaperChange":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnWallpaperChange(req.References, r0);
+                    }
+                    break;
+                case "OnFileDropEx":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var filePaths = r0.Split(BYTE_1_CHAR).ToArray();
+                        req.References.TryGetValue(1, out string r1);
+                        retValue = ghost.OnFileDropEx(req.References, filePaths, r1);
+                    }
+                    break;
+                case "OnUpdatedataCreating":
+                    retValue = ghost.OnUpdatedataCreating();
+                    break;
+                case "OnUpdatedataCreated":
+                    retValue = ghost.OnUpdatedataCreated();
+                    break;
+                case "OnNarCreating":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        var installType = ShioriParamTypeUtil.StringToInstallType(r2);
+                        retValue = ghost.OnNarCreating(req.References, r0, r1, installType);
+                    }
+                    break;
+                case "OnNarCreated":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        var installType = ShioriParamTypeUtil.StringToInstallType(r2);
+                        retValue = ghost.OnNarCreated(req.References, r0, r1, installType);
+                    }
+                    break;
+                #endregion
+                #region URLドロップイベント
+                case "OnURLDropping":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnURLDropping(req.References, r0);
+                    }
+                    break;
+                case "OnURLDropped":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnURLDropped(req.References, r0);
+                    }
+                    break;
+                case "OnURLDropFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        retValue = ghost.OnURLDropFailure(req.References, r0, r1);
+                    }
+                    break;
+                case "OnURLQuery":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        retValue = ghost.OnURLQuery(req.References, r0, r1, r2);
+                    }
+                    break;
+                #endregion
+                #region ネットワーク更新イベント
+                case "OnUpdateBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateBegin(req.References,r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateReady":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        if (int.TryParse(r0, out int updateCount)) updateCount += 1;
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateReady(req.References, updateCount, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var isUpdated = r0 == "changed";
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateComplete(req.References,isUpdated, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateFailure(req.References, r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnDownloadBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        if (int.TryParse(r1, out int downloadProgressCount)) downloadProgressCount += 1;
+                        req.References.TryGetValue(2, out string r2);
+                        if (int.TryParse(r2, out int downloadTotalCount)) downloadTotalCount += 1;
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOnDownloadBegin(req.References, r0, downloadProgressCount, downloadTotalCount, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnMD5CompareBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOnMD5CompareBegin(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnMD5CompareComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOnMD5CompareComplete(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdate.OnMD5CompareFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOnMD5CompareFailure(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherBegin(req.References, r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherReady":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        if (int.TryParse(r0, out int updateCount)) updateCount += 1;
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherReady(req.References, updateCount, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var isUpdated = r0 == "changed";
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',').ToArray();
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherComplete(req.References, isUpdated, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOtherFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherFailure(req.References, r0, r1, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnDownloadBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        if (int.TryParse(r1, out int downloadProgressCount)) downloadProgressCount += 1;
+                        req.References.TryGetValue(2, out string r2);
+                        if (int.TryParse(r2, out int downloadTotalCount)) downloadTotalCount += 1;
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+
+                        retValue = ghost.OnUpdateOtherOnDownloadBegin(req.References, r0, downloadProgressCount, downloadTotalCount, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnMD5CompareBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOtherOnMD5CompareBegin(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnMD5CompareComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOtherOnMD5CompareComplete(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateOther.OnMD5CompareFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateOtherOnMD5CompareFailure(req.References, r0, r1, r2, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateCheckComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        var isupdate = r0 == "changed";
+                        req.References.TryGetValue(1, out string r1);
+                        var updateFileNames = r1.Split(',');
+                        req.References.TryGetValue(3, out string r3);
+                        var updateType = ShioriParamTypeUtil.StringToUpdateType(r3);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateCheckComplete(req.References, isupdate, updateFileNames, updateType, updateReason);
+                    }
+                    break;
+                case "OnUpdateCheckFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(4, out string r4);
+                        var updateReason = ShioriParamTypeUtil.StringToUpdateReason(r4);
+                        retValue = ghost.OnUpdateCheckFailure(req.References, r0, updateReason);
+                    }
+                    break;
+                case "OnUpdateResult":
+                    retValue = ghost.OnUpdateResult(req.References, req.References);
+                    break;
+                case "OnUpdateResultExplorer":
+                    retValue = ghost.OnUpdateResultExplorer(req.References, req.References);
+                    break;
+                #endregion
+                #region 時計合わせイベント
+                case "OnSNTPBegin":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnSNTPBegin(req.References, r0);
+                    }
+                    break;
+                case "OnSNTPCompare":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        DateTime? serverTime = null;
+                        try
+                        {
+                            var st = r1.Split(',').Select(n => int.Parse(n)).ToArray();
+                            serverTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(2, out string r2);
+                        DateTime? localTime = null;
+                        try
+                        {
+                            var st = r2.Split(',').Select(n => int.Parse(n)).ToArray();
+                            localTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(3, out string r3);
+                        int.TryParse(r3, out int diffSecond);
+                        req.References.TryGetValue(4, out string r4);
+                        int.TryParse(r4, out int diffMSecond);
+                        retValue = ghost.OnSNTPCompare(req.References, r0, serverTime, localTime, diffSecond, diffMSecond);
+                    }
+                    break;
+                case "OnSNTPCorrect":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        DateTime? serverTime = null;
+                        try
+                        {
+                            var st = r1.Split(',').Select(n => int.Parse(n)).ToArray();
+                            serverTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(2, out string r2);
+                        DateTime? localTime = null;
+                        try
+                        {
+                            var st = r2.Split(',').Select(n => int.Parse(n)).ToArray();
+                            localTime = new DateTime(st[0], st[1], st[2], st[3], st[4], st[5], st[6]);
+                        }
+                        catch { }
+                        req.References.TryGetValue(3, out string r3);
+                        int.TryParse(r3, out int diffSecond);
+                        retValue = ghost.OnSNTPCorrect(req.References, r0, serverTime, localTime, diffSecond);
+                    }
+                    break;
+                case "OnSNTPFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        retValue = ghost.OnSNTPFailure(req.References, r0);
+                    }
+                    break;
+                #endregion
+                #region メールチェックイベント
+                case "OnBIFFBegin":
+                    {
+                        req.References.TryGetValue(2, out string r2);
+                        retValue = ghost.OnBIFFBegin(req.References, r2);
+                    }
+                    break;
+                case "OnBIFFComplete":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        int.TryParse(r0, out int spoolMailCount);
+                        req.References.TryGetValue(1, out string r1);
+                        int.TryParse(r1, out int spoolMailByte);
+                        req.References.TryGetValue(2, out string r2);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        req.References.TryGetValue(5, out string r5);
+                        req.References.TryGetValue(6, out string r6);
+                        req.References.TryGetValue(7, out string r7);
+                        var senderAndTitle = r7.Split(BYTE_1_CHAR);
+                        string sender = null;
+                        string title = null;
+                        try
+                        {
+                            sender = senderAndTitle[0];
+                            title = senderAndTitle[1];
+                        }
+                        catch { }
+                        retValue = ghost.OnBIFFComplete(req.References,spoolMailCount, spoolMailByte, r2, r3, r4, r5, r6, sender, title);
+                    }
+                    break;
+                case "OnBIFFFailure":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(2, out string r2);
+                        retValue = ghost.OnBIFFFailure(req.References, r0, r2);
+                    }
+                    break;
+                #endregion
+
+                #region 単体イベント
+                case "OnKeyPress":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        req.References.TryGetValue(2, out string r2);
+                        int.TryParse(r2, out int pressCount);
+                        req.References.TryGetValue(3, out string r3);
+                        req.References.TryGetValue(4, out string r4);
+                        retValue = ghost.OnKeyPress(req.References, r0, r1, pressCount, r3, r4);
+                    }
+                    break;
+                case "OnTextDrop":
+                    {
+                        req.References.TryGetValue(0, out string r0);
+                        req.References.TryGetValue(1, out string r1);
+                        retValue = ghost.OnTextDrop(req.References, string.Join("\n", r0.Split(BYTE_1_CHAR)), r1);
+                    }
+                    break;
+                
                 #endregion
                 /* SHIORI event (other) */
                 default:

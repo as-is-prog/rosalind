@@ -9,7 +9,7 @@ namespace Shiorose.Resource
     /// <summary>
     /// トークに関わるクラス
     /// </summary>
-    public class Talk
+    public class RandomTalk
     {
         /// <summary>
         /// トークが有効かを判断するメソッド
@@ -20,13 +20,13 @@ namespace Shiorose.Resource
         /// </summary>
         public Func<string> TalkScript { get; private set; } 
 
-        private Talk(Func<string> talkScript, Func<bool> filter)
+        private RandomTalk(Func<string> talkScript, Func<bool> filter)
         {
             TalkScript = talkScript;
             Filter = filter ?? (() => true);
         }
 
-        private Talk(string talkScript, Func<bool> filter = null) : this(() => talkScript, filter)
+        private RandomTalk(string talkScript, Func<bool> filter = null) : this(() => talkScript, filter)
         {
 
         }
@@ -37,9 +37,9 @@ namespace Shiorose.Resource
         /// <param name="talkScript">トーク内容を返すメソッド</param>
         /// <param name="filter">このトークが選ばれる条件（省略可）</param>
         /// <returns></returns>
-        public static Talk Create(Func<string> talkScript, Func<bool> filter = null)
+        public static RandomTalk Create(Func<string> talkScript, Func<bool> filter = null)
         {
-            return new Talk(talkScript, filter);
+            return new RandomTalk(talkScript, filter);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace Shiorose.Resource
         /// <param name="talkScript">トーク内容</param>
         /// <param name="filter">このトークが選ばれる条件（省略可）</param>
         /// <returns></returns>
-        public static Talk Create(string talkScript, Func<bool> filter = null)
+        public static RandomTalk Create(string talkScript, Func<bool> filter = null)
         {
-            return new Talk(talkScript, filter);
+            return new RandomTalk(talkScript, filter);
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace Shiorose.Resource
         /// <param name="talkScript">トーク内容を返すメソッド</param>
         /// <param name="filter">このトークが選ばれる条件（省略可）</param>
         /// <returns></returns>
-        public static Talk CreateWithAutoWait(Func<string> talkScript, Func<bool> filter = null)
+        public static RandomTalk CreateWithAutoWait(Func<string> talkScript, Func<bool> filter = null)
         {
-            return new Talk(AutoWait(talkScript), filter);
+            return new RandomTalk(AutoWait(talkScript), filter);
         }
 
         /// <summary>
@@ -70,9 +70,9 @@ namespace Shiorose.Resource
         /// <param name="talkScript">トーク内容</param>
         /// <param name="filter">このトークが選ばれる条件（省略可）</param>
         /// <returns></returns>
-        public static Talk CreateWithAutoWait(string talkScript, Func<bool> filter = null)
+        public static RandomTalk CreateWithAutoWait(string talkScript, Func<bool> filter = null)
         {
-            return new Talk(AutoWait(talkScript), filter);
+            return new RandomTalk(AutoWait(talkScript), filter);
         }
 
         /// <summary>

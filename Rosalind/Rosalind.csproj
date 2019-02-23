@@ -71,8 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompileErrorGhost.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="Resource\Choice.cs" />
+    <Compile Include="Resource\DeferredEvent.cs" />
+    <Compile Include="Resource\ShioriEvent\ShioriParams.cs" />
+    <Compile Include="Resource\SHIORIResource.cs" />
     <Compile Include="Resource\SaveDataBase.cs" />
     <Compile Include="Shiori.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,8 +88,9 @@
     <Compile Include="Shiolink\Sync.cs" />
     <Compile Include="Shiolink\Unload.cs" />
     <Compile Include="Resource\Site.cs" />
-    <Compile Include="Resource\Talk.cs" />
+    <Compile Include="Resource\RandomTalk.cs" />
     <Compile Include="Support\TalkBuilder.cs" />
+    <Compile Include="Support\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

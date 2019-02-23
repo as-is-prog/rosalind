@@ -63,12 +63,33 @@ namespace Shiorose.Resource
         public int TalkInterval { get; set; }
 
         /// <summary>
+        /// ユーザ名
+        /// </summary>
+        [DataMember]
+        public string UserName { get; set; }
+
+        /// <summary>
         /// セーブデータをファイルに書き込む
         /// </summary>
-        public void Save()
+        public virtual void Save()
         {
             SaveDataManager.Save(this);
         }
     }
+
+    internal class MockSaveData : BaseSaveData
+    {
+        public MockSaveData()
+        {
+            TalkInterval = 0;
+            UserName = "";
+        }
+
+        public override void Save()
+        {
+
+        }
+    }
+
 
 }
