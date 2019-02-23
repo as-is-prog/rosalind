@@ -15,7 +15,7 @@ namespace Shiorose
     /// </summary>
     public abstract class Ghost
     {
- 
+
         /// <summary>
         /// ユーザ名
         /// </summary>
@@ -44,8 +44,9 @@ namespace Shiorose
         /// <summary>
         /// ランダムトークのリスト
         /// </summary>
-        public List<Talk> RandomTalks { get; protected set; } = new List<Talk>();
+        public List<RandomTalk> RandomTalks { get; protected set; } = new List<RandomTalk>();
 
+        public Func<string> NextRandomTalk { get; protected set; }
 
         private Random rand = new Random();
 
@@ -90,7 +91,7 @@ namespace Shiorose
         /// </summary>
         public Ghost()
         {
-
+            NextRandomTalk = () => GetRandomTalk().TalkScript();
         }
 
         #region 起動・終了・切り替えイベント
@@ -1876,7 +1877,7 @@ namespace Shiorose
 
         /* ランダムトーク */
 
-        private Talk GetRandomTalk()
+        private RandomTalk GetRandomTalk()
         {
             var filtedTalks = RandomTalks.Where(t => t.Filter()).ToArray();
 
@@ -1890,7 +1891,10 @@ namespace Shiorose
         /// <returns></returns>
         protected virtual string OnRandomTalk()
         {
-            return GetRandomTalk().TalkScript();
+            var randomTalk = NextRandomTalk;
+            NextRandomTalk = () => GetRandomTalk().TalkScript();
+
+            return randomTalk();
         }
 
         /* マウス関連 */

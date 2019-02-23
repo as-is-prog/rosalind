@@ -88,7 +88,7 @@
     <Compile Include="Shiolink\Sync.cs" />
     <Compile Include="Shiolink\Unload.cs" />
     <Compile Include="Resource\Site.cs" />
-    <Compile Include="Resource\Talk.cs" />
+    <Compile Include="Resource\RandomTalk.cs" />
     <Compile Include="Support\TalkBuilder.cs" />
     <Compile Include="Support\Util.cs" />
   </ItemGroup>

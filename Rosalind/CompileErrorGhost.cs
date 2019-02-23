@@ -19,7 +19,7 @@ namespace Shiorose
             _saveData = new MockSaveData();
 
             this.errorMessage = new TalkBuilder().Append("エラーが発生しました。").LineFeed().HalfLine().Append("\\_?" + errorMessage + "\\_?").Build();
-            RandomTalks.Add(Talk.Create(this.errorMessage));
+            RandomTalks.Add(RandomTalk.Create(this.errorMessage));
         }
 
         public override string OnBoot(IDictionary<int, string> reference, string shellName = "", bool isHalt = false, string haltGhostName = "")

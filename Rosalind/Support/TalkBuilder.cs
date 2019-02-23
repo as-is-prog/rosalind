@@ -246,7 +246,7 @@ namespace Shiorose.Support
         /// <returns></returns>
         public string BuildWithAutoWait()
         {
-            return Embed(Talk.AutoWait(stringBuilder.Append("\\e").ToString()));
+            return Embed(RandomTalk.AutoWait(stringBuilder.Append("\\e").ToString()));
         }
 
         private string Embed(string str)
