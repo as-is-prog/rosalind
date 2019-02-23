@@ -1,4 +1,6 @@
 ﻿using Shiorose.Resource;
+using Shiorose.Resource.ShioriEvent;
+using Shiorose.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace Shiorose
 {
     /// <summary>
     /// Rosalindを用いたゴースト開発者が継承すべき、SHIORIイベントに対する挙動を実装するクラス．
-    /// 各種イベントをハンドルするメソッドのコメントは 2019/02/10にukadocを参照し参考にしています．
+    /// <remarks>各種イベントをハンドルするメソッドのコメントはukadocの引用 + 一部改変して書いています。</remarks>
     /// </summary>
     public abstract class Ghost
     {
- 
+
         /// <summary>
         /// ユーザ名
         /// </summary>
@@ -42,8 +44,9 @@ namespace Shiorose
         /// <summary>
         /// ランダムトークのリスト
         /// </summary>
-        public List<Talk> RandomTalks { get; protected set; } = new List<Talk>();
+        public List<RandomTalk> RandomTalks { get; protected set; } = new List<RandomTalk>();
 
+        public Func<string> NextRandomTalk { get; protected set; }
 
         private Random rand = new Random();
 
@@ -76,12 +79,19 @@ namespace Shiorose
         /// </summary>
         public virtual BaseSaveData SaveData { get => _saveData; }
 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual SHIORIResource Resource { get; set; } = new SHIORIResource();
+        
+
         /// <summary>
         /// 
         /// </summary>
         public Ghost()
         {
-
+            NextRandomTalk = () => GetRandomTalk().TalkScript();
         }
 
         #region 起動・終了・切り替えイベント
@@ -93,7 +103,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnFirstBoot(IDictionary<int, string> reference, int vanishCount = 0)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnFirstBoot";
+            return "";
         }
 
         /// <summary>
@@ -106,7 +116,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnBoot(IDictionary<int, string> reference, string shellName = "", bool isHalt = false, string haltGhostName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnBoot";
+            return "";
         }
 
         /// <summary>
@@ -117,7 +127,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnClose(IDictionary<int, string> reference, string reason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnClose";
+            return "";
         }
 
         /// <summary>
@@ -128,7 +138,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCloseAll(IDictionary<int, string> reference, string reason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnCloseAll";
+            return "";
         }
 
         /// <summary>
@@ -143,7 +153,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostChanged(IDictionary<int, string> reference, string prevSakuraName = "", string prevScript = "", string prevGhostName = "", string prevGhostPath = "", string nowGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostchanged";
+            return "";
         }
 
         /// <summary>
@@ -157,7 +167,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostChanging(IDictionary<int, string> reference, string nextSakuraName = "", string changeReason = "", string nextGhostName = "", string nextGhostPath = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostChanging";
+            return "";
         }
 
         /// <summary>
@@ -172,7 +182,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostCalled(IDictionary<int, string> reference, string calledSakuraName = "", string calledScript = "", string calledGhostName = "", string calledGhostPath = "", string nowGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostCalled";
+            return "";
         }
 
         /// <summary>
@@ -186,7 +196,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostCalling(IDictionary<int, string> reference, string callingSakuraName = "", string callingReason = "", string callingGhostName = "", string callingGhostPath = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostCalling";
+            return "";
         }
 
         /// <summary>
@@ -200,7 +210,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnGhostCallComplete(IDictionary<int, string> reference, string calledSakuraName = "", string calledScript = "", string calledGhostName = "", string calledGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnGhostCallComplete";
+            return "";
         }
 
         /// <summary>
@@ -214,7 +224,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnOtherGhostBooted(IDictionary<int, string> reference, string bootedSakuraName = "", string bootedScript = "", string bootedGhostName = "", string bootedGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnOtherGhostBooted";
+            return "";
         }
 
         /// <summary>
@@ -232,7 +242,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnOtherGhostChanged(IDictionary<int, string> reference, string prevSakuraName = "", string nextSakuraName = "", string prevScript = "", string nextScript = "", string prevGhostName = "", string nextGhostName = "", string prevGhostShellName = "", string nextGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnOtherGhostChanged";
+            return "";
         }
 
         /// <summary>
@@ -246,7 +256,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnOtherGhostClosed(IDictionary<int, string> reference, string closedSakuraName = "", string closedScript = "", string closedGhostName = "", string closedGhostShellName = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnOtherGhostClosed";
+            return "";
         }
 
         /// <summary>
@@ -259,7 +269,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnShellChanged(IDictionary<int, string> reference, string nowShellName, string nowGhostName, string nowShellPath)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnShellChanged";
+            return "";
         }
 
         /// <summary>
@@ -272,7 +282,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnShellChanging(IDictionary<int, string> reference, string nextShellName, string nowShellName, string nextShellPath)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnShellChanging";
+            return "";
         }
 
         /// <summary>
@@ -287,7 +297,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnDressupChanged(IDictionary<int, string> reference, string charId, string partsName, bool isEnable, string category)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnDressupChanged";
+            return "";
         }
 
         /// <summary>
@@ -425,7 +435,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnTeachStart()
         {
-            return @"\u\s[-1]\h\s[0](Base)OnTeachStart";
+            return "";
         }
 
         /// <summary>
@@ -437,7 +447,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnTeachInputCancel(IDictionary<int,string> reference, string cancelReason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnTeachInputCancel";
+            return DeferredEvent.Cancel();
         }
 
         /// <summary>
@@ -448,7 +458,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnTeach(IDictionary<int,string> reference, IEnumerable<string> teachRecents)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnTeach";
+            return DeferredEvent.Exec(teachRecents.LastOrDefault());
         }
 
         /// <summary>
@@ -461,7 +471,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCommunicate(IDictionary<int, string> reference, string senderName = "", string script = "", IEnumerable<string> extInfo = null)
         {
-            return @"\u\s[-1]\h\s[0](Base)OnCommunicate";
+            return "";
         }
 
         /// <summary>
@@ -473,7 +483,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCommunicateInputCancel(IDictionary<int, string> reference, string cancelReason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnCommunicateInputCancel";
+            return "";
         }
 
         /// <summary>
@@ -485,7 +495,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUserInput(IDictionary<int, string> reference, string inputBoxId = "", string content = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnUserInput";
+            return DeferredEvent.Exec(content);
         }
 
         /// <summary>
@@ -497,7 +507,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUserInputCancel(IDictionary<int, string> reference, string eventId = "", string cancelReason = "")
         {
-            return @"\u\s[-1]\h\s[0](Base)OnUserInputCancel";
+            return DeferredEvent.Cancel();
         }
 
 
@@ -718,7 +728,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelect(IDictionary<int, string> reference, string selectedId, IEnumerable<string> otherIds)
         {
-            return Choice.Select(selectedId)();
+            if (Choice.Count == 0)
+                return DeferredEvent.Exec(selectedId);
+            else
+                return Choice.Select(selectedId)();
         }
 
         /// <summary>
@@ -732,7 +745,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelectEx(IDictionary<int, string> reference, string selectedText, string selectedId, IEnumerable<string> extInfo)
         {
-            return Choice.Select(selectedId)();
+            if (Choice.Count == 0)
+                return DeferredEvent.Exec(selectedId);
+            else
+                return Choice.Select(selectedId)();
         }
 
         // TODO: OnChoiceEnter [NOTIFY]
@@ -745,7 +761,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceTimeout(IDictionary<int, string> reference, string script)
         {
-            return Choice.Select("timeout")();
+            if (Choice.Count == 0)
+                return DeferredEvent.Exec("timeout");
+            else
+                return Choice.Select("timeout")();
         }
 
         /// <summary>
@@ -782,7 +801,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnAnchorSelectEx(IDictionary<int, string> reference, string anchorText, string anchorId, IEnumerable<string> extInfo)
         {
-            return "";
+            if (anchorId.StartsWith("http://") || anchorId.StartsWith("https://"))
+                return "\\![open,browser," + anchorId + "]";
+            else
+                return "";
         }
 
         #endregion
@@ -844,7 +866,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -859,7 +881,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -874,7 +896,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDoubleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseDoubleClick(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -889,7 +911,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDoubleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseDoubleClickEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -939,7 +961,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseUp(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseUp(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -954,7 +976,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseUpEx(IDictionary<int, string> reference, string mouseX, string mouseY, string Reference3, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseUpEx(IDictionary<int, string> reference, string mouseX, string mouseY, string Reference3, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -969,7 +991,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 左クリックは0、右クリックは1、中クリックは2(互換仕様：OnMouseClickExへの移行を推奨)。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDown(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseDown(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsName, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -984,7 +1006,7 @@ namespace Shiorose
         /// <param name="buttonName">Reference5 ホイールクリック(または3ボタンマウスの中ボタン)はmiddle、拡張ボタン1(通常「戻る」に割当)はxbutton1、拡張ボタン2(通常「進む」に割当)はxbutton2。</param>
         /// <param name="deviceType">Reference6 windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseDownEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsType, string buttonName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseDownEx(IDictionary<int, string> reference, string mouseX, string mouseY, string charId, string partsType, string buttonName, DeviceType deviceType)
         {
             return "";
         }
@@ -1000,7 +1022,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseMove(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseMove(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, DeviceType deviceType)
         {
             if (++mouseMoveCount > 1 && mouseMoveCount % GetCallOnMouseStrokeTiming(partsName, deviceType) == 0)
             {
@@ -1019,7 +1041,7 @@ namespace Shiorose
         /// <param name="partsName">Reference4 当たり判定の識別子。</param>
         /// <param name="deviceType">Reference6 ※SSPのみ　windows7以降、マルチタッチ対応環境のタッチパネル（※タッチパッド不可）からの入力でtouch、マウスなどからの入力でmouse</param>
         /// <returns></returns>
-        public virtual string OnMouseWheel(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, DeviceType deviceType = DeviceType.MOUSE)
+        public virtual string OnMouseWheel(IDictionary<int, string> reference, string mouseX, string mouseY, string wheelRotation, string charId, string partsName, DeviceType deviceType)
         {
             return "";
         }
@@ -1156,12 +1178,706 @@ namespace Shiorose
 
         #endregion
 
+        #region インストールイベント
+
+        /// <summary>
+        /// アーカイブのインストール開始の際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnInstallBegin()
+        {
+            return @"(インストール開始)";
+        }
+
+        /// <summary>
+        /// インストールが正常終了した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="installType">Reference0 インストールした物の識別子。</param>
+        /// <param name="installName">Reference1 インストールした物の名前（install.txtのname指定）。</param>
+        /// <param name="installName2">Reference2 インストールした物の名前2（ghost with balloonなどの場合のballoon側の名前）。</param>
+        /// <returns></returns>
+        public virtual string OnInstallComplete(IDictionary<int, string> reference, InstallType installType, string installName, string installName2)
+        {
+            return string.Format(@"({0}, {1}をインストールしました。)", installType.ToString(), installName);
+        }
+
+        /// <summary>
+        /// インストールが正常終了した際に発生。
+        /// このイベントが無かった場合OnInstallCompleteが発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="installTypes">Reference0 インストールした物の識別子。</param>
+        /// <param name="installNames">Reference1 インストールした物の名前。</param>
+        /// <param name="installPaths">Reference2 インストールした場所。</param>
+        /// <returns></returns>
+        public virtual string OnInstallCompleteEx(IDictionary<int, string> reference, InstallType[] installTypes, string[] installNames, string[] installPaths)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// インストールに失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 ※失敗理由。</param>
+        /// <returns></returns>
+        public virtual string OnInstallFailure(IDictionary<int, string> reference, InstallFailureReason failureReason)
+        {
+            return @"(インストール失敗。\n理由:"+ failureReason.ToString() +")";
+        }
+
+        /// <summary>
+        /// インストールするファイルが他のゴーストを指名していた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="sakuraName">Reference0 指定されたゴーストの本体側名（install.txtのaccept指定、つまり本来渡すべき相手）。</param>
+        /// <returns></returns>
+        public virtual string OnInstallRefuse(IDictionary<int, string> reference, string sakuraName)
+        {
+            return @"(インストール失敗。これは"+ sakuraName +"専用です。)";
+        }
+
+        /// <summary>
+        /// インストールするファイルが他のゴーストを指名していた際、かつ、指名対象ゴーストが一緒に起動していた時に発生。以降のインストールイベントは指名対象ゴースト側に発生する。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="sakuraName">Reference0 指定されたゴーストの本体側名（install.txtのaccept指定、つまり本来渡すべき相手）。</param>
+        /// <returns></returns>
+        public virtual string OnInstallReroute(IDictionary<int, string> reference, string sakuraName)
+        {
+            return @"(これは" + sakuraName + "専用です。" + sakuraName + "にインストールします。)";
+        }
+
+        #endregion
+
+        #region ファイルドロップイベント
+        /// <summary>
+        /// ファイルをドラッグしたままのカーソルがゴースト上に乗った際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ドラッグしているファイルパス。</param>
+        /// <param name="charId">Reference1 ドロップされたキャラクターのスコープ番号。本体側0、相方1、3人目以降は2以降。</param>
+        /// <returns></returns>
+        public virtual string OnFileDropping(IDictionary<int, string> reference, string filePath, string charId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ディレクトリがDnD された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="dirPath">Reference0 ドロップされたディレクトリのパス。</param>
+        /// <param name="charId">Reference1 ドロップされたキャラクターのスコープ番号。本体側0、相方1、3人目以降は2以降。</param>
+        /// <returns></returns>
+        public virtual string OnDirectoryDrop(IDictionary<int, string> reference, string dirPath, string charId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 画像ファイルのDnDによって壁紙が変更された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ドロップされたファイルパス。</param>
+        /// <returns></returns>
+        public virtual string OnWallpaperChange(IDictionary<int, string> reference, string filePath)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ファイルがDnDされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePaths">Reference0 ドロップされたファイルパスを（複数あればbyte値1で区切って）返す。</param>
+        /// <param name="charId">Reference1 ドロップされたキャラクターのスコープ番号。本体側0、相方1、3人目以降は2以降。</param>
+        /// <returns></returns>
+        public virtual string OnFileDropEx(IDictionary<int, string> reference, string[] filePaths, string charId)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴーストフォルダがDnDされた際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnUpdatedataCreating()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// updates2.dauが作成された際に発生。
+        /// </summary>
+        /// <returns></returns>
+        public virtual string OnUpdatedataCreated()
+        {
+            return @"(updates2.dau作成完了)";
+        }
+
+        /// <summary>
+        /// install.txtの入ったゴーストフォルダがDnDされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="objectName">Reference0 narにするオブジェクト名。</param>
+        /// <param name="fileName">Reference1 narに出力されたファイル名。</param>
+        /// <param name="installType">Reference2 ※識別子。インストールの識別子参照。</param>
+        /// <returns></returns>
+        public virtual string OnNarCreating(IDictionary<int, string> reference, string objectName, string fileName, InstallType installType)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// narファイルが作成された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="objectName">Reference0 narにするオブジェクト名。</param>
+        /// <param name="fileName">Reference1 narに出力されたファイル名。</param>
+        /// <param name="installType">Reference2 ※識別子。インストールの識別子参照。</param>
+        /// <returns></returns>
+        public virtual string OnNarCreated(IDictionary<int, string> reference, string objectName, string fileName, InstallType installType)
+        {
+            return @"(\_?"+fileName+@"\_?としてnarファイル作成完了)";
+        }
+
+
+        #endregion
+
+        #region URLドロップイベント
+        /// <summary>
+        /// URLがドロップされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="urlPath">Reference0 URLパス。</param>
+        /// <returns></returns>
+        public virtual string OnURLDropping(IDictionary<int, string> reference, string urlPath)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ドロップされたURLを受領し終わった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ダウンロードし終わったファイルのローカルパス。</param>
+        /// <returns></returns>
+        public virtual string OnURLDropped(IDictionary<int, string> reference, string filePath)
+        {
+            return @"("+filePath+"をダウンロード完了)";
+        }
+        /// <summary>
+        /// ドロップされたURLの受領に失敗したかキャンセルされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="filePath">Reference0 ダウンロードし終わった分のファイルのローカルパス。</param>
+        /// <param name="failureReason">Reference1 ユーザーのダブルクリックによって中断した場合、artificial</param>
+        /// <returns></returns>
+        public virtual string OnURLDropFailure(IDictionary<int, string> reference, string filePath, string failureReason)
+        {
+            return @"(ダウンロード失敗 理由:"+failureReason+")";
+        }
+
+        /// <summary>
+        /// URLがキャラクターウィンドウにドラッグ＆ドロップされた際に通知されます。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="urlPath">Reference0 URLパス。</param>
+        /// <param name="charId">Reference1 本体の場合は0、相方の場合は1。SSP/CROWでは2以降もある。</param>
+        /// <param name="mimeType">Reference2 ドロップされたURLのMIMEタイプ</param>
+        /// <returns></returns>
+        public virtual string OnURLQuery(IDictionary<int, string> reference, string urlPath, string charId, string mimeType)
+        {
+            return "";
+        }
+
+        #endregion
+
+        #region ネットワーク更新イベント
+        /// <summary>
+        /// ネットワーク更新開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="ghostName">Reference0 ゴースト名。</param>
+        /// <param name="fullPath">Reference1 フルパス。</param>
+        /// <param name="updateType">Reference3 更新対象の識別子</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateBegin(IDictionary<int, string> reference, string ghostName, string fullPath, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "(ネットワーク更新開始)";
+        }
+
+        /// <summary>
+        /// 更新ファイルが確認された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateCount">Reference0 更新を行うファイルの総数。</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 更新対象種別。(shell ghost balloon headline plugin)</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateReady(IDictionary<int, string> reference, int updateCount, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "("+(updateCount)+"個の更新を確認)";
+        }
+
+        /// <summary>
+        /// ネットワーク更新が成功し完了した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="isUpdated">Reference0 更新があればtrue, なければfalse</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateComplete(IDictionary<int, string> reference, bool isUpdated, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return isUpdated ? "(ネットワーク更新完了)" : "(更新ファイルなし)";
+        }
+
+        /// <summary>
+        /// ネットワーク更新に失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 失敗理由
+        /// <para> timeout -> タイムアウト</para>
+        /// <para> too slow -> 回線が非常に重い</para>
+        /// <para> md5 miss -> MD5不一致</para>
+        /// <para> artificial -> ユーザによる中断</para>
+        /// <para> 404等 -> 各ステータスコードによる失敗</para>
+        /// <para> fileio -> ストレージの容量不足</para>
+        /// <para> readonly -> 更新対象が読み取り専用だった</para>
+        /// </param>
+        /// <param name="failureFileName">Reference1 カンマでセパレートされた更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateFailure(IDictionary<int, string> reference, string failureReason, string failureFileName, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "(ネットワーク更新失敗 理由:"+failureReason+")";
+        }
+        /// <summary>
+        /// ファイルダウンロード開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="downloadFileName">Reference0 ダウンロードするファイル名。</param>
+        /// <param name="downloadProgressCount">Reference1 ダウンロード中の更新ファイルが何番目か。</param>
+        /// <param name="downloadTotalCount">Reference2 更新を行うファイルの総数。</param>
+        /// <param name="updateType">Reference3 （SSPのみ）※更新対象種別。</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnDownloadBegin(IDictionary<int, string> reference, string downloadFileName, int downloadProgressCount, int downloadTotalCount, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "("+downloadFileName+"をダウンロード開始 "+downloadProgressCount+"/"+downloadTotalCount+")";
+        }
+
+        /// <summary>
+        /// MD5の照合開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnMD5CompareBegin(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// MD5が一致した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnMD5CompareComplete(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// MD5が一致しなかった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOnMD5CompareFailure(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のネットワーク更新開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="ghostName">Reference0 ゴースト名。</param>
+        /// <param name="fullPath">Reference1 フルパス。</param>
+        /// <param name="updateType">Reference3 更新対象の識別子</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherBegin(IDictionary<int, string> reference, string ghostName, string fullPath, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外の更新ファイルが確認された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateCount">Reference0 更新を行うファイルの総数。</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 更新対象種別。(shell ghost balloon headline plugin)</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherReady(IDictionary<int, string> reference, int updateCount, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のネットワーク更新が成功し完了した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="isUpdated">Reference0 更新があればtrue, なければfalse</param>
+        /// <param name="updateFileNames">Reference1 更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherComplete(IDictionary<int, string> reference, bool isUpdated, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のネットワーク更新に失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 失敗理由
+        /// <para> timeout -> タイムアウト</para>
+        /// <para> too slow -> 回線が非常に重い</para>
+        /// <para> md5 miss -> MD5不一致</para>
+        /// <para> artificial -> ユーザによる中断</para>
+        /// <para> 404等 -> 各ステータスコードによる失敗</para>
+        /// <para> fileio -> ストレージの容量不足</para>
+        /// <para> readonly -> 更新対象が読み取り専用だった</para>
+        /// </param>
+        /// <param name="failureFileName">Reference1 カンマでセパレートされた更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 SSP：※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherFailure(IDictionary<int, string> reference, string failureReason, string failureFileName, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のファイルダウンロード開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="downloadFileName">Reference0 ダウンロードするファイル名。</param>
+        /// <param name="downloadProgressCount">Reference1 ダウンロード中の更新ファイルが何番目か。</param>
+        /// <param name="downloadTotalCount">Reference2 更新を行うファイルの総数。</param>
+        /// <param name="updateType">Reference3 （SSPのみ）※更新対象種別。</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnDownloadBegin(IDictionary<int, string> reference, string downloadFileName, int downloadProgressCount, int downloadTotalCount, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のMD5の照合開始の際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnMD5CompareBegin(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のMD5が一致した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnMD5CompareComplete(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴースト以外のMD5が一致しなかった際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="fileName">Reference0 比較するファイル名。</param>
+        /// <param name="exceptedMd5">Reference1 正しいMD5値。</param>
+        /// <param name="actualMd5">Reference2 落としたファイルのMD5値。</param>
+        /// <param name="updateType">Reference3 SSP　※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：※更新実行理由。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateOtherOnMD5CompareFailure(IDictionary<int, string> reference, string fileName, string exceptedMd5, string actualMd5, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ネットワーク更新のチェックに成功した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="isUpdate">Reference0 更新があればtrue、なければfalse。</param>
+        /// <param name="updateFileNames">Reference1 カンマでセパレートされた更新されたファイル名のリスト。</param>
+        /// <param name="updateType">Reference3 ※更新対象種別</param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。scriptのみ。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateCheckComplete(IDictionary<int, string> reference, bool isUpdate, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
+        {
+            return "(ネットワーク更新"+(isUpdate ? "あり" : "なし")+")";
+        }
+
+        /// <summary>
+        /// ネットワーク更新のチェックに失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 失敗理由
+        /// <para> timeout -> タイムアウト</para>
+        /// <para> too slow -> 回線が非常に重い</para>
+        /// <para> md5 miss -> MD5不一致</para>
+        /// <para> artificial -> ユーザによる中断</para>
+        /// <para> 404等 -> 各ステータスコードによる失敗</para>
+        /// <para> fileio -> ストレージの容量不足</para>
+        /// <para> readonly -> 更新対象が読み取り専用だった</para>
+        /// </param>
+        /// <param name="updateReason">Reference4 SSP 2.3：更新実行理由。scriptのみ。</param>
+        /// <returns></returns>
+        public virtual string OnUpdateCheckFailure(IDictionary<int, string> reference, string failureReason, UpdateReason updateReason)
+        {
+            return @"(ネットワーク更新のチェック失敗 理由: "+failureReason+")";
+        }
+
+        /// <summary>
+        /// ネットワーク更新を実行した際に発生し、バルーン・シェル一括更新機能も含めてすべての更新結果を一括で通知する。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateResults">Reference* 更新を実行した順に、更新結果が以下のフォーマットで入っている
+        /// <para>（\1はバイト値1）</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)[\1] (※4)</para> 
+        /// <para>または</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)</para>
+        ///
+        /// <para>※1……ネットワーク更新対象の種別</para>
+        /// <para>※2……成功時「OK」　失敗時「NG」</para>
+        /// <para>※3……成功した場合は更新ファイル数(更新ファイルなし= noneの場合0)、失敗した場合は失敗理由。</para>
+        /// <para>※4……失敗して、かつ失敗原因のファイルがわかる場合、そのファイル名。</para>
+        /// </param>
+        /// <returns></returns>
+        public virtual string OnUpdateResult(IDictionary<int, string> reference, IDictionary<int, string> updateResults)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ゴーストエクスプローラからネットワーク更新を実行した際に発生。OnUpdateResultのエクスプローラ版。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="updateResults">Reference* 更新を実行した順に、更新結果が以下のフォーマットで入っている
+        /// <para>（\1はバイト値1）</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)[\1] (※4)</para> 
+        /// <para>または</para>
+        /// <para>(※1)[\1] (※2)[\1] (※3)</para>
+        ///
+        /// <para>※1……ネットワーク更新対象の種別</para>
+        /// <para>※2……成功時「OK」　失敗時「NG」</para>
+        /// <para>※3……成功した場合は更新ファイル数(更新ファイルなし= noneの場合0)、失敗した場合は失敗理由。</para>
+        /// <para>※4……失敗して、かつ失敗原因のファイルがわかる場合、そのファイル名。</para>
+        /// </param>
+        /// <returns></returns>
+        public virtual string OnUpdateResultExplorer(IDictionary<int, string> reference, IDictionary<int, string> updateResults)
+        {
+            return "";
+        }
+
+
+        #endregion
+
+        #region 時計合わせイベント
+        /// <summary>
+        /// 時計合わせが開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <returns></returns>
+        public virtual string OnSNTPBegin(IDictionary<int, string> reference, string serverName)
+        {
+            return "(時計合わせ開始)";
+        }
+        /// <summary>
+        /// サーバに接続が確立された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <param name="serverTime">Reference1 カンマでセパレートされたサーバ側の現時刻。</param>
+        /// <param name="localTime">Reference2 カンマでセパレートされたローカル側の現時刻</param>
+        /// <param name="diffSecond">Reference3 サーバとローカルの時刻のずれ。（秒単位）</param>
+        /// <param name="diffMSecond">Reference4 ※SSPのみ　サーバとローカルの時刻のずれ。（ミリ秒単位）</param>
+        /// <returns></returns>
+        public virtual string OnSNTPCompare(IDictionary<int, string> reference, string serverName, DateTime? serverTime, DateTime? localTime, int diffSecond, int diffMSecond)
+        {
+            const string SET = "合わせる";
+            const string NO_SET = "そのままにする";
+            return new TalkBuilder().Append("("+diffSecond).AppendLine("秒のずれています)")
+                                    .AppendLine("時計を合わせますか？")
+                                    .HalfLine()
+                                    .Marker().AppendChoice(SET).LineFeed()
+                                    .Marker().AppendChoice(NO_SET).LineFeed()
+                                    .Build()
+                                    .ContinueWith((id) =>
+                                    {
+                                        if (id == SET)
+                                            return "\\6";
+                                        else
+                                            return "キャンセルしました。";
+                                    });
+        }
+        /// <summary>
+        /// ローカル時刻をサーバ時刻に修正した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <param name="serverTime">Reference1 カンマでセパレートされたサーバ側の現時刻。</param>
+        /// <param name="localTime">Reference2 カンマでセパレートされたローカル側の現時刻</param>
+        /// <param name="diffSecond">Reference3 サーバとローカルの時刻のずれ。（秒単位）</param>
+        /// <returns></returns>
+        public virtual string OnSNTPCorrect(IDictionary<int, string> reference, string serverName, DateTime? serverTime, DateTime? localTime, int diffSecond)
+        {
+            return "(時刻を修正しました)";
+        }
+
+        /// <summary>
+        /// 時計合わせに失敗した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="serverName">Reference0 接続先サーバ名。</param>
+        /// <returns></returns>
+        public virtual string OnSNTPFailure(IDictionary<int, string> reference, string serverName)
+        {
+            return "(時計合わせに失敗しました)";
+        }
+
+        #endregion
+
+        #region メールチェックイベント
+        /// <summary>
+        /// メールチェック開始が指示された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="accountName">Reference2 チェックするメールサーバ名、SSP、CROWはアカウント名。</param>
+        /// <returns></returns>
+        public virtual string OnBIFFBegin(IDictionary<int, string> reference, string accountName)
+        {
+            return "("+accountName+"のメールチェック開始)";
+        }
+
+        /// <summary>
+        /// メールチェックが成功した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="spoolMailCount">Reference0 スプールされているメールの通数、１オリジン表記。</param>
+        /// <param name="spoolMailByte">Reference1 スプールされているメールのバイト数。</param>
+        /// <param name="mailServerName">Reference2 チェックするメールサーバ名。</param>
+        /// <param name="newMailDiff">Reference3 メールの新着差分。</param>
+        /// <param name="topResults">Reference4 全メールのTopResult。POP通信全ヘッダリスト。メールごとバイト値2区切りの、ヘッダごとバイト値1区切り（通常はReference7の情報を利用すればよい）。</param>
+        /// <param name="listResult">Reference5 ListResult。メールサーバ上のID。POPコマンドの「LIST」の結果に相当する内容。</param>
+        /// <param name="uidlResult">Reference6 UidlResult。メールを区別するためのID。POPコマンドの「UIDL」の結果に相当する内容。</param>
+        /// <param name="mailSender">Reference7 メールの送信者。</param>
+        /// <param name="mailTitle">Reference7 メールのタイトル。</param>
+        /// <returns></returns>
+        public virtual string OnBIFFComplete(IDictionary<int, string> reference, int spoolMailCount, int spoolMailByte, string mailServerName, string newMailDiff, string topResults, string listResult, string uidlResult, string mailSender, string mailTitle)
+        {
+            return string.Format("(送信者:{0} タイトル: {1} のメールがあります)", mailSender, mailTitle);
+        }
+
+        /// <summary>
+        /// メールチェックに成功した際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="failureReason">Reference0 ※失敗理由</param>
+        /// <param name="accountName">Reference2 チェックするメールサーバ名、SSP、CROWはアカウント名。</param>
+        /// <returns></returns>
+        public virtual string OnBIFFFailure(IDictionary<int, string> reference, string failureReason, string accountName)
+        {
+            return "("+accountName+"のメールチェックに失敗: "+failureReason+")";
+        }
+
+
+        #endregion
+
+        #region ヘッドライン/RSSセンスイベント
+
+        #endregion
+
+        #region カレンダーイベント
+
+        #endregion
+
+        #region 単体イベント
+        /// <summary>
+        /// 本体がアクティブな状態でキーが入力された際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="keyName">Reference0 入力されたキー。(キートップに書かれた文字)</param>
+        /// <param name="keyCode">Reference1 入力されたキー。(Win32仮想キーコード)</param>
+        /// <param name="pressCount">Reference2 ※SSPのみ　キーの押しっぱなしカウント。</param>
+        /// <param name="charId">Reference3 ※SSPのみ　キーイベントが来たキャラクターウインドウID。</param>
+        /// <param name="extraKeys">Reference4 ※SSPのみ　修飾キーがカンマ区切りで列挙される。例："ctrl,alt"</param>
+        /// <returns></returns>
+        public virtual string OnKeyPress(IDictionary<int, string> reference, string keyName, string keyCode, int pressCount, string charId, string extraKeys)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// テキストデータがDnDされた際に発生。
+        /// </summary>
+        /// <param name="reference">Reference</param>
+        /// <param name="content">Reference0 テキスト内容。</param>
+        /// <param name="charId">Reference1 DnDされたキャラクターのID。</param>
+        /// <returns></returns>
+        public virtual string OnTextDrop(IDictionary<int, string> reference, string content, string charId)
+        {
+            return "";
+        }
+
+        #endregion
+
         #region イベント処理補助
 
 
         /* ランダムトーク */
 
-        private Talk GetRandomTalk()
+        private RandomTalk GetRandomTalk()
         {
             var filtedTalks = RandomTalks.Where(t => t.Filter()).ToArray();
 
@@ -1175,7 +1891,10 @@ namespace Shiorose
         /// <returns></returns>
         protected virtual string OnRandomTalk()
         {
-            return GetRandomTalk().TalkScript();
+            var randomTalk = NextRandomTalk;
+            NextRandomTalk = () => GetRandomTalk().TalkScript();
+
+            return randomTalk();
         }
 
         /* マウス関連 */
@@ -1208,38 +1927,6 @@ namespace Shiorose
 
         #endregion
 
-    }
-
-    /// <summary>
-    /// マウスイベントにおけるデバイスタイプ。
-    /// </summary>
-    public enum DeviceType
-    {
-        /// <summary>
-        /// マウス
-        /// </summary>
-        MOUSE,
-        /// <summary>
-        /// タッチパネル
-        /// </summary>
-        TOUCH
-    }
-
-    /// <summary>
-    /// DeviceTypeを拡張するクラス。
-    /// </summary>
-    internal static class DeviceTypeUtil
-    {
-        public static DeviceType ValueOf(string str)
-        {
-            switch (str)
-            {
-                case "touch":
-                    return DeviceType.TOUCH;
-                default:
-                    return DeviceType.MOUSE;
-            }
-        }
     }
 
 }
