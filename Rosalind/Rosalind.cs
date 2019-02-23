@@ -30,7 +30,7 @@ namespace Shiorose
         public static readonly string BYTE_2_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 2 });
 
         private static readonly string NAME = "Rosalind";
-        private static readonly string VERSION = "0.0.0";
+        private static readonly string VERSION = "0.1.4.2";
         private static readonly string CRAFTMAN = "as-is-prog";
         private static readonly string CRAFTMAN_W = "AS-IS";
 
