@@ -9,4 +9,4 @@
 
 などが特長です。
 
-詳しくはリリースにあたってのブログもしくは[Release](https://github.com/as-is-prog/rosalind/releases)にあるテンプレートゴーストのファイルをご覧ください。
+詳しくは[リリースにあたってのブログ](https://as-is-prog.hateblo.jp/entry/2019/02/23/210000)もしくは[Release](https://github.com/as-is-prog/rosalind/releases)にあるテンプレートゴーストのファイルをご覧ください。
