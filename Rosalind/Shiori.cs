@@ -19,10 +19,12 @@ namespace Shiorose
         {
             // TODO: 設定ファイル(ini)読み込み？
 
-            Console.InputEncoding = DEFAULT_CHARSET;
-            Console.OutputEncoding = DEFAULT_CHARSET;
+            Console.InputEncoding = Encoding.GetEncoding("Shift_JIS");
 
             Shiolink.Load firstLoad = Shiolink.Protocol.Parse(Console.In) as Shiolink.Load;
+
+            Console.InputEncoding = DEFAULT_CHARSET;
+            Console.OutputEncoding = DEFAULT_CHARSET;
 
             Rosalind rosa = await loadFunc(firstLoad);
 
