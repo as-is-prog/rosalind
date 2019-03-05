@@ -54,14 +54,14 @@ namespace Shiorose.Shiolink
         private static readonly string REFERENCE_STR = "Reference";
 
 
-        public RequestMethod Method { get; private set; }
-        public string Version { get; private set; }
-        public string Charset { get; private set; }
-        public string Sender { get; private set; }
-        public string SecurityLevel { get; private set; }
-        public string Status { get; set; }
-        public string ID { get; private set; }
-        public string BaseID { get; private set; }
+        public RequestMethod Method { get; internal set; }
+        public string Version { get; internal set; }
+        public string Charset { get; internal set; }
+        public string Sender { get; internal set; }
+        public string SecurityLevel { get; internal set; }
+        public string Status { get; internal set; }
+        public string ID { get; internal set; }
+        public string BaseID { get; internal set; }
         public IDictionary<int, string> References { get; private set; } = new Dictionary<int, string>();
 
         public static new Request Parse(System.IO.TextReader stdIn)
