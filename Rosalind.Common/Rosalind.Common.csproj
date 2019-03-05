@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Shiorose</RootNamespace>
+    <AssemblyName>Rosalind</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\as-is-prog\git\Rosalind\Rosalind.Common\Rosalind.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>

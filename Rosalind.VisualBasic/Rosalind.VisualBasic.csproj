@@ -51,9 +51,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rosalind\Rosalind.csproj">
-      <Project>{12d09bf9-11e4-4c4f-8484-dd56cb89689e}</Project>
-      <Name>Rosalind</Name>
+    <ProjectReference Include="..\Rosalind.Common\Rosalind.Common.csproj">
+      <Project>{ae1799a1-8703-4d82-8ca0-47aa724f89a8}</Project>
+      <Name>Rosalind.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
