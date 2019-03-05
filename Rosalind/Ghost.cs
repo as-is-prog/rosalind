@@ -46,6 +46,9 @@ namespace Shiorose
         /// </summary>
         public List<RandomTalk> RandomTalks { get; protected set; } = new List<RandomTalk>();
 
+        /// <summary>
+        /// 次回再生予定のランダムトーク
+        /// </summary>
         public Func<string> NextRandomTalk { get; protected set; }
 
         private Random rand = new Random();
