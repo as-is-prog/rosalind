@@ -19,6 +19,7 @@ namespace Shiorose
         {
             // TODO: 設定ファイル(ini)読み込み？
 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Console.InputEncoding = Encoding.GetEncoding("Shift_JIS");
 
             Shiolink.Load firstLoad = Shiolink.Protocol.Parse(Console.In) as Shiolink.Load;

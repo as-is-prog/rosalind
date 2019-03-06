@@ -8,6 +8,18 @@ Rosalindは以下のライブラリを使用しています。
 
 著作権表示: Copyright (c) どっとステーション
 
+
+
+## Rosalind.Commonの使用ライブラリとそのライセンス
+
+### MIT License
+
+System.Text.CodePages
+
+著作権表示: Copyright (c) .NET Foundation and Contributors
+
+
+
 ## Rosalind.CSharpの使用ライブラリとそのライセンス
 
 ### MIT License
