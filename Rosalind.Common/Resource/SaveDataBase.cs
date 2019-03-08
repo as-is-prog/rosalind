@@ -28,7 +28,7 @@ namespace Shiorose.Resource
             if (!File.Exists(Rosalind.ShioriDir + SaveFileName)) return new T();
 
             var jsonStr = File.ReadAllText(Rosalind.ShioriDir + SaveFileName);
-            return (T)JsonConvert.DeserializeObject(jsonStr);
+            return JsonConvert.DeserializeObject<T>(jsonStr);
         }
 
         /// <summary>
