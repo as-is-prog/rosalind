@@ -14,9 +14,19 @@ Rosalindは以下のライブラリを使用しています。
 
 ### MIT License
 
-System.Text.CodePages
+#### .NET Foundation and Contributors
+
+- .NET Standard Library
+
+- System.Text.CodePages
 
 著作権表示: Copyright (c) .NET Foundation and Contributors
+
+#### James Newton-King
+
+Newtonsoft.Json
+
+著作権表示: Copyright (c) 2007 James Newton-King
 
 
 
@@ -25,7 +35,9 @@ System.Text.CodePages
 ### MIT License
 
 #### Fody
-Costura.Fody, Fody
+- Costura.Fody
+
+- Fody
 
 著作権表示: Copyright (c) Simon Cropp and contributors
 

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Shiorose.Resource
 {
@@ -28,11 +27,8 @@ namespace Shiorose.Resource
         {
             if (!File.Exists(Rosalind.ShioriDir + SaveFileName)) return new T();
 
-            using (var stream = File.OpenRead(Rosalind.ShioriDir + SaveFileName))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(T));
-                return (T)serializer.ReadObject(stream);
-            }
+            var jsonStr = File.ReadAllText(Rosalind.ShioriDir + SaveFileName);
+            return (T)JsonConvert.DeserializeObject(jsonStr);
         }
 
         /// <summary>
@@ -42,10 +38,10 @@ namespace Shiorose.Resource
         /// <param name="saveData">セーブデータのインスタンス</param>
         public static void Save<T>(T saveData) where T : BaseSaveData, new()
         {
-            using (var stream = File.Create(Rosalind.ShioriDir + SaveFileName))
+            using (var streamWriter = new StreamWriter(File.Create(Rosalind.ShioriDir + SaveFileName)))
             {
-                var serializer = new DataContractJsonSerializer(saveData.GetType());
-                serializer.WriteObject(stream, saveData);
+                var jsonStr = JsonConvert.SerializeObject(saveData);
+                streamWriter.Write(jsonStr);
             }
         }
     }
@@ -53,19 +49,16 @@ namespace Shiorose.Resource
     /// <summary>
     /// セーブデータのクラス。ゴースト開発者はこのクラスを継承して保存したい項目を増やすと良い。
     /// </summary>
-    [DataContract]
     public class BaseSaveData
     {
         /// <summary>
         /// ランダムトークの間隔（秒）
         /// </summary>
-        [DataMember]
         public int TalkInterval { get; set; }
 
         /// <summary>
         /// ユーザ名
         /// </summary>
-        [DataMember]
         public string UserName { get; set; }
 
         /// <summary>
