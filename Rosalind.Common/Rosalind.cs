@@ -30,7 +30,7 @@ namespace Shiorose
         public static readonly string BYTE_2_STR = Shiori.DEFAULT_CHARSET.GetString(new byte[] { 2 });
 
         private static readonly string NAME = "Rosalind";
-        private static readonly string VERSION = "0.1.4.3";
+        private static readonly string VERSION = "0.1.5";
         private static readonly string CRAFTMAN = "as-is-prog";
         private static readonly string CRAFTMAN_W = "AS-IS";
 
@@ -62,6 +62,7 @@ namespace Shiorose
                     case RequestMethod.GET:
                         return CreateResponseOfGETRequest(req);
                     case RequestMethod.NOTIFY:
+                        OnNOTIFYRequest(req);
                         return CreateOKResponse(null);
                 }
 
@@ -1331,6 +1332,19 @@ namespace Shiorose
             else
             {
                 return CreateNoContentResponse();
+            }
+        }
+
+        private void OnNOTIFYRequest(Request req)
+        {
+            switch (req.ID)
+            {
+                case "OnInitialize":
+                    ghost.OnInitialize();
+                    break;
+                case "OnDestroy":
+                    ghost.OnDestroy();
+                    break;
             }
         }
 

@@ -1875,6 +1875,24 @@ namespace Shiorose
 
         #endregion
 
+        #region Notifyイベント
+
+        /// <summary>
+        /// 起動時に通知されるNotifyイベント
+        /// </summary>
+        public virtual void OnInitialize()
+        {
+        }
+
+        /// <summary>
+        /// 終了時に通知されるNotifyイベント
+        /// </summary>
+        public virtual void OnDestroy()
+        {
+        }
+
+        #endregion
+
         #region イベント処理補助
 
 
