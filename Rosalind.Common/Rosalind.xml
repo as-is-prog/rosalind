@@ -1392,6 +1392,16 @@
             <param name="charId">Reference1 DnDされたキャラクターのID。</param>
             <returns></returns>
         </member>
+        <member name="M:Shiorose.Ghost.OnInitialize">
+            <summary>
+            起動時に通知されるNotifyイベント
+            </summary>
+        </member>
+        <member name="M:Shiorose.Ghost.OnDestroy">
+            <summary>
+            終了時に通知されるNotifyイベント
+            </summary>
+        </member>
         <member name="M:Shiorose.Ghost.OnRandomTalk">
             <summary>
             ランダムトークが発生するタイミングで呼び出される。
@@ -1921,6 +1931,47 @@
             SHIORIの存在しているディレクトリ
             </summary>
         </member>
+        <member name="T:Shiorose.Sstp.SstpConnection">
+            <summary>
+            SSTPを簡単に送るためのクラス
+            </summary>
+        </member>
+        <member name="M:Shiorose.Sstp.SstpConnection.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="hostname"></param>
+            <param name="port"></param>
+        </member>
+        <member name="M:Shiorose.Sstp.SstpConnection.SendNotify1_1(System.String,System.String[])">
+            <summary>
+            NOTIFY1.1を送信します
+            </summary>
+            <param name="eventName"></param>
+            <param name="reference"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Shiorose.Sstp.SstpConnection.Send(Shiorose.Sstp.SstpProtocol)">
+            <summary>
+            指定のSSTPProtocolを送信します
+            </summary>
+            <param name="sstp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Shiorose.Sstp.SstpConnection.Send(System.String)">
+            <summary>
+            SSTPのポートに任意の文字列を送信します。
+            </summary>
+            <param name="sendDataStr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Shiorose.Sstp.SstpProtocol.ToSstpString">
+            <summary>
+            SSTP用のフォーマットの文字列に変換する
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Shiorose.Support.TalkBuilder">
             <summary>
             トーク文字列作成を補助するクラスです。
@@ -2173,6 +2224,51 @@
         <member name="M:Shiorose.Support.Util.RandomChoice(System.Func{System.String}[])">
             <summary>
             引数で渡されたメソッドからランダムに一つ選択して"実行し、その値を返し"ます。
+            </summary>
+        </member>
+        <member name="T:Shiorose.Web.HttpToSstpServer">
+            <summary>
+            httpとsstpの仲介をするサーバです
+            </summary>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.#ctor">
+            <summary>
+            コンストラクタ。この時点ではサーバは起動しません。Start()を呼び出しましょう。
+            </summary>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.Start">
+            <summary>
+            サーバをスタートします。
+            </summary>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.OnRequested(System.Net.HttpListenerContext)">
+            <summary>
+            サーバにリクエストがあった時の処理を行うメソッドです。
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.OnGETRequested(System.Net.HttpListenerContext)">
+            <summary>
+            サーバにGETリクエストがあった時に実行されるメソッドです。
+            </summary>
+            <param name="context"></param>
+            <returns>jsonで返したいオブジェクト。返す値がない場合はnullを返してください。</returns>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.OnPostRequested(System.Net.HttpListenerContext)">
+            <summary>
+            サーバにGETリクエストがあった時に実行されるメソッドです。
+            </summary>
+            <param name="context"></param>
+            <returns>jsonで返したいオブジェクト。返す値がない場合はnullを返してください。</returns>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.Stop">
+            <summary>
+            サーバを一時停止します。
+            </summary>
+        </member>
+        <member name="M:Shiorose.Web.HttpToSstpServer.Close">
+            <summary>
+            サーバを終了します。
             </summary>
         </member>
     </members>

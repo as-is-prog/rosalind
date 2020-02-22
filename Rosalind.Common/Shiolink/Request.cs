@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
@@ -15,18 +14,17 @@ namespace Shiorose.Shiolink
 
     internal static class RequestMethodUtil
     {
-        public static string ToStringFromEnum(this RequestMethod requestMethod)
+        private static IDictionary<RequestMethod, string> RequestMethodTable { get; } = new Dictionary<RequestMethod, string>
         {
-            switch (requestMethod)
-            {
-                case RequestMethod.GET:
-                    return "GET";
-                case RequestMethod.NOTIFY:
-                    return "NOTIFY";
-                default:
-                    return "NONE";
-            }
-        }
+            { RequestMethod.GET, "GET" },
+            { RequestMethod.NOTIFY, "NOTIFY" },
+            { RequestMethod.NONE, "NONE" }
+        };
+
+        public static string ToStringFromEnum(this RequestMethod requestMethod)
+            => RequestMethodTable.TryGetValue(requestMethod, out var reqMethodStr)
+                ? reqMethodStr
+                : requestMethod.ToString();
 
         public static RequestMethod StringToRequestMethod(string methodStr)
         {
