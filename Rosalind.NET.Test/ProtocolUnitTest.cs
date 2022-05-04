@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Shiorose.Test
 {
@@ -74,7 +74,7 @@ Sender: TestBaseware
         public void TestRequestParse3()
         {
             var testStreamReader = CreateTestStreamReader("\r\n\r\n");
-            
+
             var request = Shiolink.Request.Parse(testStreamReader);
             Console.WriteLine(request.ToString());
         }
@@ -106,15 +106,16 @@ Sender: TestBaseware
         #endregion
 
         #region UtilMethod
-        private System.IO.TextReader CreateTestStreamReader(string testStr)
+        private EncodingTextReader CreateTestStreamReader(string testStr)
         {
-            return new System.IO.StreamReader(
+            return new EncodingTextReader(
                     new System.IO.MemoryStream(
                         System.Text.Encoding.UTF8.GetBytes(testStr)
-                        ),
-                    System.Text.Encoding.UTF8
-                );
-            
+                        )
+                )
+            {
+                Encoding = System.Text.Encoding.UTF8
+            };
         }
         #endregion
     }

@@ -31,8 +31,10 @@ using System.Runtime.InteropServices;
 
 // TestクラスからInternalの参照可にする
 [assembly: InternalsVisibleTo("Rosalind.Test")]
+[assembly: InternalsVisibleTo("Rosalind.NET.Test")]
 
 // 各言語対応プロジェクトからInternalの参照可にする
 [assembly: InternalsVisibleTo("Rosalind.CSharp")]
+[assembly: InternalsVisibleTo("Rosalind.NET.CSharp")]
 [assembly: InternalsVisibleTo("Rosalind.NETCore.CSharp")]
 [assembly: InternalsVisibleTo("Rosalind.VisualBasic")]

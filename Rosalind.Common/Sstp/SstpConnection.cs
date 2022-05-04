@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Shiorose.Sstp
 {
-    class SstpConnection
+    /// <summary>
+    /// SSTPを簡単に送るためのクラス
+    /// </summary>
+    public class SstpConnection
     {
         private string sender;
         private string address;
@@ -17,6 +16,12 @@ namespace Shiorose.Sstp
 
         private const bool DEBUG = false;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="hostname"></param>
+        /// <param name="port"></param>
         public SstpConnection(string sender, string hostname = "127.0.0.1", int port = 9801)
         {
             this.sender = sender;
@@ -25,6 +30,12 @@ namespace Shiorose.Sstp
             address = hostname;
         }
         
+        /// <summary>
+        /// NOTIFY1.1を送信します
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="reference"></param>
+        /// <returns></returns>
         public string SendNotify1_1(string eventName, params string[] reference)
         {
             string sendDataStr = "NOTIFY SSTP/1.1\r\n" + "Sender: " + sender + "\r\n" + "Event: " + eventName + "\r\n";
@@ -55,6 +66,11 @@ namespace Shiorose.Sstp
             return response;
         }
 
+        /// <summary>
+        /// 指定のSSTPProtocolを送信します
+        /// </summary>
+        /// <param name="sstp"></param>
+        /// <returns></returns>
         internal string Send(SstpProtocol sstp)
         {
             Send(sstp.ToSstpString());
@@ -62,6 +78,11 @@ namespace Shiorose.Sstp
             return "";
         }
 
+        /// <summary>
+        /// SSTPのポートに任意の文字列を送信します。
+        /// </summary>
+        /// <param name="sendDataStr"></param>
+        /// <returns></returns>
         private string Send(string sendDataStr)
         {
             try

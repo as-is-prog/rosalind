@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shiorose.Sstp
+﻿namespace Shiorose.Sstp
 {
     abstract class SstpProtocol
     {

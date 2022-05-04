@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Shiorose.Shiolink;
 
@@ -31,7 +25,7 @@ namespace Shiorose.CSharp
                 var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
                 var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
 
-                var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(ShioriDir + "Ghost.csx"), so);
+                var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(Path.Combine(ShioriDir, "Ghost.csx")), so);
 
                 rosa.ghost = (await ghostScript.RunAsync()).ReturnValue;
             }

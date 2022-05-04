@@ -31,7 +31,7 @@ namespace Shiorose.CSharp
                 var smr = ScriptMetadataResolver.Default.WithBaseDirectory(ShioriDir);
                 var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
 
-                var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(ShioriDir + "Ghost.csx"), so);
+                var ghostScript = CSharpScript.Create<Ghost>(imp + File.ReadAllText(Path.Combine(ShioriDir, "Ghost.csx")), so);
 
                 rosa.ghost = (await ghostScript.RunAsync()).ReturnValue;
             }

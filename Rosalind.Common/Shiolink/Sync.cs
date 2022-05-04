@@ -15,7 +15,7 @@ namespace Shiorose.Shiolink
             SyncStr = syncStr;
         }
 
-        public static new Sync Parse(System.IO.TextReader stdIn)
+        public static new Sync Parse(EncodingTextReader stdIn)
         {
             return Protocol.Parse(stdIn) as Sync;
         }

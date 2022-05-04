@@ -1,15 +1,11 @@
 ﻿#define LOGGING_off
-using Shiorose;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Shiorose
 {
-    internal class Shiori
+    public class Shiori
     {
         public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
 #if LOGGING
@@ -18,13 +14,21 @@ namespace Shiorose
         internal static async Task Main(string[] args, Func<Shiolink.Load, Task<Rosalind>> loadFunc)
         {
             // TODO: 設定ファイル(ini)読み込み？
-
+            
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Console.InputEncoding = Encoding.GetEncoding("Shift_JIS");
+            var firstEncoding = Console.InputEncoding;
 
-            Shiolink.Load firstLoad = Shiolink.Protocol.Parse(Console.In) as Shiolink.Load;
 
-            Console.InputEncoding = DEFAULT_CHARSET;
+            var inStream = Console.OpenStandardInput();
+
+            var inTextReader = new EncodingTextReader(inStream)
+            {
+                Encoding = DEFAULT_CHARSET
+            };
+
+            Shiolink.Load firstLoad = Shiolink.Protocol.Parse(inTextReader) as Shiolink.Load;
+
+            inTextReader.Encoding = DEFAULT_CHARSET;
             Console.OutputEncoding = DEFAULT_CHARSET;
 
             Rosalind rosa = await loadFunc(firstLoad);
@@ -32,14 +36,14 @@ namespace Shiorose
             Shiolink.Protocol pr;
             do
             {
-                pr = Shiolink.Protocol.Parse(Console.In);
+                pr = Shiolink.Protocol.Parse(inTextReader);
                 switch (pr)
                 {
                     case Shiolink.Load load:
                         throw new InvalidOperationException("Unexpected second load.");
                     case Shiolink.Sync sync:
                         Console.WriteLine(sync.SyncStr);
-                        Shiolink.Request request = Shiolink.Request.Parse(Console.In);
+                        Shiolink.Request request = Shiolink.Request.Parse(inTextReader);
 #if LOGGING
                         logFile.WriteLine("\\\\ request\r\n\r\n" + request + "\r\n");
 #endif
@@ -54,6 +58,7 @@ namespace Shiorose
             } while (pr.GetType() != typeof(Shiolink.Unload));
 
             rosa.Unload(pr as Shiolink.Unload);
+            inTextReader.Dispose();
 
 #if LOGGING
             logFile.Close();

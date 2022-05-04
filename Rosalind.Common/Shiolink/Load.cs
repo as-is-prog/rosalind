@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shiorose.Shiolink
+﻿namespace Shiorose.Shiolink
 {
 
     internal class Load : Protocol
@@ -16,7 +10,7 @@ namespace Shiorose.Shiolink
             ShioriDir = shioriDir;
         }
 
-        public static new Load Parse(System.IO.TextReader stdIn)
+        public static new Load Parse(EncodingTextReader stdIn)
         {
             return Protocol.Parse(stdIn) as Load;
         }

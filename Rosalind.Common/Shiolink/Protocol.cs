@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace Shiorose.Shiolink
 {
     internal abstract class Protocol
     {
-        public static Protocol Parse(System.IO.TextReader stdIn)
+        public static Protocol Parse(EncodingTextReader stdIn)
         {
             var s = stdIn.ReadLine();
 

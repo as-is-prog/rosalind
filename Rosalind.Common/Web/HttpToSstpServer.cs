@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 using Newtonsoft.Json;
 using Shiorose.Sstp;
 
 namespace Shiorose.Web
 {
     /// <summary>
-    /// Httpで投げられた
+    /// httpとsstpの仲介をするサーバです
     /// </summary>
     public class HttpToSstpServer
     {

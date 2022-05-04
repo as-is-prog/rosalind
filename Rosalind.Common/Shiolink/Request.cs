@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Shiorose.Shiolink
 {
@@ -15,18 +14,17 @@ namespace Shiorose.Shiolink
 
     internal static class RequestMethodUtil
     {
-        public static string ToStringFromEnum(this RequestMethod requestMethod)
+        private static IDictionary<RequestMethod, string> RequestMethodTable { get; } = new Dictionary<RequestMethod, string>
         {
-            switch (requestMethod)
-            {
-                case RequestMethod.GET:
-                    return "GET";
-                case RequestMethod.NOTIFY:
-                    return "NOTIFY";
-                default:
-                    return "NONE";
-            }
-        }
+            { RequestMethod.GET, "GET" },
+            { RequestMethod.NOTIFY, "NOTIFY" },
+            { RequestMethod.NONE, "NONE" }
+        };
+
+        public static string ToStringFromEnum(this RequestMethod requestMethod)
+            => RequestMethodTable.TryGetValue(requestMethod, out var reqMethodStr)
+                ? reqMethodStr
+                : requestMethod.ToString();
 
         public static RequestMethod StringToRequestMethod(string methodStr)
         {
@@ -46,6 +44,7 @@ namespace Shiorose.Shiolink
     {
 
         private static readonly string SENDER_HEADSTR = "Sender: ";
+        private static readonly string SENDER_TYPE_HEADSTR = "SenderType: ";
         private static readonly string CHARSET_HEADSTR = "Charset: ";
         private static readonly string SECURITYLEVEL_HEADSTR = "SecurityLevel: ";
         private static readonly string STATUS_HEADSTR = "Status: ";
@@ -58,13 +57,14 @@ namespace Shiorose.Shiolink
         public string Version { get; internal set; }
         public string Charset { get; internal set; }
         public string Sender { get; internal set; }
+        public string SenderType { get; internal set; }
         public string SecurityLevel { get; internal set; }
         public string Status { get; internal set; }
         public string ID { get; internal set; }
         public string BaseID { get; internal set; }
         public IDictionary<int, string> References { get; private set; } = new Dictionary<int, string>();
 
-        public static new Request Parse(System.IO.TextReader stdIn)
+        public static new Request Parse(EncodingTextReader stdIn)
         {
             var request = new Request();
 
@@ -86,6 +86,10 @@ namespace Shiorose.Shiolink
                 if (s.StartsWith(SENDER_HEADSTR))
                 {
                     request.Sender = s.Substring(SENDER_HEADSTR.Length);
+                }
+                else if (s.StartsWith(SENDER_HEADSTR))
+                {
+                    request.SenderType = s.Substring(SENDER_TYPE_HEADSTR.Length);
                 }
                 else if (s.StartsWith(CHARSET_HEADSTR))
                 {
@@ -114,7 +118,8 @@ namespace Shiorose.Shiolink
                 }
                 else
                 {
-                    throw new FormatException("SHIORI requestdata parse error. str: " + s);
+                    // 該当しなかった場合は無視する。
+                    // throw new FormatException("SHIORI requestdata parse error. str: " + s);
                 }
             }
 
