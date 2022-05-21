@@ -58,7 +58,7 @@ namespace Shiorose.Sstp
             {
                 response = Send(sb.ToString());
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 response = "IOException";
             }

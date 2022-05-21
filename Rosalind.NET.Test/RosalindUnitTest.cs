@@ -8,7 +8,7 @@ namespace Shiorose.Test
     [TestClass]
     public class RosalindUnitTest
     {
-        static Rosalind rosa;
+        static Rosalind? rosa;
 
         [ClassInitialize]
         public static void TestRosalindInitialize(TestContext testContext)
@@ -33,9 +33,9 @@ namespace Shiorose.Test
             };
             req.References.Add(0, "Sakura名");
 
-            var res = rosa.Request(req).Result;
+            var res = rosa?.Request(req).Result.Value;
 
-            Assert.AreEqual("起動しました", res.Value);
+            Assert.AreEqual("起動しました", res);
         }
 
         [TestMethod]
@@ -54,9 +54,9 @@ namespace Shiorose.Test
             req.References.Add(6, "halt");
             req.References.Add(7, "haltSakura名");
 
-            var res = rosa.Request(req).Result;
+            var res = rosa?.Request(req).Result.Value;
 
-            Assert.AreEqual("haltSakura名で落ちましたが無事起動しました", res.Value);
+            Assert.AreEqual("haltSakura名で落ちましたが無事起動しました", res);
         }
 
         [TestMethod]
@@ -73,16 +73,16 @@ namespace Shiorose.Test
             };
             req.References.Add(0, "Sakura名");
 
-            var res = rosa.Request(req).Result;
+            var res = rosa?.Request(req).Result.Value;
 
-            Assert.AreEqual("終了します", res.Value);
+            Assert.AreEqual("終了します", res);
         }
 
 
         [ClassCleanup]
         public static void TestRosalindCleanup()
         {
-            rosa.Unload(new Shiolink.Unload());
+            rosa?.Unload(new Shiolink.Unload());
         }
     }
 }

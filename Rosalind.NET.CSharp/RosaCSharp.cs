@@ -56,7 +56,7 @@ namespace Shiorose.CSharp
             }
         }
 
-        public async static Task<RunScriptResult> RunCSharpScript(string str, string currentDir = null)
+        public async static Task<RunScriptResult> RunCSharpScript(string str, string? currentDir = null)
         {
             return await Task.Run(async () => {
                 try

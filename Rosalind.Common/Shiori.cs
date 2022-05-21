@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 
 namespace Shiorose
 {
+    /// <summary>
+    /// SHIORIおよびSHIOLINKプロトコルの処理をするクラス
+    /// </summary>
     public class Shiori
     {
+        /// <summary>
+        /// デフォルト文字コード
+        /// </summary>
         public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
 #if LOGGING
         public static readonly System.IO.TextWriter logFile = System.IO.File.AppendText("error_log.txt");
