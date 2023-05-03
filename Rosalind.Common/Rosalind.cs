@@ -57,6 +57,12 @@ namespace Shiorose
                     return CreateBadRequestResponse();
                 }
 
+                // ダメなものを弾く(ghostの層まで伝えない)
+                if (!ValidateBySecurityLevel(req))
+                {
+                    return CreateOKResponse(null);
+                }
+
                 switch (req.Method)
                 {
                     case RequestMethod.GET:
@@ -69,6 +75,24 @@ namespace Shiorose
                 return CreateBadRequestResponse();
             });
 
+        }
+
+        private bool ValidateBySecurityLevel(Request req)
+        {
+            switch(ghost.SecurityLevel)
+            {
+                case RequestFilterLevel.None:
+                    return true;
+                case RequestFilterLevel.NoneAndBlackList:
+                    throw new NotImplementedException("未実装");
+                    return true;
+                case RequestFilterLevel.LocalOnlyAndWhiteList:
+                    throw new NotImplementedException("未実装");
+                    return true;
+                case RequestFilterLevel.LocalOnly:
+                default:
+                    return req.SecurityLevel == "local";
+            }
         }
 
         private Response CreateResponseOfGETRequest(Request req)

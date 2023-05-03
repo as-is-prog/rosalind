@@ -9,13 +9,15 @@ namespace Shiorose.Test
     public class RosalindUnitTest
     {
         static Rosalind? rosa;
+        static TestGhost ghost;
 
         [ClassInitialize]
         public static void TestRosalindInitialize(TestContext testContext)
         {
+            ghost = new TestGhost();
             rosa = new Rosalind(new Shiolink.Load(".\\"))
             {
-                ghost = new TestGhost()
+                ghost = ghost
             };
         }
 
@@ -76,6 +78,27 @@ namespace Shiorose.Test
             var res = rosa?.Request(req).Result.Value;
 
             Assert.AreEqual("終了します", res);
+        }
+
+        [TestMethod]
+        public void TestSecurityLevel()
+        {
+            ghost.SetSecurityLevel(Resource.RequestFilterLevel.LocalOnly);
+
+            var req = new Shiolink.Request
+            {
+                Version = "3.0",
+                Method = Shiolink.RequestMethod.GET,
+                Charset = "UTF-8",
+                Sender = "External app",
+                SecurityLevel = "external",
+                ID = "OnBoot"
+            };
+            req.References.Add(0, "Sakura名");
+
+            var res = rosa?.Request(req).Result.Value;
+
+            Assert.AreNotEqual("起動しました", res);
         }
 
 

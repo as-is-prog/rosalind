@@ -25,6 +25,10 @@ namespace Shiorose
         /// </summary>
         public string Homeurl { get; protected set; } = "";
         /// <summary>
+        /// Shiori RequestのSecurityLevelをもとに、Ghostまで伝えるリクエストを制限します。
+        /// </summary>
+        public RequestFilterLevel SecurityLevel { get; protected set; } = RequestFilterLevel.LocalOnly;
+        /// <summary>
         /// Sakura側おすすめサイト
         /// </summary>
         public List<Site> SakuraRecommendSites { get; protected set; } = new List<Site>();

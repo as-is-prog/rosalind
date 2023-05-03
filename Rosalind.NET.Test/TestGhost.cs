@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shiorose.Resource;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,16 @@ namespace Shiorose.Test
         public TestGhost()
         {
             _saveData = new Shiorose.Resource.MockSaveData();
+        }
+
+        /// <summary>
+        /// テスト用。
+        /// 本来はこのように後から差し替えられるようにすべきではない
+        /// </summary>
+        /// <param name="filterLevel"></param>
+        public void SetSecurityLevel(RequestFilterLevel filterLevel)
+        {
+            SecurityLevel = filterLevel;
         }
 
         public override string OnBoot(IDictionary<int, string> reference, string shellName = "", bool isHalt = false, string haltGhostName = "")
