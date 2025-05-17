@@ -341,7 +341,7 @@ namespace Shiorose.Support
         /// <summary>
         /// 遅延イベント付きトークオブジェクトを生成します。
         /// <para>
-        /// 通常はこの後ContinuteWithメソッドで遅延イベント発生時の処理を追加します。
+        /// 通常はこの後ContinueWithメソッドで遅延イベント発生時の処理を追加します。
         /// </para>
         /// </summary>
         /// <returns></returns>
@@ -353,7 +353,7 @@ namespace Shiorose.Support
         /// <summary>
         /// 遅延イベント付きトークオブジェクトをオートウェイト挿入有りで生成します。
         /// <para>
-        /// 通常はこの後ContinuteWithメソッドで遅延イベント発生時の処理を追加します。
+        /// 通常はこの後ContinueWithメソッドで遅延イベント発生時の処理を追加します。
         /// </para>
         /// </summary>
         /// <returns></returns>
