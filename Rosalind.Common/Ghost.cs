@@ -1977,7 +1977,7 @@ namespace Shiorose
             return new TalkBuilder()
                 .Append(@"\s[" + surface + "]")
                 .Append(content)
-                .Build();
+                .BuildWithAutoWait();
         }
 
         /// <summary>

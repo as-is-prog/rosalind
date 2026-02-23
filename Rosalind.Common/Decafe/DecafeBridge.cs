@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using SocketIOClient;
@@ -13,7 +13,7 @@ namespace Shiorose.Decafe
     /// </summary>
     public class DecafeBridge : IDisposable
     {
-        private SocketIOClient.SocketIO _socket;
+        private SocketIO _socket;
         private readonly ConcurrentQueue<DecafeMessage> _messageQueue = new ConcurrentQueue<DecafeMessage>();
         private volatile bool _connected;
         private volatile bool _isThinking;
@@ -47,13 +47,15 @@ namespace Shiorose.Decafe
         /// </summary>
         public async Task ConnectAsync()
         {
-            _socket = new SocketIOClient.SocketIO(_serverUrl, new SocketIOOptions
+            var query = new NameValueCollection
             {
-                Query = new List<KeyValuePair<string, string>>
-                {
-                    new KeyValuePair<string, string>("page", "talk"),
-                    new KeyValuePair<string, string>("inhabitantId", _inhabitantId)
-                }
+                { "page", "talk" },
+                { "inhabitantId", _inhabitantId }
+            };
+
+            _socket = new SocketIO(new Uri(_serverUrl), new SocketIOOptions
+            {
+                Query = query
             });
 
             _socket.OnConnected += (sender, e) =>
@@ -66,7 +68,7 @@ namespace Shiorose.Decafe
                 _connected = false;
             };
 
-            _socket.On("speak:message", response =>
+            _socket.On("speak:message", async response =>
             {
                 try
                 {
@@ -84,9 +86,11 @@ namespace Shiorose.Decafe
                     });
                 }
                 catch { }
+
+                await Task.CompletedTask;
             });
 
-            _socket.On("ask:question", response =>
+            _socket.On("ask:question", async response =>
             {
                 try
                 {
@@ -105,9 +109,11 @@ namespace Shiorose.Decafe
                     });
                 }
                 catch { }
+
+                await Task.CompletedTask;
             });
 
-            _socket.On("talk:chunk", response =>
+            _socket.On("talk:chunk", async response =>
             {
                 if (!_isThinking)
                 {
@@ -117,18 +123,22 @@ namespace Shiorose.Decafe
                         Type = DecafeMessageType.ThinkStart
                     });
                 }
+
+                await Task.CompletedTask;
             });
 
-            _socket.On("talk:done", response =>
+            _socket.On("talk:done", async response =>
             {
                 _isThinking = false;
                 _messageQueue.Enqueue(new DecafeMessage
                 {
                     Type = DecafeMessageType.ThinkEnd
                 });
+
+                await Task.CompletedTask;
             });
 
-            _socket.On("talk:error", response =>
+            _socket.On("talk:error", async response =>
             {
                 var content = "";
                 try
@@ -146,6 +156,8 @@ namespace Shiorose.Decafe
                     Type = DecafeMessageType.Error,
                     Content = content
                 });
+
+                await Task.CompletedTask;
             });
 
             await _socket.ConnectAsync();
@@ -190,7 +202,7 @@ namespace Shiorose.Decafe
         {
             if (_socket != null && _connected)
             {
-                _ = _socket.EmitAsync("talk:send", text);
+                _ = _socket.EmitAsync("talk:send", new object[] { text });
             }
         }
 
@@ -203,7 +215,7 @@ namespace Shiorose.Decafe
         {
             if (_socket != null && _connected)
             {
-                _ = _socket.EmitAsync("talk:touch", new { type, collision });
+                _ = _socket.EmitAsync("talk:touch", new object[] { new { type, collision } });
             }
         }
 
@@ -216,7 +228,7 @@ namespace Shiorose.Decafe
         {
             if (_socket != null && _connected)
             {
-                _ = _socket.EmitAsync("ask:answer", new { id, choice });
+                _ = _socket.EmitAsync("ask:answer", new object[] { new { id, choice } });
             }
         }
 
