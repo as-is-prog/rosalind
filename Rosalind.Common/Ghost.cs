@@ -1,4 +1,5 @@
-﻿using Shiorose.Resource;
+﻿using Shiorose.Decafe;
+using Shiorose.Resource;
 using Shiorose.Resource.ShioriEvent;
 using Shiorose.Support;
 using System;
@@ -82,9 +83,24 @@ namespace Shiorose
         /// </summary>
         public virtual BaseSaveData SaveData { get => _saveData; }
 
-        
         /// <summary>
-        /// 
+        /// 0x51decafe 連携ブリッジ
+        /// </summary>
+        protected DecafeBridge DecafeBridge { get; private set; }
+
+        /// <summary>
+        /// 0x51decafe ask 応答待ちの質問ID
+        /// </summary>
+        private string _pendingDecafeAskId;
+
+        /// <summary>
+        /// ユーザー入力を 0x51decafe に転送するか
+        /// </summary>
+        protected bool ForwardInputToDecafe { get; set; } = false;
+
+
+        /// <summary>
+        ///
         /// </summary>
         public virtual SHIORIResource Resource { get; set; } = new SHIORIResource();
         
@@ -95,6 +111,18 @@ namespace Shiorose
         public Ghost()
         {
             NextRandomTalk = () => GetRandomTalk().TalkScript();
+        }
+
+        /// <summary>
+        /// 0x51decafe 連携を初期化する
+        /// </summary>
+        /// <param name="shioriDir">SHIORIのディレクトリパス</param>
+        protected void InitializeDecafe(string shioriDir)
+        {
+            var config = DecafeConfig.Load(shioriDir);
+            if (!config.Enabled) return;
+            DecafeBridge = new DecafeBridge(config.ServerUrl, config.InhabitantId);
+            _ = DecafeBridge.ConnectAsync();
         }
 
         #region 起動・終了・切り替えイベント
@@ -474,6 +502,10 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnCommunicate(IDictionary<int, string> reference, string senderName = "", string script = "", IEnumerable<string> extInfo = null)
         {
+            if (senderName == "user" && ForwardInputToDecafe && DecafeBridge != null && DecafeBridge.IsConnected)
+            {
+                DecafeBridge.SendTalk(script);
+            }
             return "";
         }
 
@@ -602,6 +634,13 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnSecondChange(IDictionary<int, string> reference, string uptime, bool isOffScreen, bool isOverlap, bool canTalk, string leftSecond)
         {
+            // 0x51decafe メッセージ処理（優先）
+            if (DecafeBridge != null && DecafeBridge.HasPendingMessages())
+            {
+                var msg = DecafeBridge.DequeueMessage();
+                return ProcessDecafeMessage(msg);
+            }
+
             // 間隔0なら自発的に発言しない
             if (SaveData.TalkInterval == 0) return "";
 
@@ -731,6 +770,14 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnChoiceSelect(IDictionary<int, string> reference, string selectedId, IEnumerable<string> otherIds)
         {
+            if (selectedId != null && selectedId.StartsWith("decafe_ask:") && DecafeBridge != null)
+            {
+                var choice = selectedId.Substring("decafe_ask:".Length);
+                DecafeBridge.SendAnswer(_pendingDecafeAskId, choice);
+                _pendingDecafeAskId = null;
+                return OnDecafeAnswered(choice);
+            }
+
             if (Choice.Count == 0)
                 return DeferredEvent.Exec(selectedId);
             else
@@ -1889,6 +1936,118 @@ namespace Shiorose
         /// </summary>
         public virtual void OnDestroy()
         {
+        }
+
+        #endregion
+
+        #region 0x51decafe 連携
+
+        /// <summary>
+        /// 0x51decafe から受信したメッセージを処理します。
+        /// </summary>
+        /// <param name="msg">受信メッセージ</param>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string ProcessDecafeMessage(DecafeMessage msg)
+        {
+            switch (msg.Type)
+            {
+                case DecafeMessageType.Speak:
+                    return OnDecafeSpeak(msg.Content, msg.Surface);
+                case DecafeMessageType.AskQuestion:
+                    return OnDecafeAsk(msg.QuestionId, msg.Content, msg.Choices);
+                case DecafeMessageType.ThinkStart:
+                    return OnDecafeThinkStart();
+                case DecafeMessageType.ThinkEnd:
+                    return OnDecafeThinkEnd();
+                case DecafeMessageType.Error:
+                    return OnDecafeError(msg.Content);
+                default:
+                    return "";
+            }
+        }
+
+        /// <summary>
+        /// speak:message 受信時 — バルーンに表示
+        /// </summary>
+        /// <param name="content">発話内容</param>
+        /// <param name="surface">表情番号</param>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string OnDecafeSpeak(string content, int surface)
+        {
+            return new TalkBuilder()
+                .Append(@"\s[" + surface + "]")
+                .Append(content)
+                .Build();
+        }
+
+        /// <summary>
+        /// ask:question 受信時 — 選択肢をバルーンに表示
+        /// </summary>
+        /// <param name="questionId">質問ID</param>
+        /// <param name="content">質問内容</param>
+        /// <param name="choices">選択肢の配列</param>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string OnDecafeAsk(string questionId, string content, string[] choices)
+        {
+            _pendingDecafeAskId = questionId;
+            var tb = new TalkBuilder()
+                .AppendLine(content)
+                .HalfLine();
+            var dtb = (DeferredEventTalkBuilder)null;
+            for (int i = 0; i < choices.Length; i++)
+            {
+                if (i == 0)
+                {
+                    dtb = tb.Marker().AppendChoice(choices[i], "decafe_ask:" + choices[i]);
+                    dtb.LineFeed();
+                }
+                else
+                {
+                    dtb.Marker().AppendChoice(choices[i], "decafe_ask:" + choices[i]).LineFeed();
+                }
+            }
+            if (dtb != null)
+                return dtb.Build().ToString();
+            else
+                return tb.Build();
+        }
+
+        /// <summary>
+        /// 思考中表示開始
+        /// </summary>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string OnDecafeThinkStart()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// 思考中表示終了
+        /// </summary>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string OnDecafeThinkEnd()
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// エラー表示
+        /// </summary>
+        /// <param name="error">エラー内容</param>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string OnDecafeError(string error)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// ask 回答送信後のリアクション
+        /// </summary>
+        /// <param name="choice">選択された回答</param>
+        /// <returns>さくらスクリプト</returns>
+        protected virtual string OnDecafeAnswered(string choice)
+        {
+            return "";
         }
 
         #endregion

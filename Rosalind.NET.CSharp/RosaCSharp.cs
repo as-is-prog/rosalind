@@ -58,11 +58,13 @@ namespace Shiorose.CSharp
 
         public async static Task<RunScriptResult> RunCSharpScript(string str, string? currentDir = null)
         {
-            return await Task.Run(async () => {
+            return await Task.Run(async () =>
+            {
                 try
                 {
                     Script<string> script;
-                    if (currentDir != null) {
+                    if (currentDir != null)
+                    {
                         var ssr = ScriptSourceResolver.Default.WithBaseDirectory(currentDir);
                         var smr = ScriptMetadataResolver.Default.WithBaseDirectory(currentDir);
                         var so = ScriptOptions.Default.WithSourceResolver(ssr).WithMetadataResolver(smr);
