@@ -64,12 +64,13 @@ namespace Shiorose
         /// </summary>
         protected int mouseMoveCount = 0;
 
-        private BaseSaveData __saveData; 
+        private BaseSaveData __saveData;
         /// <summary>
         /// （常用非推奨）セーブデータを保持するプロパティ。
         /// セーブデータのロード時のみ使ってください。
         /// </summary>
-        protected BaseSaveData _saveData {
+        protected BaseSaveData _saveData
+        {
             get => __saveData;
             set
             {
@@ -103,13 +104,14 @@ namespace Shiorose
         ///
         /// </summary>
         public virtual SHIORIResource Resource { get; set; } = new SHIORIResource();
-        
+
 
         /// <summary>
         /// 
         /// </summary>
         public Ghost()
         {
+            InitializeDecafe(Rosalind.ShioriDir);
             NextRandomTalk = () => GetRandomTalk().TalkScript();
         }
 
@@ -121,8 +123,19 @@ namespace Shiorose
         {
             var config = DecafeConfig.Load(shioriDir);
             if (!config.Enabled) return;
-            DecafeBridge = new DecafeBridge(config.ServerUrl, config.InhabitantId);
-            _ = DecafeBridge.ConnectAsync();
+            Task.Run(async () =>
+            {
+                try
+                {
+                    DecafeBridge = new DecafeBridge(config.ServerUrl, config.InhabitantId);
+                    await DecafeBridge.ConnectAsync();
+                    ForwardInputToDecafe = true;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Decafe] Connection failed: {ex.Message}");
+                }
+            });
         }
 
         #region 起動・終了・切り替えイベント
@@ -476,7 +489,7 @@ namespace Shiorose
         /// <param name="reference">Reference</param>
         /// <param name="cancelReason">Reference1 タイムアウトした場合:timeout 閉じられた場合: close</param>
         /// <returns></returns>
-        public virtual string OnTeachInputCancel(IDictionary<int,string> reference, string cancelReason = "")
+        public virtual string OnTeachInputCancel(IDictionary<int, string> reference, string cancelReason = "")
         {
             return DeferredEvent.Cancel();
         }
@@ -487,7 +500,7 @@ namespace Shiorose
         /// <param name="reference">Reference</param>
         /// <param name="teachRecents">Reference* 入力された言葉の履歴（0のほうが古くて末尾の方が新しい）</param>
         /// <returns></returns>
-        public virtual string OnTeach(IDictionary<int,string> reference, IEnumerable<string> teachRecents)
+        public virtual string OnTeach(IDictionary<int, string> reference, IEnumerable<string> teachRecents)
         {
             return DeferredEvent.Exec(teachRecents.LastOrDefault());
         }
@@ -1274,7 +1287,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallFailure(IDictionary<int, string> reference, InstallFailureReason failureReason)
         {
-            return @"(インストール失敗。\n理由:"+ failureReason.ToString() +")";
+            return @"(インストール失敗。\n理由:" + failureReason.ToString() + ")";
         }
 
         /// <summary>
@@ -1285,7 +1298,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnInstallRefuse(IDictionary<int, string> reference, string sakuraName)
         {
-            return @"(インストール失敗。これは"+ sakuraName +"専用です。)";
+            return @"(インストール失敗。これは" + sakuraName + "専用です。)";
         }
 
         /// <summary>
@@ -1390,7 +1403,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnNarCreated(IDictionary<int, string> reference, string objectName, string fileName, InstallType installType)
         {
-            return @"(\_?"+fileName+@"\_?としてnarファイル作成完了)";
+            return @"(\_?" + fileName + @"\_?としてnarファイル作成完了)";
         }
 
 
@@ -1416,7 +1429,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnURLDropped(IDictionary<int, string> reference, string filePath)
         {
-            return @"("+filePath+"をダウンロード完了)";
+            return @"(" + filePath + "をダウンロード完了)";
         }
         /// <summary>
         /// ドロップされたURLの受領に失敗したかキャンセルされた際に発生。
@@ -1427,7 +1440,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnURLDropFailure(IDictionary<int, string> reference, string filePath, string failureReason)
         {
-            return @"(ダウンロード失敗 理由:"+failureReason+")";
+            return @"(ダウンロード失敗 理由:" + failureReason + ")";
         }
 
         /// <summary>
@@ -1471,7 +1484,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUpdateReady(IDictionary<int, string> reference, int updateCount, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
         {
-            return "("+(updateCount)+"個の更新を確認)";
+            return "(" + (updateCount) + "個の更新を確認)";
         }
 
         /// <summary>
@@ -1507,7 +1520,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUpdateFailure(IDictionary<int, string> reference, string failureReason, string failureFileName, UpdateType updateType, UpdateReason updateReason)
         {
-            return "(ネットワーク更新失敗 理由:"+failureReason+")";
+            return "(ネットワーク更新失敗 理由:" + failureReason + ")";
         }
         /// <summary>
         /// ファイルダウンロード開始の際に発生。
@@ -1521,7 +1534,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUpdateOnDownloadBegin(IDictionary<int, string> reference, string downloadFileName, int downloadProgressCount, int downloadTotalCount, UpdateType updateType, UpdateReason updateReason)
         {
-            return "("+downloadFileName+"をダウンロード開始 "+downloadProgressCount+"/"+downloadTotalCount+")";
+            return "(" + downloadFileName + "をダウンロード開始 " + downloadProgressCount + "/" + downloadTotalCount + ")";
         }
 
         /// <summary>
@@ -1704,7 +1717,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUpdateCheckComplete(IDictionary<int, string> reference, bool isUpdate, string[] updateFileNames, UpdateType updateType, UpdateReason updateReason)
         {
-            return "(ネットワーク更新"+(isUpdate ? "あり" : "なし")+")";
+            return "(ネットワーク更新" + (isUpdate ? "あり" : "なし") + ")";
         }
 
         /// <summary>
@@ -1724,7 +1737,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnUpdateCheckFailure(IDictionary<int, string> reference, string failureReason, UpdateReason updateReason)
         {
-            return @"(ネットワーク更新のチェック失敗 理由: "+failureReason+")";
+            return @"(ネットワーク更新のチェック失敗 理由: " + failureReason + ")";
         }
 
         /// <summary>
@@ -1797,7 +1810,7 @@ namespace Shiorose
         {
             const string SET = "合わせる";
             const string NO_SET = "そのままにする";
-            return new TalkBuilder().Append("("+diffSecond).AppendLine("秒のずれています)")
+            return new TalkBuilder().Append("(" + diffSecond).AppendLine("秒のずれています)")
                                     .AppendLine("時計を合わせますか？")
                                     .HalfLine()
                                     .Marker().AppendChoice(SET).LineFeed()
@@ -1847,7 +1860,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnBIFFBegin(IDictionary<int, string> reference, string accountName)
         {
-            return "("+accountName+"のメールチェック開始)";
+            return "(" + accountName + "のメールチェック開始)";
         }
 
         /// <summary>
@@ -1878,7 +1891,7 @@ namespace Shiorose
         /// <returns></returns>
         public virtual string OnBIFFFailure(IDictionary<int, string> reference, string failureReason, string accountName)
         {
-            return "("+accountName+"のメールチェックに失敗: "+failureReason+")";
+            return "(" + accountName + "のメールチェックに失敗: " + failureReason + ")";
         }
 
 

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using SocketIOClient;
+using SocketIOClient.Common;
 
 namespace Shiorose.Decafe
 {
@@ -20,6 +20,7 @@ namespace Shiorose.Decafe
         private readonly string _serverUrl;
         private readonly string _inhabitantId;
         private bool _disposed;
+        private string _lastError;
 
         /// <summary>
         /// サーバーに接続中かどうか
@@ -30,6 +31,11 @@ namespace Shiorose.Decafe
         /// 思考中かどうか
         /// </summary>
         public bool IsThinking => _isThinking;
+
+        /// <summary>
+        /// 最後に発生したエラーメッセージ（デバッグ用）
+        /// </summary>
+        public string LastError => _lastError;
 
         /// <summary>
         /// DecafeBridge を作成します。
@@ -55,7 +61,10 @@ namespace Shiorose.Decafe
 
             _socket = new SocketIO(new Uri(_serverUrl), new SocketIOOptions
             {
-                Query = query
+                Query = query,
+                Transport = TransportProtocol.WebSocket,
+                Reconnection = true,
+                ReconnectionAttempts = 5
             });
 
             _socket.OnConnected += (sender, e) =>
@@ -68,21 +77,42 @@ namespace Shiorose.Decafe
                 _connected = false;
             };
 
+            _socket.OnError += (sender, e) =>
+            {
+                _lastError = e;
+                _messageQueue.Enqueue(new DecafeMessage
+                {
+                    Type = DecafeMessageType.Error,
+                    Content = $"Socket.IO error: {e}"
+                });
+            };
+
+            _socket.OnReconnectAttempt += (sender, e) =>
+            {
+                _lastError = $"Reconnecting... attempt {e}";
+            };
+
+            _socket.OnReconnectError += (sender, e) =>
+            {
+                _lastError = $"Reconnect error: {e}";
+                _messageQueue.Enqueue(new DecafeMessage
+                {
+                    Type = DecafeMessageType.Error,
+                    Content = $"Reconnect error: {e}"
+                });
+            };
+
             _socket.On("speak:message", async response =>
             {
                 try
                 {
-                    var data = response.GetValue<JObject>(0);
-                    var content = data.Value<string>("content") ?? "";
-                    var surface = data.Value<int?>("surface") ?? 0;
-                    var timestamp = data.Value<long?>("timestamp") ?? 0;
-
+                    var data = response.GetValue<SpeakMessagePayload>(0);
                     _messageQueue.Enqueue(new DecafeMessage
                     {
                         Type = DecafeMessageType.Speak,
-                        Content = content,
-                        Surface = surface,
-                        Timestamp = timestamp
+                        Content = data?.content ?? "",
+                        Surface = data?.surface ?? 0,
+                        Timestamp = data?.timestamp ?? 0
                     });
                 }
                 catch { }
@@ -94,18 +124,13 @@ namespace Shiorose.Decafe
             {
                 try
                 {
-                    var data = response.GetValue<JObject>(0);
-                    var questionId = data.Value<string>("id") ?? "";
-                    var content = data.Value<string>("content") ?? "";
-                    var choicesToken = data["choices"];
-                    var choices = choicesToken != null ? choicesToken.ToObject<string[]>() : new string[0];
-
+                    var data = response.GetValue<AskQuestionPayload>(0);
                     _messageQueue.Enqueue(new DecafeMessage
                     {
                         Type = DecafeMessageType.AskQuestion,
-                        QuestionId = questionId,
-                        Content = content,
-                        Choices = choices
+                        QuestionId = data?.id ?? "",
+                        Content = data?.content ?? "",
+                        Choices = data?.choices ?? new string[0]
                     });
                 }
                 catch { }
@@ -143,8 +168,8 @@ namespace Shiorose.Decafe
                 var content = "";
                 try
                 {
-                    var data = response.GetValue<JObject>(0);
-                    content = data.Value<string>("error") ?? data.Value<string>("message") ?? "";
+                    var data = response.GetValue<TalkErrorPayload>(0);
+                    content = data?.error ?? "";
                 }
                 catch
                 {
@@ -202,7 +227,7 @@ namespace Shiorose.Decafe
         {
             if (_socket != null && _connected)
             {
-                _ = _socket.EmitAsync("talk:send", new object[] { text });
+                _ = _socket.EmitAsync("talk:send", new object[] { new { text } });
             }
         }
 
@@ -252,5 +277,26 @@ namespace Shiorose.Decafe
                 }
             }
         }
+    }
+
+    // Socket.IO ペイロード用 POCO（System.Text.Json でデシリアライズ）
+    internal class SpeakMessagePayload
+    {
+        public string content { get; set; }
+        public int surface { get; set; }
+        public long timestamp { get; set; }
+    }
+
+    internal class AskQuestionPayload
+    {
+        public string id { get; set; }
+        public string content { get; set; }
+        public string[] choices { get; set; }
+        public long timestamp { get; set; }
+    }
+
+    internal class TalkErrorPayload
+    {
+        public string error { get; set; }
     }
 }

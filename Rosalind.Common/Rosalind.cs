@@ -1319,7 +1319,11 @@ namespace Shiorose
                     try
                     {
                         object[] parameters = { req.References };
-                        retValue = ghost.GetType().GetMethod(req.ID).Invoke(ghost, parameters) as string;
+                        var method = ghost.GetType().GetMethod(req.ID);
+                        if (method != null)
+                        {
+                            retValue = method.Invoke(ghost, parameters) as string;
+                        }
                     }
                     catch { }
                     break;
